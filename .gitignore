@@ -361,3 +361,10 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+appsettings.json
+appsettings.*.json
+
+# Ignore specific migration files
+Predictive-Healthcare-Management-System/Migrations/20241104190312_IntialCreate.Designer.cs
+Predictive-Healthcare-Management-System/Migrations/20241104190312_IntialCreate.cs

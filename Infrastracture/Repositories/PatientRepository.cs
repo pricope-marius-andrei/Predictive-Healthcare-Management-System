@@ -1,9 +1,15 @@
 using Domain.Entities;
+using Infrastracture.Persistence;
 
 namespace Infrastructure.Repositories
 {
     public class PatientRepository : IPatientRepository
     {
+        private readonly ApplicationDbContext context;
+        public PatientRepository(ApplicationDbContext context)
+        {
+            this.context = context;
+        }
         public Task<IEnumerable<Patient>> GetAllAsync()
         {
             throw new NotImplementedException();
@@ -14,9 +20,11 @@ namespace Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Guid> AddAsync(Patient patient)
+        public async Task<Guid> AddAsync(Patient patient)
         {
-            throw new NotImplementedException();
+           await context.Patients.AddAsync(patient);
+           await context.SaveChangesAsync();
+           return patient.UserId;
         }
 
         public Task UpdateAsync(Patient patient)
