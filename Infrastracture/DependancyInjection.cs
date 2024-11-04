@@ -1,6 +1,6 @@
-﻿using Domain.Repositories;
+﻿using Domain.Interfaces;
 using Infrastracture.Persistence;
-using Infrastracture.Repositories;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +16,11 @@ namespace Infrastracture
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
-            services.AddScoped<ITestRepository, TestRepository>();
+            /*services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPatientRepository, PatientRepository>();
+            services.AddScoped<IDoctorRepository, DoctorRepository>();
+            services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
+            services.AddScoped<IRecordRepository, RecordRepository>();*/
 
             return services;
         }

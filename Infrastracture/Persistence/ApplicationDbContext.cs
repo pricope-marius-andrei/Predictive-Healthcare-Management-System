@@ -10,25 +10,25 @@ namespace Infrastracture.Persistence
 
         }
 
-        public DbSet<Test> Tests { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Patient> Patients { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<MedicalHistory> MedicalHistories { get; set; }
+        public DbSet<MedicalRecord> MedicalRecords { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasPostgresExtension("uuid-ossp");
-            modelBuilder.Entity<Test>(
-                entity =>
-                {
-                    entity.HasKey(e => e.Id);
-                    entity.Property(e => e.Id)
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("uuid_generate_v4()")
-                        .ValueGeneratedOnAdd();
-                    entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
-                    entity.ToTable("tests");
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Patient)
+                .WithOne(p => p.User)
+                .HasForeignKey<Patient>(p => p.UserId);
 
-                }
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Doctor)
+                .WithOne(d => d.User)
+                .HasForeignKey<Doctor>(d => d.UserId);
 
-                );
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

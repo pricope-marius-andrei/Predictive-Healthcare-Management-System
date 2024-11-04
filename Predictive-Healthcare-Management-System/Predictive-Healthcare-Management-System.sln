@@ -3,21 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Predictive-Healthcare-Management-System", "Predictive-Healthcare-Management-System.csproj", "{6B463439-1048-49EE-ABED-C48157241B26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Predictive-Healthcare-Management-System", "Predictive-Healthcare-Management-System.csproj", "{6B463439-1048-49EE-ABED-C48157241B26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{4209B209-F515-4747-BB01-D4DCD33A6C07}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{71E3295A-C50A-41C0-A19D-C6DACB6E6687}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastracture", "Infrastracture", "{4E7824AD-CC70-4116-A22B-1B07E33571DA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{4E7824AD-CC70-4116-A22B-1B07E33571DA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{8FD1379A-BC94-4E7D-9CFE-1ECAC03820EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "..\Domain\Domain.csproj", "{E9990DE4-7799-4FE3-BC9C-A0CF992A3836}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "..\Domain\Domain.csproj", "{E9990DE4-7799-4FE3-BC9C-A0CF992A3836}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "..\Application\Application.csproj", "{1741F09B-2880-4D2E-B886-633E6D7D2C8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "..\Application\Application.csproj", "{1741F09B-2880-4D2E-B886-633E6D7D2C8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastracture", "..\Infrastracture\Infrastracture.csproj", "{3BB29FBB-22DA-4DA2-BDF7-6B96795A8BE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "..\Infrastracture\Infrastructure.csproj", "{3BB29FBB-22DA-4DA2-BDF7-6B96795A8BE9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D7AF80BA-6D8E-45DC-B8BE-A68E8BC479C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D2D7C4F0-723A-4E48-AC0F-911F119D36C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit-tests", "unit-tests", "{704D8580-1FCA-4221-80E5-37A1F61F0FED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration-tests", "integration-tests", "{74A22106-4AA3-4F5C-8CB7-0470457E2D54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Predictive-Healthcare-Management-System.Integration.UnitTests", "..\Predictive-Healthcare-Management-System.Integration.UnitTests\Predictive-Healthcare-Management-System.Integration.UnitTests.csproj", "{4B0815F0-6F08-404C-9065-11A3E3922240}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,15 +51,26 @@ Global
 		{3BB29FBB-22DA-4DA2-BDF7-6B96795A8BE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BB29FBB-22DA-4DA2-BDF7-6B96795A8BE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BB29FBB-22DA-4DA2-BDF7-6B96795A8BE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B0815F0-6F08-404C-9065-11A3E3922240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B0815F0-6F08-404C-9065-11A3E3922240}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B0815F0-6F08-404C-9065-11A3E3922240}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B0815F0-6F08-404C-9065-11A3E3922240}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6B463439-1048-49EE-ABED-C48157241B26} = {8FD1379A-BC94-4E7D-9CFE-1ECAC03820EB}
+		{4209B209-F515-4747-BB01-D4DCD33A6C07} = {D7AF80BA-6D8E-45DC-B8BE-A68E8BC479C5}
+		{71E3295A-C50A-41C0-A19D-C6DACB6E6687} = {D7AF80BA-6D8E-45DC-B8BE-A68E8BC479C5}
+		{4E7824AD-CC70-4116-A22B-1B07E33571DA} = {D7AF80BA-6D8E-45DC-B8BE-A68E8BC479C5}
+		{8FD1379A-BC94-4E7D-9CFE-1ECAC03820EB} = {D7AF80BA-6D8E-45DC-B8BE-A68E8BC479C5}
 		{E9990DE4-7799-4FE3-BC9C-A0CF992A3836} = {4209B209-F515-4747-BB01-D4DCD33A6C07}
 		{1741F09B-2880-4D2E-B886-633E6D7D2C8D} = {71E3295A-C50A-41C0-A19D-C6DACB6E6687}
 		{3BB29FBB-22DA-4DA2-BDF7-6B96795A8BE9} = {4E7824AD-CC70-4116-A22B-1B07E33571DA}
+		{704D8580-1FCA-4221-80E5-37A1F61F0FED} = {D2D7C4F0-723A-4E48-AC0F-911F119D36C0}
+		{74A22106-4AA3-4F5C-8CB7-0470457E2D54} = {D2D7C4F0-723A-4E48-AC0F-911F119D36C0}
+		{4B0815F0-6F08-404C-9065-11A3E3922240} = {704D8580-1FCA-4221-80E5-37A1F61F0FED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46B52E9D-366D-47A3-BFE8-396953082C75}
