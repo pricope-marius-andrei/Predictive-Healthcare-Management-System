@@ -10,7 +10,7 @@ namespace Infrastructure.Repositories
         private readonly ApplicationDbContext _context;
         public PatientRepository(ApplicationDbContext context)
         {
-            this._context = _context;
+            this._context = context;
         }
         public async Task<Guid> AddAsync(Patient patient)
         {
