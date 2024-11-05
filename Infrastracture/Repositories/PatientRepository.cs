@@ -1,5 +1,6 @@
 using Domain.Entities;
 using Domain.Repositories;
+using Domain.Utils;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +13,20 @@ namespace Infrastructure.Repositories
         {
             this._context = context;
         }
-        public async Task<Guid> AddAsync(Patient patient)
+        public async Task<Result<Guid>> AddAsync(Patient patient)
         {
             if (patient == null) throw new ArgumentNullException(nameof(patient));
+            try
+            {
+                _context.Patients.Add(patient);
+                await _context.SaveChangesAsync();
+                return Result<Guid>.Success(patient.PatientId);
+            }
+            catch(Exception ex)
+            {
+                return Result<Guid>.Failure(ex.Message);
+            }
 
-            _context.Patients.Add(patient);
-            await _context.SaveChangesAsync();
             return patient.PatientId;
         }
 

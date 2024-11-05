@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 using Application.Use_Cases.Commands;
 using Domain.Entities;
 using Domain.Repositories;
+using Domain.Utils;
 using MediatR;
 
-public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand, Guid>
+public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand, Result<Guid>>
 {
     private readonly IPatientRepository repository;
 
@@ -15,7 +16,7 @@ public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand,
         this.repository = repository;
     }
 
-    public async Task<Guid> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
     {
         var patientId = Guid.NewGuid();
 
@@ -34,7 +35,11 @@ public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand,
             Weight = request.Weight
         };
 
-        await repository.AddAsync(patient);
-        return patientId;
+        var result = await repository.AddAsync(patient);
+        if (result.IsSuccess)
+        {
+            return Result<Guid>.Success(result.Data);
+        }
+        return Result<Guid>.Failure(result.ErrorMessage);
     }
 }
