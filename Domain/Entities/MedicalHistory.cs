@@ -11,15 +11,13 @@ namespace Domain.Entities
     public class MedicalHistory
     {
         [Key]
-        public Guid MedicalHistoryId { get; set; }
+        public Guid HistoryId { get; set; }
 
+        [Required]
         public Guid PatientId { get; set; }
-
-        [ForeignKey("PatientId")]
         public Patient Patient { get; set; }
 
         public string Illness { get; set; }
-
-        public DateTime DateOfDiagnose { get; set; }
+        public DateTime DateOfDiagnosis { get; set; }
     }
 }

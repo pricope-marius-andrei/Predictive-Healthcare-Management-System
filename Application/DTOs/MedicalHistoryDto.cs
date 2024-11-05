@@ -1,10 +1,9 @@
 ﻿namespace Application.DTOs
 {
-    internal class MedicalHistoryDto
+    public class MedicalHistoryDto
     {
-        public Guid MedicalHistoryId { get; set; }
-        public Guid PatientId { get; set; }
+        public Guid HistoryId { get; set; }
         public string Illness { get; set; }
-        public DateTime DateOfDiagnose { get; set; }
+        public DateTime DateOfDiagnosis { get; set; }
     }
 }

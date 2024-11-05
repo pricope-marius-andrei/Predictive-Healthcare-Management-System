@@ -6,36 +6,61 @@ using Application.Use_Cases.Queries;
 
 namespace Predictive_Healthcare_Management_System.Controllers
 {
-
     [Route("api/v1/[controller]")]
     [ApiController]
-
-    public class PatientsController : Controller
+    public class PatientsController : ControllerBase
     {
-        private readonly IMediator mediator;
+        private readonly IMediator _mediator;
+
         public PatientsController(IMediator mediator)
         {
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> CreatePatient(CreatePatientCommand command)
+        public async Task<ActionResult<Guid>> CreatePatient([FromBody] CreatePatientCommand command)
         {
-            var id= await mediator.Send(command);
-            return CreatedAtAction(nameof(GetPatient), new { id = id }, id);
+            try
+            {
+                var id = await _mediator.Send(command);
+                return CreatedAtAction(nameof(GetPatient), new { id = id }, id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PatientsDto>> GetPatient(Guid id)
         {
-            var patient = await mediator.Send(new GetPatientByUserIdQuery { Id = id });
-            if (patient == null)
+            try
             {
-                return NotFound();
+                var patient = await _mediator.Send(new GetPatientByUserIdQuery { Id = id });
+                if (patient == null)
+                {
+                    return NotFound();
+                }
+                return Ok(patient);
             }
-            return Ok(patient);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
-
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PatientsDto>>> GetAllPatients()
+        {
+            try
+            {
+                var patients = await _mediator.Send(new GetAllPatientsQuery());
+                return Ok(patients);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

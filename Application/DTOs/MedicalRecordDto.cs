@@ -1,12 +1,12 @@
 ﻿namespace Application.DTOs
 {
-    internal class MedicalRecordDto
+    public class MedicalRecordDto
     {
-        public Guid MedicalRecordId { get; set; }
-        public Guid PatientId { get; set; }
+        public Guid RecordId { get; set; }
         public string VisitReason { get; set; }
         public string Symptoms { get; set; }
         public string Diagnosis { get; set; }
         public string DoctorNotes { get; set; }
+        public Guid DoctorId { get; set; }
     }
 }

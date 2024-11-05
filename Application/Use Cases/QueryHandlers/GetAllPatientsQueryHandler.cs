@@ -2,31 +2,27 @@
 using Application.Use_Cases.Queries;
 using Domain.Repositories;
 using MediatR;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Use_Cases.QueryHandlers
 {
-    public class GetPatientByUserIdQueryHandler : IRequestHandler<GetPatientByUserIdQuery, PatientsDto>
+    public class GetAllPatientsQueryHandler : IRequestHandler<GetAllPatientsQuery, IEnumerable<PatientsDto>>
     {
         private readonly IPatientRepository repository;
 
-        public GetPatientByUserIdQueryHandler(IPatientRepository repository)
+        public GetAllPatientsQueryHandler(IPatientRepository repository)
         {
             this.repository = repository;
         }
 
-        public async Task<PatientsDto> Handle(GetPatientByUserIdQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<PatientsDto>> Handle(GetAllPatientsQuery request, CancellationToken cancellationToken)
         {
-            var patient = await repository.GetByIdAsync(request.Id);
+            var patients = await repository.GetAllAsync();
 
-            if (patient == null)
-            {
-                throw new KeyNotFoundException("Patient not found.");
-            }
-
-            return new PatientsDto
+            return patients.Select(patient => new PatientsDto
             {
                 UserId = patient.PatientId,
                 Username = patient.Username,
@@ -53,7 +49,7 @@ namespace Application.Use_Cases.QueryHandlers
                     DoctorNotes = mr.DoctorNotes,
                     DoctorId = mr.DoctorId
                 }).ToList()
-            };
+            }).ToList();
         }
     }
 }

@@ -1,30 +1,39 @@
 using Domain.Entities;
-using Infrastracture.Persistence;
+using Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
     public class PatientRepository : IPatientRepository
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
         public PatientRepository(ApplicationDbContext context)
         {
-            this.context = context;
+            this._context = _context;
         }
-        public Task<IEnumerable<Patient>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Patient> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Guid> AddAsync(Patient patient)
         {
-           await context.Patients.AddAsync(patient);
-           await context.SaveChangesAsync();
-           return patient.UserId;
+            if (patient == null) throw new ArgumentNullException(nameof(patient));
+
+            _context.Patients.Add(patient);
+            await _context.SaveChangesAsync();
+            return patient.PatientId;
+        }
+
+        public async Task<Patient> GetByIdAsync(Guid id)
+        {
+            return await _context.Patients
+                .Include(p => p.MedicalHistories)
+                .Include(p => p.MedicalRecords)
+                .FirstOrDefaultAsync(p => p.PatientId == id);
+        }
+
+        public async Task<IEnumerable<Patient>> GetAllAsync()
+        {
+            return await _context.Patients
+                .Include(p => p.MedicalHistories)
+                .Include(p => p.MedicalRecords)
+                .ToListAsync();
         }
 
         public Task UpdateAsync(Patient patient)

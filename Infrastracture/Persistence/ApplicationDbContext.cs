@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastracture.Persistence
+namespace Infrastructure.Persistence
 {
     public class ApplicationDbContext : DbContext
     {
@@ -9,26 +9,27 @@ namespace Infrastracture.Persistence
         {
 
         }
-
-        public DbSet<User> Users { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
-        public DbSet<MedicalHistory> MedicalHistories { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
+        public DbSet<MedicalHistory> MedicalHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Patient)
-                .WithOne(p => p.User)
-                .HasForeignKey<Patient>(p => p.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<MedicalRecord>()
+                .HasOne(mr => mr.Patient)
+                .WithMany(p => p.MedicalRecords)
+                .HasForeignKey(mr => mr.PatientId);
 
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Doctor)
-                .WithOne(d => d.User)
-                .HasForeignKey<Doctor>(d => d.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<MedicalRecord>()
+                .HasOne(mr => mr.Doctor)
+                .WithMany(d => d.MedicalRecords)
+                .HasForeignKey(mr => mr.DoctorId);
+
+            modelBuilder.Entity<MedicalHistory>()
+                .HasOne(mh => mh.Patient)
+                .WithMany(p => p.MedicalHistories)
+                .HasForeignKey(mh => mh.PatientId);
 
             base.OnModelCreating(modelBuilder);
         }

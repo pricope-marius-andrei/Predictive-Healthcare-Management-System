@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Predictive_Healthcare_Management_System.Migrations
+namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class RedesignedDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
