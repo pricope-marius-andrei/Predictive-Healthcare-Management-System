@@ -21,12 +21,14 @@ namespace Infrastracture.Persistence
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Patient)
                 .WithOne(p => p.User)
-                .HasForeignKey<Patient>(p => p.UserId);
+                .HasForeignKey<Patient>(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Doctor)
                 .WithOne(d => d.User)
-                .HasForeignKey<Doctor>(d => d.UserId);
+                .HasForeignKey<Doctor>(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

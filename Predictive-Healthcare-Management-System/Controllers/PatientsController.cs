@@ -2,7 +2,7 @@
 using MediatR;
 using Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using Application.Use_Cases.Queries
+using Application.Use_Cases.Queries;
 
 namespace Predictive_Healthcare_Management_System.Controllers
 {
