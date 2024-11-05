@@ -37,9 +37,30 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public Task UpdateAsync(Patient patient)
+        public async Task UpdateAsync(Patient patient)
         {
-            throw new NotImplementedException();
+            if (patient == null) throw new ArgumentNullException(nameof(patient));
+
+            var existingPatient = await _context.Patients.FindAsync(patient.PatientId);
+            if (existingPatient == null)
+            {
+                throw new KeyNotFoundException("Patient not found.");
+            }
+
+            existingPatient.Username = patient.Username;
+            existingPatient.Email = patient.Email;
+            existingPatient.Password = patient.Password;
+            existingPatient.FirstName = patient.FirstName;
+            existingPatient.LastName = patient.LastName;
+            existingPatient.PhoneNumber = patient.PhoneNumber;
+            existingPatient.Address = patient.Address;
+            existingPatient.Gender = patient.Gender;
+            existingPatient.Height = patient.Height;
+            existingPatient.Weight = patient.Weight;
+
+            _context.Patients.Update(existingPatient);
+
+            await _context.SaveChangesAsync();
         }
 
         public Task DeleteAsync(Guid id)

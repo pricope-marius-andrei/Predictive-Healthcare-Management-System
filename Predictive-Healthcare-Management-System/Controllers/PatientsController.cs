@@ -62,5 +62,22 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdatePatient(Guid id, [FromBody] UpdatePatientCommand command)
+        {
+            if (id != command.PatientId)
+            {
+                return BadRequest("Patient ID in the path does not match the ID in the request body.");
+            }
+
+            var result = await _mediator.Send(command);
+            if (!result)
+            {
+                return NotFound("Patient not found.");
+            }
+
+            return NoContent();
+        }
     }
 }
