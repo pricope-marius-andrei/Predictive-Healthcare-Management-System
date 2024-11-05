@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Domain.Utils;
+using MediatR;
 
 namespace Application.Use_Cases.Commands
 {
-    public class CreatePatientCommand : IRequest<Guid>
+    public class CreatePatientCommand : IRequest<Result<Guid>>
     {
         public string Username { get; set; }
         public string Email { get; set; }
