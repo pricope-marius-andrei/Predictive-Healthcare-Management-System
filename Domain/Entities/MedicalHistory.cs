@@ -17,7 +17,8 @@ namespace Domain.Entities
         public Guid PatientId { get; set; }
         public Patient Patient { get; set; }
 
-        public string Illness { get; set; }
-        public DateTime DateOfDiagnosis { get; set; }
+        [Required]
+        public string Condition { get; set; }
+        public DateTime DateOfDiagnosis { get; set; } = DateTime.Now;
     }
 }

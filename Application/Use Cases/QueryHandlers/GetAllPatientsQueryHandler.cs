@@ -37,7 +37,7 @@ namespace Application.Use_Cases.QueryHandlers
                 MedicalHistories = patient.MedicalHistories.Select(mh => new MedicalHistoryDto
                 {
                     HistoryId = mh.HistoryId,
-                    Illness = mh.Illness,
+                    Illness = mh.Condition,
                     DateOfDiagnosis = mh.DateOfDiagnosis
                 }).ToList(),
                 MedicalRecords = patient.MedicalRecords.Select(mr => new MedicalRecordDto

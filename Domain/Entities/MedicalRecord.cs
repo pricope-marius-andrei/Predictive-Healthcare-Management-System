@@ -21,9 +21,14 @@ namespace Domain.Entities
         public Guid DoctorId { get; set; }
         public Doctor Doctor { get; set; }
 
+        [Required]
         public string VisitReason { get; set; }
+
         public string Symptoms { get; set; }
+
+        [Required]
         public string Diagnosis { get; set; }
+
         public string DoctorNotes { get; set; }
     }
 }
