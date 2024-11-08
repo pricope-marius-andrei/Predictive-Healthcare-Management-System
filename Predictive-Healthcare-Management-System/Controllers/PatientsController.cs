@@ -80,5 +80,19 @@ namespace Predictive_Healthcare_Management_System.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeletePatient(Guid id)
+        {
+            try
+            {
+                await _mediator.Send(new DeletePatientCommand { PatientId = id });
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound($"Patient with ID {id} not found.");
+            }
+        }
     }
 }

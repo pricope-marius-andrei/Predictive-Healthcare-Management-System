@@ -24,5 +24,7 @@ namespace Domain.Entities
         public string Diagnosis { get; set; }
 
         public string DoctorNotes { get; set; }
+
+        public DateTime DateOfVisit { get; set; } = DateTime.Now;
     }
 }

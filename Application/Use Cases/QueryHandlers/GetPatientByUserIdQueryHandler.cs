@@ -7,16 +7,16 @@ namespace Application.Use_Cases.QueryHandlers
 {
     public class GetPatientByUserIdQueryHandler : IRequestHandler<GetPatientByUserIdQuery, PatientsDto>
     {
-        private readonly IPatientRepository repository;
+        private readonly IPatientRepository _repository;
 
         public GetPatientByUserIdQueryHandler(IPatientRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task<PatientsDto> Handle(GetPatientByUserIdQuery request, CancellationToken cancellationToken)
         {
-            var patient = await repository.GetByIdAsync(request.Id);
+            var patient = await _repository.GetByIdAsync(request.Id);
 
             if (patient == null)
             {

@@ -11,7 +11,7 @@ namespace Infrastructure.Repositories
         private readonly ApplicationDbContext _context;
         public PatientRepository(ApplicationDbContext context)
         {
-            this._context = context;
+            _context = context;
         }
         public async Task<Result<Guid>> AddAsync(Patient patient)
         {
@@ -70,9 +70,16 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var patient = await _context.Patients.FindAsync(id);
+            if (patient == null)
+            {
+                throw new KeyNotFoundException("Patient not found.");
+            }
+
+            _context.Patients.Remove(patient);
+            await _context.SaveChangesAsync();
         }
     }
 }

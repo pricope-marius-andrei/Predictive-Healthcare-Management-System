@@ -4,6 +4,8 @@ using Domain.Repositories;
 using Domain.Utils;
 using MediatR;
 
+namespace Application.Use_Cases.CommandHandlers;
+
 public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand, Result<Guid>>
 {
     private readonly IPatientRepository repository;

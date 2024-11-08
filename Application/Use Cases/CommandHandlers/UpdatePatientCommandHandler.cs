@@ -2,6 +2,8 @@
 using Domain.Repositories;
 using MediatR;
 
+namespace Application.Use_Cases.CommandHandlers;
+
 public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand, bool>
 {
     private readonly IPatientRepository _repository;
