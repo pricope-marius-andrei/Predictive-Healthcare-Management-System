@@ -8,7 +8,7 @@ using Application.UseCases.Commands;
 using AutoMapper;
 using Domain.Entities;
 
-namespace Application
+namespace Application.Utils
 {
     public class MappingProfile : Profile
     {

@@ -2,6 +2,7 @@
 using System.Reflection;
 using FluentValidation;
 using MediatR;
+using Application.Utils;
 
 namespace Application
 {
