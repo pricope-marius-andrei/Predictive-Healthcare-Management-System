@@ -1,4 +1,4 @@
-﻿namespace Domain.Utils
+﻿namespace Domain.Common
 {
     public class Result<T>
     {
