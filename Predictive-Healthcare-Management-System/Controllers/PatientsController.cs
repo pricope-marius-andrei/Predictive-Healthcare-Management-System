@@ -3,7 +3,7 @@ using Application.DTOs;
 using Application.UseCases.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Application.UseCases.Queries;
-using Domain.Utils;
+using Domain.Common;
 
 namespace Predictive_Healthcare_Management_System.Controllers
 {

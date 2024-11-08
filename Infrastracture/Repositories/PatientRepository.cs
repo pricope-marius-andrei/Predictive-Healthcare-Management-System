@@ -1,7 +1,7 @@
 using System.Net;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
-using Domain.Utils;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,7 +53,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Result<Patient>> UpdateAsync(Patient patient)
+        public async Task UpdateAsync(Patient patient)
         {
             if (patient == null) throw new ArgumentNullException(nameof(patient));
 
