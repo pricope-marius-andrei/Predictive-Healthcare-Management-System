@@ -3,6 +3,7 @@ using MediatR;
 using Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Application.Use_Cases.Queries;
+using Domain.Utils;
 
 namespace Predictive_Healthcare_Management_System.Controllers
 {
@@ -18,7 +19,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> CreatePatient([FromBody] CreatePatientCommand command)
+        public async Task<ActionResult<Result<Guid>>> CreatePatient([FromBody] CreatePatientCommand command)
         {
             try
             {

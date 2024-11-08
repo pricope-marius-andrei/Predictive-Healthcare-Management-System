@@ -26,8 +26,6 @@ namespace Infrastructure.Repositories
             {
                 return Result<Guid>.Failure(ex.Message);
             }
-
-            return patient.PatientId;
         }
 
         public async Task<Patient> GetByIdAsync(Guid id)
