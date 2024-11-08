@@ -1,6 +1,7 @@
-﻿using MediatR;
+﻿using Application.UseCases.Commands;
+using MediatR;
 
-namespace Application.Use_Cases.Commands
+namespace Application.UseCases.Commands
 {
     public class UpdatePatientCommand : CreatePatientCommand, IRequest
     {

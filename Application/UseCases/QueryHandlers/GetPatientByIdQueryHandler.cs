@@ -1,10 +1,10 @@
 ﻿using Application.DTOs;
-using Application.Use_Cases.Queries;
+using Application.UseCases.Queries;
 using AutoMapper;
 using Domain.Repositories;
 using MediatR;
 
-namespace Application.Use_Cases.QueryHandlers
+namespace Application.UseCases.QueryHandlers
 {
     public class GetPatientByIdQueryHandler : IRequestHandler<GetPatientByIdQuery, PatientDto>
     {

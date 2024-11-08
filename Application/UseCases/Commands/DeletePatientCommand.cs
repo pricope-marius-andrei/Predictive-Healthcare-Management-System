@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Use_Cases.Commands
+namespace Application.UseCases.Commands
 {
     public class DeletePatientCommand : IRequest
     {

@@ -1,10 +1,10 @@
-﻿using Application.Use_Cases.Commands;
+﻿using Application.UseCases.Commands;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 
-namespace Application.Use_Cases.CommandHandlers;
+namespace Application.UseCases.CommandHandlers;
 
 public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand>
 {

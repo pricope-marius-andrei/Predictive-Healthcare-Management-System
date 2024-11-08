@@ -2,7 +2,7 @@
 using Domain.Utils;
 using MediatR;
 
-namespace Application.Use_Cases.Commands
+namespace Application.UseCases.Commands
 {
     public class CreatePatientCommand : IRequest<Result<Guid>>
     {
@@ -18,7 +18,5 @@ namespace Application.Use_Cases.Commands
         public decimal? Weight { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime DateOfRegistration { get; set; }
-        public ICollection<MedicalHistory>? MedicalHistories { get; set; }
-        public ICollection<MedicalRecord>? MedicalRecords { get; set; }
     }
 }

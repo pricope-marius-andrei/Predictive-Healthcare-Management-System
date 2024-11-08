@@ -1,8 +1,8 @@
-﻿using Application.Use_Cases.Commands;
-using MediatR;
+﻿using MediatR;
 using Application.DTOs;
+using Application.UseCases.Commands;
 using Microsoft.AspNetCore.Mvc;
-using Application.Use_Cases.Queries;
+using Application.UseCases.Queries;
 using Domain.Utils;
 
 namespace Predictive_Healthcare_Management_System.Controllers

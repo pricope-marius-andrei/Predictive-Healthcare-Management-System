@@ -4,7 +4,7 @@ namespace Application.DTOs
 {
     public class DoctorDto
     {
-        public Guid Id { get; set; }
+        public Guid DoctorId { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
