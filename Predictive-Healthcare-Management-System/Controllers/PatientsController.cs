@@ -23,8 +23,8 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var id = await _mediator.Send(command);
-                return CreatedAtAction(nameof(GetPatient), new { id = id }, id);
+                var result =  await _mediator.Send(command);
+                return CreatedAtAction(nameof(GetPatient), new { id = result.Data }, result.Data);
             }
             catch (Exception ex)
             {
