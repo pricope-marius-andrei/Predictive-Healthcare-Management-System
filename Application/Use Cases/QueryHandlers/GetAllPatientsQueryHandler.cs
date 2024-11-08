@@ -2,25 +2,21 @@
 using Application.Use_Cases.Queries;
 using Domain.Repositories;
 using MediatR;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.Use_Cases.QueryHandlers
 {
     public class GetAllPatientsQueryHandler : IRequestHandler<GetAllPatientsQuery, IEnumerable<PatientsDto>>
     {
-        private readonly IPatientRepository repository;
+        private readonly IPatientRepository _repository;
 
         public GetAllPatientsQueryHandler(IPatientRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task<IEnumerable<PatientsDto>> Handle(GetAllPatientsQuery request, CancellationToken cancellationToken)
         {
-            var patients = await repository.GetAllAsync();
+            var patients = await _repository.GetAllAsync();
 
             return patients.Select(patient => new PatientsDto
             {
@@ -37,7 +33,7 @@ namespace Application.Use_Cases.QueryHandlers
                 MedicalHistories = patient.MedicalHistories.Select(mh => new MedicalHistoryDto
                 {
                     HistoryId = mh.HistoryId,
-                    Illness = mh.Illness,
+                    Illness = mh.Condition,
                     DateOfDiagnosis = mh.DateOfDiagnosis
                 }).ToList(),
                 MedicalRecords = patient.MedicalRecords.Select(mr => new MedicalRecordDto

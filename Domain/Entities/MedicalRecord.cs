@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
@@ -21,9 +15,16 @@ namespace Domain.Entities
         public Guid DoctorId { get; set; }
         public Doctor Doctor { get; set; }
 
+        [Required]
         public string VisitReason { get; set; }
+
         public string Symptoms { get; set; }
+
+        [Required]
         public string Diagnosis { get; set; }
+
         public string DoctorNotes { get; set; }
+
+        public DateTime DateOfVisit { get; set; } = DateTime.Now;
     }
 }

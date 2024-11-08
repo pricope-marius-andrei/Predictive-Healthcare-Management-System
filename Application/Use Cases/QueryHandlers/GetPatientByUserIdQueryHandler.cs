@@ -2,24 +2,21 @@
 using Application.Use_Cases.Queries;
 using Domain.Repositories;
 using MediatR;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.Use_Cases.QueryHandlers
 {
     public class GetPatientByUserIdQueryHandler : IRequestHandler<GetPatientByUserIdQuery, PatientsDto>
     {
-        private readonly IPatientRepository repository;
+        private readonly IPatientRepository _repository;
 
         public GetPatientByUserIdQueryHandler(IPatientRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task<PatientsDto> Handle(GetPatientByUserIdQuery request, CancellationToken cancellationToken)
         {
-            var patient = await repository.GetByIdAsync(request.Id);
+            var patient = await _repository.GetByIdAsync(request.Id);
 
             if (patient == null)
             {
@@ -41,7 +38,7 @@ namespace Application.Use_Cases.QueryHandlers
                 MedicalHistories = patient.MedicalHistories.Select(mh => new MedicalHistoryDto
                 {
                     HistoryId = mh.HistoryId,
-                    Illness = mh.Illness,
+                    Illness = mh.Condition,
                     DateOfDiagnosis = mh.DateOfDiagnosis
                 }).ToList(),
                 MedicalRecords = patient.MedicalRecords.Select(mr => new MedicalRecordDto

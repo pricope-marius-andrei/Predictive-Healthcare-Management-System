@@ -3,6 +3,7 @@ using MediatR;
 using Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Application.Use_Cases.Queries;
+using Domain.Utils;
 
 namespace Predictive_Healthcare_Management_System.Controllers
 {
@@ -18,12 +19,12 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> CreatePatient([FromBody] CreatePatientCommand command)
+        public async Task<ActionResult<Result<Guid>>> CreatePatient([FromBody] CreatePatientCommand command)
         {
             try
             {
-                var id = await _mediator.Send(command);
-                return CreatedAtAction(nameof(GetPatient), new { id = id }, id);
+                var result =  await _mediator.Send(command);
+                return CreatedAtAction(nameof(GetPatient), new { id = result.Data }, result.Data);
             }
             catch (Exception ex)
             {
@@ -78,6 +79,20 @@ namespace Predictive_Healthcare_Management_System.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeletePatient(Guid id)
+        {
+            try
+            {
+                await _mediator.Send(new DeletePatientCommand { PatientId = id });
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound($"Patient with ID {id} not found.");
+            }
         }
     }
 }

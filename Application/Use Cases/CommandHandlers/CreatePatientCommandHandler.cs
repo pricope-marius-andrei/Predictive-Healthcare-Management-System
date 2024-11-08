@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Use_Cases.Commands;
+﻿using Application.Use_Cases.Commands;
 using Domain.Entities;
 using Domain.Repositories;
 using Domain.Utils;
 using MediatR;
+
+namespace Application.Use_Cases.CommandHandlers;
 
 public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand, Result<Guid>>
 {
