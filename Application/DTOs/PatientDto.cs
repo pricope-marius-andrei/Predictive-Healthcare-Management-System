@@ -1,6 +1,6 @@
 ﻿namespace Application.DTOs
 {
-    public class PatientsDto
+    public class PatientDto
     {
         public Guid UserId { get; set; }
         public string Username { get; set; }
@@ -12,7 +12,8 @@
         public string Gender { get; set; }
         public decimal Height { get; set; }
         public decimal Weight { get; set; }
-
+        public DateTime DateOfBirth { get; set; }
+        public DateTime DateOfRegistration { get; set; }
         public ICollection<MedicalHistoryDto> MedicalHistories { get; set; }
         public ICollection<MedicalRecordDto> MedicalRecords { get; set; }
     }

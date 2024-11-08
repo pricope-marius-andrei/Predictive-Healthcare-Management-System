@@ -1,3 +1,4 @@
+using System.Net;
 using Domain.Entities;
 using Domain.Repositories;
 using Domain.Utils;
@@ -13,16 +14,17 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
+
         public async Task<Result<Guid>> AddAsync(Patient patient)
         {
             if (patient == null) throw new ArgumentNullException(nameof(patient));
             try
             {
-                _context.Patients.Add(patient);
+                await _context.Patients.AddAsync(patient);
                 await _context.SaveChangesAsync();
                 return Result<Guid>.Success(patient.PatientId);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Result<Guid>.Failure(ex.InnerException!.ToString());
             }
@@ -30,10 +32,17 @@ namespace Infrastructure.Repositories
 
         public async Task<Patient> GetByIdAsync(Guid id)
         {
-            return await _context.Patients
+            var patient = await _context.Patients
                 .Include(p => p.MedicalHistories)
                 .Include(p => p.MedicalRecords)
                 .FirstOrDefaultAsync(p => p.PatientId == id);
+
+            if (patient == null)
+            {
+                throw new KeyNotFoundException("Patient not found.");
+            }
+
+            return patient;
         }
 
         public async Task<IEnumerable<Patient>> GetAllAsync()
@@ -54,19 +63,7 @@ namespace Infrastructure.Repositories
                 throw new KeyNotFoundException("Patient not found.");
             }
 
-            existingPatient.Username = patient.Username;
-            existingPatient.Email = patient.Email;
-            existingPatient.Password = patient.Password;
-            existingPatient.FirstName = patient.FirstName;
-            existingPatient.LastName = patient.LastName;
-            existingPatient.PhoneNumber = patient.PhoneNumber;
-            existingPatient.Address = patient.Address;
-            existingPatient.Gender = patient.Gender;
-            existingPatient.Height = patient.Height;
-            existingPatient.Weight = patient.Weight;
-
-            _context.Patients.Update(existingPatient);
-
+            _context.Entry(existingPatient).CurrentValues.SetValues(patient);
             await _context.SaveChangesAsync();
         }
 

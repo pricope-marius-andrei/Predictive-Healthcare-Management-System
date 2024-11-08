@@ -19,12 +19,12 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Result<Guid>>> CreatePatient([FromBody] CreatePatientCommand command)
+        public async Task<ActionResult<Result<Guid>>> CreatePatient(CreatePatientCommand command)
         {
             try
             {
                 var result =  await _mediator.Send(command);
-                return CreatedAtAction(nameof(GetPatient), new { id = result.Data }, result.Data);
+                return CreatedAtAction(nameof(GetPatientById), new { id = result.Data }, result.Data);
             }
             catch (Exception ex)
             {
@@ -33,25 +33,21 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<PatientsDto>> GetPatient(Guid id)
+        public async Task<ActionResult<PatientDto>> GetPatientById(Guid id)
         {
             try
             {
-                var patient = await _mediator.Send(new GetPatientByUserIdQuery { Id = id });
-                if (patient == null)
-                {
-                    return NotFound();
-                }
+                var patient = await _mediator.Send(new GetPatientByIdQuery { Id = id });
                 return Ok(patient);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return NotFound($"Internal server error: {ex.Message}");
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PatientsDto>>> GetAllPatients()
+        public async Task<ActionResult<IEnumerable<PatientDto>>> GetAllPatients()
         {
             try
             {
@@ -65,20 +61,16 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdatePatient(Guid id, [FromBody] UpdatePatientCommand command)
+        public async Task<IActionResult> UpdatePatient(Guid id, UpdatePatientCommand command)
         {
             if (id != command.PatientId)
             {
                 return BadRequest("Patient ID in the path does not match the ID in the request body.");
             }
 
-            var result = await _mediator.Send(command);
-            if (!result)
-            {
-                return NotFound("Patient not found.");
-            }
+            await _mediator.Send(command);
 
-            return NoContent();
+            return StatusCode(StatusCodes.Status204NoContent);
         }
 
         [HttpDelete("{id:guid}")]
@@ -87,7 +79,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
             try
             {
                 await _mediator.Send(new DeletePatientCommand { PatientId = id });
-                return NoContent();
+                return StatusCode(StatusCodes.Status204NoContent);
             }
             catch (Exception ex)
             {

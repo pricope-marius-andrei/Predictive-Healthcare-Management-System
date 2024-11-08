@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Domain.Utils
+﻿namespace Domain.Utils
 {
     public class Result<T>
     {

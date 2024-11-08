@@ -1,4 +1,5 @@
 ﻿using Application.Use_Cases.Commands;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
 using Domain.Utils;
@@ -8,33 +9,20 @@ namespace Application.Use_Cases.CommandHandlers;
 
 public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand, Result<Guid>>
 {
-    private readonly IPatientRepository repository;
+    private readonly IPatientRepository _repository;
+    private readonly IMapper _mapper;
 
-    public CreatePatientCommandHandler(IPatientRepository repository)
+    public CreatePatientCommandHandler(IPatientRepository repository, IMapper mapper)
     {
-        this.repository = repository;
+        _repository = repository;
+        _mapper = mapper;
     }
 
     public async Task<Result<Guid>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
     {
-        var patientId = Guid.NewGuid();
-
-        var patient = new Patient
-        {
-            PatientId = patientId,
-            Username = request.Username,
-            Email = request.Email,
-            Password = request.Password,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            PhoneNumber = request.PhoneNumber,
-            Address = request.Address,
-            Gender = request.Gender,
-            Height = request.Height,
-            Weight = request.Weight
-        };
-
-        var result = await repository.AddAsync(patient);
+        var patient = _mapper.Map<Patient>(request);
+     
+        var result = await _repository.AddAsync(patient);
         if (result.IsSuccess)
         {
             return Result<Guid>.Success(result.Data);

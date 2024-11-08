@@ -16,6 +16,7 @@ namespace Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasPostgresExtension("uuid-ossp");
             modelBuilder.Entity<MedicalRecord>()
                 .HasOne(mr => mr.Patient)
                 .WithMany(p => p.MedicalRecords)
@@ -30,6 +31,18 @@ namespace Infrastructure.Persistence
                 .HasOne(mh => mh.Patient)
                 .WithMany(p => p.MedicalHistories)
                 .HasForeignKey(mh => mh.PatientId);
+
+            modelBuilder.Entity<Patient>()
+                .Property(p => p.FirstName)
+                .IsRequired();
+
+            modelBuilder.Entity<Patient>()
+                .Property(p => p.LastName)
+                .IsRequired();
+
+            modelBuilder.Entity<Patient>()
+                .Property(p => p.Gender)
+                .IsRequired();
 
             base.OnModelCreating(modelBuilder);
         }

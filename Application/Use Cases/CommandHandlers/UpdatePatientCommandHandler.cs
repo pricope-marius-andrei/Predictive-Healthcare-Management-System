@@ -1,38 +1,25 @@
 ﻿using Application.Use_Cases.Commands;
+using AutoMapper;
+using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 
 namespace Application.Use_Cases.CommandHandlers;
 
-public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand, bool>
+public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand>
 {
     private readonly IPatientRepository _repository;
+    private readonly IMapper _mapper;
 
-    public UpdatePatientCommandHandler(IPatientRepository repository)
+    public UpdatePatientCommandHandler(IPatientRepository repository, IMapper mapper)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _repository = repository;
+        _mapper = mapper;
     }
 
-    public async Task<bool> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
+    public Task Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
     {
-        var patient = await _repository.GetByIdAsync(request.PatientId);
-        if (patient == null)
-        {
-            return false;
-        }
-
-        patient.Username = request.Username;
-        patient.Email = request.Email;
-        patient.Password = request.Password;
-        patient.FirstName = request.FirstName;
-        patient.LastName = request.LastName;
-        patient.PhoneNumber = request.PhoneNumber;
-        patient.Address = request.Address;
-        patient.Gender = request.Gender;
-        patient.Height = request.Height;
-        patient.Weight = request.Weight;
-
-        await _repository.UpdateAsync(patient);
-        return true;
+        var patient = _mapper.Map<Patient>(request);
+        return _repository.UpdateAsync(patient);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Application.DTOs
+﻿using Domain.Entities;
+
+namespace Application.DTOs
 {
     public class DoctorDto
     {
@@ -9,5 +11,7 @@
         public string LastName { get; set; }
         public string Specialization { get; set; }
         public string PhoneNumber { get; set; }
+        public DateTime DateOfRegistration { get; set; }
+        public ICollection<MedicalRecord> MedicalRecords { get; set; }
     }
 }
