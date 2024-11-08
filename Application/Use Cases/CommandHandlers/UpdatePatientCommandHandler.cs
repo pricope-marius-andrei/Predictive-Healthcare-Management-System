@@ -1,9 +1,6 @@
 ﻿using Application.Use_Cases.Commands;
 using Domain.Repositories;
 using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand, bool>
 {
