@@ -10,22 +10,22 @@ namespace Predictive_Healthcare_Management_System.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class PatientsController : ControllerBase
+    public class MedicalHistoriesController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public PatientsController(IMediator mediator)
+        public MedicalHistoriesController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Result<Guid>>> CreatePatient(CreatePatientCommand command)
+        public async Task<ActionResult<Result<Guid>>> CreateMedicalHistory(CreateMedicalHistoryCommand command)
         {
             try
             {
                 var result = await _mediator.Send(command);
-                return CreatedAtAction(nameof(GetPatientById), new { id = result.Data }, result.Data);
+                return CreatedAtAction(nameof(GetMedicalHistoryById), new { id = result.Data }, result.Data);
             }
             catch (Exception ex)
             {
@@ -34,12 +34,12 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<PatientDto>> GetPatientById(Guid id)
+        public async Task<ActionResult<MedicalHistoryDto>> GetMedicalHistoryById(Guid id)
         {
             try
             {
-                var patient = await _mediator.Send(new GetPatientByIdQuery { Id = id });
-                return Ok(patient);
+                var medicalHistory = await _mediator.Send(new GetMedicalHistoryByIdQuery { HistoryId = id });
+                return Ok(medicalHistory);
             }
             catch (Exception ex)
             {
@@ -48,12 +48,12 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PatientDto>>> GetAllPatients()
+        public async Task<ActionResult<IEnumerable<MedicalHistoryDto>>> GetAllMedicalHistories()
         {
             try
             {
-                var patients = await _mediator.Send(new GetAllPatientsQuery());
-                return Ok(patients);
+                var medicalHistories = await _mediator.Send(new GetAllMedicalHistoriesQuery());
+                return Ok(medicalHistories);
             }
             catch (Exception ex)
             {
@@ -62,11 +62,11 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Result<Patient>>> UpdatePatient(Guid id, UpdatePatientCommand command)
+        public async Task<ActionResult<Result<MedicalHistory>>> UpdateMedicalHistory(Guid id, UpdateMedicalHistoryCommand command)
         {
-            if (id != command.PatientId)
+            if (id != command.HistoryId)
             {
-                return BadRequest("Patient ID in the path does not match the ID in the request body.");
+                return BadRequest("Medical history ID in the path does not match the ID in the request body.");
             }
 
             try
@@ -82,16 +82,16 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeletePatient(Guid id)
+        public async Task<IActionResult> DeleteMedicalHistory(Guid id)
         {
             try
             {
-                await _mediator.Send(new DeletePatientCommand { PatientId = id });
+                await _mediator.Send(new DeleteMedicalHistoryCommand { HistoryId = id });
                 return StatusCode(StatusCodes.Status204NoContent);
             }
             catch (Exception ex)
             {
-                return NotFound($"Patient with ID {id} not found.");
+                return NotFound($"Medical history with ID {id} not found.");
             }
         }
     }
