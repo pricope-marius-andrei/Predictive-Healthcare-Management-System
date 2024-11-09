@@ -7,22 +7,22 @@ using MediatR;
 
 namespace Application.UseCases.CommandHandlers;
 
-public class CreateMedicalHistoryCommandHandler : IRequestHandler<CreateMedicalHistoryCommand, Result<Guid>>
+public class CreateMedicalRecordCommandHandler : IRequestHandler<CreateMedicalRecordCommand, Result<Guid>>
 {
-    private readonly IMedicalHistoryRepository _repository;
+    private readonly IMedicalRecordRepository _repository;
     private readonly IMapper _mapper;
 
-    public CreateMedicalHistoryCommandHandler(IMedicalHistoryRepository repository, IMapper mapper)
+    public CreateMedicalRecordCommandHandler(IMedicalRecordRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
     }
 
-    public async Task<Result<Guid>> Handle(CreateMedicalHistoryCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateMedicalRecordCommand request, CancellationToken cancellationToken)
     {
-        var medicalHistory = _mapper.Map<MedicalHistory>(request);
-     
-        var result = await _repository.AddAsync(medicalHistory);
+        var medicalRecord = _mapper.Map<MedicalRecord>(request);
+
+        var result = await _repository.AddAsync(medicalRecord);
         if (result.IsSuccess)
         {
             return Result<Guid>.Success(result.Data);
