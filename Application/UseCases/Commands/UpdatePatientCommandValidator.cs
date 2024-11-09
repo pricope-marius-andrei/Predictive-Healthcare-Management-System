@@ -2,10 +2,13 @@
 
 namespace Application.UseCases.Commands
 {
-    public class CreatePatientCommandValidator : AbstractValidator<CreatePatientCommand>
+    public class UpdatePatientCommandValidator : AbstractValidator<UpdatePatientCommand>
     {
-        public CreatePatientCommandValidator()
+        public UpdatePatientCommandValidator()
         {
+            RuleFor(command => command.PatientId)
+                .NotEmpty().WithMessage("Patient ID is required.");
+
             RuleFor(command => command.Username)
                 .NotEmpty().WithMessage("Username is required.")
                 .MaximumLength(50).WithMessage("Username must not exceed 50 characters.");
