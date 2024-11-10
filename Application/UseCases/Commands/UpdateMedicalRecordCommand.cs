@@ -4,11 +4,16 @@ using MediatR;
 
 namespace Application.UseCases.Commands
 {
-    public class UpdateMedicalHistoryCommand : IRequest<Result<MedicalHistory>>
+    public class UpdateMedicalRecordCommand : IRequest<Result<MedicalRecord>>
     {
-        public Guid HistoryId { get; set; }
+        public Guid RecordId { get; set; }
         public Guid PatientId { get; set; }
-        public string Condition { get; set; }
-        public DateTime DateOfDiagnosis { get; set; } = DateTime.Now;
+        public Guid DoctorId { get; set; }
+        public string VisitReason { get; set; }
+        public string Symptoms { get; set; }
+        public string Diagnosis { get; set; }
+        public string DoctorNotes { get; set; }
+        public DateTime DateOfVisit { get; set; } = DateTime.Now;
     }
 }
+

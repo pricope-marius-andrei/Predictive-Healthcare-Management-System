@@ -6,27 +6,30 @@ using MediatR;
 
 namespace Application.UseCases.QueryHandlers
 {
-    public class GetMedicalHistoryByIdQueryHandler : IRequestHandler<GetMedicalHistoryByIdQuery, MedicalHistoryDto>
+    public class GetMedicalRecordByIdQueryHandler : IRequestHandler<GetMedicalRecordByIdQuery, MedicalRecordDto>
     {
-        private readonly IMedicalHistoryRepository _repository;
+        private readonly IMedicalRecordRepository _repository;
         private readonly IMapper _mapper;
 
-        public GetMedicalHistoryByIdQueryHandler(IMedicalHistoryRepository repository, IMapper mapper)
+        public GetMedicalRecordByIdQueryHandler(IMedicalRecordRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<MedicalHistoryDto> Handle(GetMedicalHistoryByIdQuery request, CancellationToken cancellationToken)
+        public async Task<MedicalRecordDto> Handle(GetMedicalRecordByIdQuery request, CancellationToken cancellationToken)
         {
-            var medicalHistory = await _repository.GetByIdAsync(request.HistoryId);
+            var medicalRecord = await _repository.GetByIdAsync(request.RecordId);
 
-            if (medicalHistory == null)
+            if (medicalRecord == null)
             {
-                throw new KeyNotFoundException("Medical history not found.");
+                throw new KeyNotFoundException("Medical record not found.");
             }
 
-            return _mapper.Map<MedicalHistoryDto>(medicalHistory);
+            return _mapper.Map<MedicalRecordDto>(medicalRecord);
         }
     }
 }
+
+
+

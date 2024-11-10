@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MedicalRecordDto>> GetMedicalRecordById(Guid id)
         {
-            var query = new GetMedicalRecordByIdQuery { Id = id };
+            var query = new GetMedicalRecordByIdQuery { RecordId = id };
             var result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -71,13 +71,15 @@ namespace WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMedicalRecord(Guid id)
         {
-            var command = new DeleteMedicalRecordCommand { Id = id };
-            var result = await _mediator.Send(command);
-            if (result.IsSuccess)
+            try
             {
-                return NoContent();
+                await _mediator.Send(new DeleteMedicalRecordCommand { RecordId = id });
+                return StatusCode(StatusCodes.Status204NoContent);
             }
-            return BadRequest(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return NotFound($"Medical record with ID {id} not found.");
+            }
         }
     }
 }

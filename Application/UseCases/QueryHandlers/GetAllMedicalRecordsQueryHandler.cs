@@ -6,22 +6,24 @@ using MediatR;
 
 namespace Application.UseCases.QueryHandlers
 {
-    public class GetAllMedicalHistoriesQueryHandler : IRequestHandler<GetAllMedicalHistoriesQuery, IEnumerable<MedicalHistoryDto>>
+    public class GetAllMedicalRecordsQueryHandler : IRequestHandler<GetAllMedicalRecordsQuery, IEnumerable<MedicalRecordDto>>
     {
-        private readonly IMedicalHistoryRepository _repository;
+        private readonly IMedicalRecordRepository _repository;
         private readonly IMapper _mapper;
 
-        public GetAllMedicalHistoriesQueryHandler(IMedicalHistoryRepository repository, IMapper mapper)
+        public GetAllMedicalRecordsQueryHandler(IMedicalRecordRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<MedicalHistoryDto>> Handle(GetAllMedicalHistoriesQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<MedicalRecordDto>> Handle(GetAllMedicalRecordsQuery request, CancellationToken cancellationToken)
         {
-            var medicalHistories = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<MedicalHistoryDto>>(medicalHistories);
+            var medicalRecords = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<MedicalRecordDto>>(medicalRecords);
         }
     }
 }
+
+
 

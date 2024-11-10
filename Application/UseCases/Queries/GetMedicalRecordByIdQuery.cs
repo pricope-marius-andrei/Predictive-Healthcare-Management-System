@@ -3,8 +3,8 @@ using MediatR;
 
 namespace Application.UseCases.Queries
 {
-    public class GetMedicalHistoryByIdQuery : IRequest<MedicalHistoryDto>
+    public class GetMedicalRecordByIdQuery : IRequest<MedicalRecordDto>
     {
-        public Guid HistoryId { get; set; }
+        public Guid RecordId { get; set; }
     }
 }

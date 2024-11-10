@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.UseCases.Queries
 {
-    public class GetAllMedicalHistoriesQuery : IRequest<IEnumerable<MedicalHistoryDto>>
+    public class GetAllMedicalRecordsQuery : IRequest<IEnumerable<MedicalRecordDto>>
     {
     }
 }

@@ -16,6 +16,8 @@ namespace Application.Utils
             CreateMap<CreateMedicalHistoryCommand, MedicalHistory>().ReverseMap();
             CreateMap<UpdateMedicalHistoryCommand, MedicalHistory>().ReverseMap();
             CreateMap<MedicalRecord, MedicalRecordDto>().ReverseMap();
+            CreateMap<CreateMedicalRecordCommand, MedicalRecord>().ReverseMap();
+            CreateMap<UpdateMedicalRecordCommand, MedicalRecord>().ReverseMap();
         }
     }
 }

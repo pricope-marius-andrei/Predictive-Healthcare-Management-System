@@ -2,8 +2,8 @@
 
 namespace Application.UseCases.Commands
 {
-    public class DeleteMedicalHistoryCommand : IRequest
+    public class DeleteMedicalRecordCommand : IRequest
     {
-        public Guid HistoryId { get; set; }
+        public Guid RecordId { get; set; }
     }
 }

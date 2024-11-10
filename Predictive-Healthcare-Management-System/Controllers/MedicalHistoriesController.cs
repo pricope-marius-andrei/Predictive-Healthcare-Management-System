@@ -82,7 +82,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteMedicalHistory(Guid id)
+        public async Task<ActionResult> DeleteMedicalHistory(Guid id)
         {
             try
             {
