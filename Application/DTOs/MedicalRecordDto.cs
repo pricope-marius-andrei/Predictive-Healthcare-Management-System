@@ -8,5 +8,8 @@
         public string Diagnosis { get; set; }
         public string DoctorNotes { get; set; }
         public Guid DoctorId { get; set; }
+        public Guid PatientId { get; set; }
+        public PatientDto Patient { get; set; }
+        public DateTime DateOfVisit { get; set; }
     }
 }

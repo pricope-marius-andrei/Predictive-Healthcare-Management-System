@@ -1,7 +1,8 @@
-﻿using Domain.Utils;
+﻿using Domain.Common;
+using Domain.Entities;
 using MediatR;
 
-namespace Application.Use_Cases.Commands
+namespace Application.UseCases.Commands
 {
     public class CreatePatientCommand : IRequest<Result<Guid>>
     {
@@ -13,7 +14,9 @@ namespace Application.Use_Cases.Commands
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public string Gender { get; set; }
-        public decimal Height { get; set; }
-        public decimal Weight { get; set; }
+        public decimal? Height { get; set; }
+        public decimal? Weight { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public DateTime DateOfRegistration { get; set; }
     }
 }
