@@ -47,6 +47,14 @@ namespace Predictive_Healthcare_Management_System.Controllers
             }
         }
 
+        [HttpGet("patient/{patientId}")]
+        public async Task<ActionResult<IEnumerable<MedicalRecordDto>>> GetMedicalHistoriesByPatientId(Guid patientId)
+        {
+            var query = new GetMedicalRecordsByPatientIdQuery { PatientId = patientId };
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MedicalHistoryDto>>> GetAllMedicalHistories()
         {
