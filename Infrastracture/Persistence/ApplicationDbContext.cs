@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence
 {
@@ -43,6 +44,14 @@ namespace Infrastructure.Persistence
             modelBuilder.Entity<Patient>()
                 .Property(p => p.Gender)
                 .IsRequired();
+
+            var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
+                 v => v.ToUniversalTime(),
+                 v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+            modelBuilder.Entity<Doctor>()
+                .Property(d => d.DateOfRegistration)
+                .HasConversion(dateTimeConverter);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -43,9 +43,37 @@ namespace Infrastructure.Repositories
         {
             return await _context.Doctors.ToListAsync();
         }
-        public Task UpdateAsync(Doctor doctor)
+        public async Task<Result<Doctor>> UpdateAsync(Doctor doctor)
         {
-            throw new NotImplementedException();
+            if (doctor == null) throw new ArgumentNullException(nameof(doctor));
+            try
+            {
+                var existingDoctor = await _context.Doctors.FindAsync(doctor.DoctorId);
+                if (existingDoctor == null)
+                {
+                    throw new KeyNotFoundException("Doctor not found.");
+                }
+
+                doctor.DateOfRegistration = doctor.DateOfRegistration.ToUniversalTime();
+
+                _context.Entry(existingDoctor).CurrentValues.SetValues(doctor);
+                await _context.SaveChangesAsync();
+
+                var newDoctor = await _context.Doctors
+                    .FirstOrDefaultAsync(d => d.DoctorId == existingDoctor.DoctorId);
+
+                if (newDoctor == null)
+                {
+                    throw new KeyNotFoundException("Doctor not found.");
+                }
+
+                return Result<Doctor>.Success(newDoctor);
+            }
+            catch (Exception ex)
+            {
+                return Result<Doctor>.Failure(ex.InnerException!.ToString());
+            }
+
         }
 
         public async Task DeleteAsync(Guid id)

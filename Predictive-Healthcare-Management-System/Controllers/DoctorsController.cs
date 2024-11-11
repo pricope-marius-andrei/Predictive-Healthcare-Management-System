@@ -2,6 +2,7 @@
 using Application.UseCases.Commands;
 using Application.UseCases.Queries;
 using Domain.Common;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -66,6 +67,26 @@ namespace Predictive_Healthcare_Management_System.Controllers
             {
                 var doctors = await _mediator.Send(new GetAllDoctorsQuery());
                 return Ok(doctors);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<ActionResult<Result<Doctor>>> UpdateDoctor(Guid id, UpdateDoctorCommand command)
+        {
+            if (id != command.DoctorId)
+            {
+                return BadRequest($"Doctor {id} in the path does not match the ID in the request body.");
+            }
+
+            try
+            {
+                var result = await _mediator.Send(command);
+
+                return Ok(result.Data);
             }
             catch (Exception ex)
             {
