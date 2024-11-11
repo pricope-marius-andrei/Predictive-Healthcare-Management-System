@@ -48,9 +48,16 @@ namespace Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var doctor = _context.Doctors.Find(id);
+            if (doctor == null)
+            {
+                throw new KeyNotFoundException("Doctor not found.");
+            }
+
+            _context.Doctors.Remove(doctor);
+            await _context.SaveChangesAsync();
         }
     }
 }

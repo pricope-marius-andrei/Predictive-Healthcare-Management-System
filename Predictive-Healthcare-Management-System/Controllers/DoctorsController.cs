@@ -44,5 +44,19 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 return NotFound($"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<ActionResult> DeleteDoctor(Guid id)
+        {
+            try
+            {
+                await _mediator.Send(new DeleteDoctorCommand { DoctorId = id });
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound($"Doctor with ID {id} Not Found.");
+            }
+        }
     }
 }
