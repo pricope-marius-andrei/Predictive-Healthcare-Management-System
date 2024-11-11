@@ -39,18 +39,25 @@ namespace Infrastructure.Repositories
             }
             return doctor;
         }
-        public Task<IEnumerable<Doctor>> GetAllAsync()
+        public async Task<IEnumerable<Doctor>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Doctors.ToListAsync();
         }
         public Task UpdateAsync(Doctor doctor)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var doctor = _context.Doctors.Find(id);
+            if (doctor == null)
+            {
+                throw new KeyNotFoundException("Doctor not found.");
+            }
+
+            _context.Doctors.Remove(doctor);
+            await _context.SaveChangesAsync();
         }
     }
 }
