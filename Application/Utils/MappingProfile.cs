@@ -18,6 +18,8 @@ namespace Application.Utils
             CreateMap<MedicalRecord, MedicalRecordDto>().ReverseMap();
             CreateMap<CreateMedicalRecordCommand, MedicalRecord>().ReverseMap();
             CreateMap<UpdateMedicalRecordCommand, MedicalRecord>().ReverseMap();
+            CreateMap<Doctor, DoctorDto>().ReverseMap();
+            CreateMap<CreateDoctorCommand, Doctor>().ReverseMap();
         }
     }
 }

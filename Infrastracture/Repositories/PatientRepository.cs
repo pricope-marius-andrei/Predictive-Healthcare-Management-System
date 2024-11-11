@@ -53,7 +53,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Result<Patient>> UpdateAsync(Patient patient)
+        public async Task UpdateAsync(Patient patient)
         {
             if (patient == null) throw new ArgumentNullException(nameof(patient));
             try
