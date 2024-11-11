@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241105125112_RedesignedDb4")]
-    partial class RedesignedDb4
+    [Migration("20241111164819_NewMigration")]
+    partial class NewMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,7 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Domain.Entities.Doctor", b =>
@@ -30,6 +31,9 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("DoctorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateOfRegistration")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -70,12 +74,12 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("DateOfDiagnosis")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Illness")
+                    b.Property<string>("Condition")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("DateOfDiagnosis")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uuid");
@@ -92,6 +96,9 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("RecordId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateOfVisit")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Diagnosis")
                         .IsRequired()
@@ -133,6 +140,12 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateOfRegistration")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()

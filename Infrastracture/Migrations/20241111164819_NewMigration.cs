@@ -6,11 +6,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class RedesignedDb4 : Migration
+    public partial class NewMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("Npgsql:PostgresExtension:uuid-ossp", ",,");
+
             migrationBuilder.CreateTable(
                 name: "Doctors",
                 columns: table => new
@@ -21,8 +24,9 @@ namespace Infrastructure.Migrations
                     Password = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
                     Specialization = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false)
+                    DateOfRegistration = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -39,11 +43,13 @@ namespace Infrastructure.Migrations
                     Password = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PhoneNumber = table.Column<string>(type: "text", nullable: false),
                     Address = table.Column<string>(type: "text", nullable: false),
                     Gender = table.Column<string>(type: "text", nullable: false),
                     Height = table.Column<decimal>(type: "numeric", nullable: false),
-                    Weight = table.Column<decimal>(type: "numeric", nullable: false)
+                    Weight = table.Column<decimal>(type: "numeric", nullable: false),
+                    DateOfRegistration = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,7 +62,7 @@ namespace Infrastructure.Migrations
                 {
                     HistoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     PatientId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Illness = table.Column<string>(type: "text", nullable: false),
+                    Condition = table.Column<string>(type: "text", nullable: false),
                     DateOfDiagnosis = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -80,7 +86,8 @@ namespace Infrastructure.Migrations
                     VisitReason = table.Column<string>(type: "text", nullable: false),
                     Symptoms = table.Column<string>(type: "text", nullable: false),
                     Diagnosis = table.Column<string>(type: "text", nullable: false),
-                    DoctorNotes = table.Column<string>(type: "text", nullable: false)
+                    DoctorNotes = table.Column<string>(type: "text", nullable: false),
+                    DateOfVisit = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
