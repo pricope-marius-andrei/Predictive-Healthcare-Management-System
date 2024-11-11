@@ -3,6 +3,7 @@ using Application.DTOs;
 using Application.UseCases.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Application.UseCases.Queries;
+using Domain.Entities;
 using Domain.Common;
 
 namespace Predictive_Healthcare_Management_System.Controllers
@@ -23,7 +24,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var result =  await _mediator.Send(command);
+                var result = await _mediator.Send(command);
                 return CreatedAtAction(nameof(GetPatientById), new { id = result.Data }, result.Data);
             }
             catch (Exception ex)
@@ -61,16 +62,23 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdatePatient(Guid id, UpdatePatientCommand command)
+        public async Task<ActionResult<Result<Patient>>> UpdatePatient(Guid id, UpdatePatientCommand command)
         {
             if (id != command.PatientId)
             {
                 return BadRequest("Patient ID in the path does not match the ID in the request body.");
             }
 
-            await _mediator.Send(command);
+            try
+            {
+                var result = await _mediator.Send(command);
 
-            return StatusCode(StatusCodes.Status204NoContent);
+                return Ok(result.Data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id:guid}")]

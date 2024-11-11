@@ -1,5 +1,6 @@
 ﻿using Application.UseCases.Commands;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using FluentValidation;
@@ -7,7 +8,7 @@ using MediatR;
 
 namespace Application.UseCases.CommandHandlers;
 
-public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand>
+public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand, Result<Patient>>
 {
     private readonly IPatientRepository _repository;
     private readonly IMapper _mapper;
@@ -20,7 +21,7 @@ public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand>
         _validator = validator;
     }
 
-    public async Task Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Patient>> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
@@ -29,6 +30,12 @@ public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand>
         }
 
         var patient = _mapper.Map<Patient>(request);
-        await _repository.UpdateAsync(patient);
+
+        var result = await _repository.UpdateAsync(patient);
+        if (result.IsSuccess)
+        {
+            return Result<Patient>.Success(result.Data);
+        }
+        return Result<Patient>.Failure(result.ErrorMessage);
     }
 }
