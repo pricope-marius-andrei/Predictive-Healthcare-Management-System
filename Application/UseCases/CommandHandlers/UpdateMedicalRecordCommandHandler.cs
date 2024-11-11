@@ -27,7 +27,8 @@ public class UpdateMedicalRecordCommandHandler : IRequestHandler<UpdateMedicalRe
         }
 
         var medicalRecord = _mapper.Map<MedicalRecord>(request);
-        medicalRecord.PatientId = existingMedicalRecord.PatientId; // Update PatientId to the value from the database
+        medicalRecord.PatientId = existingMedicalRecord.PatientId;
+        medicalRecord.DoctorId = existingMedicalRecord.DoctorId;
 
         var result = await _repository.UpdateAsync(medicalRecord);
         if (result.IsSuccess)

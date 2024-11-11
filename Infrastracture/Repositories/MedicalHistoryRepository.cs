@@ -54,7 +54,7 @@ namespace Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                return Result<Guid>.Failure(ex.Message);
+                return Result<Guid>.Failure(ex.InnerException.ToString());
             }
         }
 
@@ -85,7 +85,7 @@ namespace Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                return Result<MedicalHistory>.Failure(ex.Message);
+                return Result<MedicalHistory>.Failure(ex.InnerException.ToString());
             }
         }
 
