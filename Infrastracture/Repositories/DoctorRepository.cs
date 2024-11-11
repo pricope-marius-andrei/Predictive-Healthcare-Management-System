@@ -39,9 +39,9 @@ namespace Infrastructure.Repositories
             }
             return doctor;
         }
-        public Task<IEnumerable<Doctor>> GetAllAsync()
+        public async Task<IEnumerable<Doctor>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Doctors.ToListAsync();
         }
         public Task UpdateAsync(Doctor doctor)
         {

@@ -58,5 +58,19 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 return NotFound($"Doctor with ID {id} Not Found.");
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<DoctorDto>>> GetAllDoctors()
+        {
+            try
+            {
+                var doctors = await _mediator.Send(new GetAllDoctorsQuery());
+                return Ok(doctors);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
-}
+}   
