@@ -7,28 +7,33 @@ using MediatR;
 
 namespace Application.UseCases.CommandHandlers;
 
-public class UpdateMedicalRecordCommandHandler : IRequestHandler<UpdateMedicalRecordCommand, Result<MedicalRecord>>
+public class UpdateMedicalHistoryCommandHandler : IRequestHandler<UpdateMedicalHistoryCommand, Result<MedicalHistory>>
 {
-    private readonly IMedicalRecordRepository _repository;
+    private readonly IMedicalHistoryRepository _repository;
     private readonly IMapper _mapper;
 
-    public UpdateMedicalRecordCommandHandler(IMedicalRecordRepository repository, IMapper mapper)
+    public UpdateMedicalHistoryCommandHandler(IMedicalHistoryRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
     }
 
-    public async Task<Result<MedicalRecord>> Handle(UpdateMedicalRecordCommand request, CancellationToken cancellationToken)
+    public async Task<Result<MedicalHistory>> Handle(UpdateMedicalHistoryCommand request, CancellationToken cancellationToken)
     {
-        var medicalRecord = _mapper.Map<MedicalRecord>(request);
+        var existingMedicalHistory = await _repository.GetByIdAsync(request.HistoryId);
+        if (existingMedicalHistory == null)
+        {
+            return Result<MedicalHistory>.Failure("Medical history not found.");
+        }
 
-        var result = await _repository.UpdateAsync(medicalRecord);
+        var medicalHistory = _mapper.Map<MedicalHistory>(request);
+        medicalHistory.PatientId = existingMedicalHistory.PatientId;
+
+        var result = await _repository.UpdateAsync(medicalHistory);
         if (result.IsSuccess)
         {
-            return Result<MedicalRecord>.Success(result.Data);
+            return Result<MedicalHistory>.Success(result.Data);
         }
-        return Result<MedicalRecord>.Failure(result.ErrorMessage);
+        return Result<MedicalHistory>.Failure(result.ErrorMessage);
     }
 }
-
-

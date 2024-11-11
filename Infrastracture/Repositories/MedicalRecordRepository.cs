@@ -37,6 +37,15 @@ namespace Infrastructure.Repositories
             return medicalRecord;
         }
 
+        public async Task<IEnumerable<MedicalRecord>> GetByPatientIdAsync(Guid patientId)
+        {
+            return await _context.MedicalRecords
+                .Where(mr => mr.PatientId == patientId)
+                .Include(mr => mr.Patient)
+                .Include(mr => mr.Doctor)
+                .ToListAsync();
+        }
+
         public async Task<Result<Guid>> AddAsync(MedicalRecord medicalRecord)
         {
             if (medicalRecord == null) throw new ArgumentNullException(nameof(medicalRecord));
@@ -94,15 +103,6 @@ namespace Infrastructure.Repositories
 
             _context.MedicalRecords.Remove(medicalRecord);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<MedicalRecord>> GetByPatientIdAsync(Guid patientId)
-        {
-            return await _context.MedicalRecords
-                .Where(mr => mr.PatientId == patientId)
-                .Include(mr => mr.Patient)
-                .Include(mr => mr.Doctor)
-                .ToListAsync();
         }
     }
 }

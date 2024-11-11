@@ -19,13 +19,13 @@ namespace Predictive_Healthcare_Management_System.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Result<Guid>>> CreateMedicalHistory(CreateMedicalHistoryCommand command)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MedicalHistoryDto>>> GetAllMedicalHistories()
         {
             try
             {
-                var result = await _mediator.Send(command);
-                return CreatedAtAction(nameof(GetMedicalHistoryById), new { id = result.Data }, result.Data);
+                var medicalHistories = await _mediator.Send(new GetAllMedicalHistoriesQuery());
+                return Ok(medicalHistories);
             }
             catch (Exception ex)
             {
@@ -50,18 +50,18 @@ namespace Predictive_Healthcare_Management_System.Controllers
         [HttpGet("patient/{patientId}")]
         public async Task<ActionResult<IEnumerable<MedicalRecordDto>>> GetMedicalHistoriesByPatientId(Guid patientId)
         {
-            var query = new GetMedicalRecordsByPatientIdQuery { PatientId = patientId };
+            var query = new GetMedicalHistoriesByPatientIdQuery { PatientId = patientId };
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<MedicalHistoryDto>>> GetAllMedicalHistories()
+        [HttpPost]
+        public async Task<ActionResult<Result<Guid>>> CreateMedicalHistory(CreateMedicalHistoryCommand command)
         {
             try
             {
-                var medicalHistories = await _mediator.Send(new GetAllMedicalHistoriesQuery());
-                return Ok(medicalHistories);
+                var result = await _mediator.Send(command);
+                return CreatedAtAction(nameof(GetMedicalHistoryById), new { id = result.Data }, result.Data);
             }
             catch (Exception ex)
             {
@@ -80,7 +80,6 @@ namespace Predictive_Healthcare_Management_System.Controllers
             try
             {
                 var result = await _mediator.Send(command);
-
                 return Ok(result.Data);
             }
             catch (Exception ex)

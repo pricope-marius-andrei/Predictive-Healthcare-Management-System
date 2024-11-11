@@ -7,8 +7,6 @@ namespace Application.UseCases.Commands
     public class UpdateMedicalRecordCommand : IRequest<Result<MedicalRecord>>
     {
         public Guid RecordId { get; set; }
-        public Guid PatientId { get; set; }
-        public Guid DoctorId { get; set; }
         public string VisitReason { get; set; }
         public string Symptoms { get; set; }
         public string Diagnosis { get; set; }
