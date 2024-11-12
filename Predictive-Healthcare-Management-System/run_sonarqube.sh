@@ -40,6 +40,7 @@ dotnet build
 # Check if the build was successful
 if [ $? -ne 0 ]; then
   echo "Error: Build failed."
+  sleep 10
   exit 1
 fi
 
@@ -50,7 +51,10 @@ dotnet sonarscanner end -d:sonar.token="$SONAR_TOKEN"
 # Check if the SonarQube analysis end was successful
 if [ $? -ne 0 ]; then
   echo "Error: Failed to complete SonarQube analysis."
+  sleep 10
   exit 1
 fi
 
-echo "SonarQube analysis com
+echo "SonarQube analysis completed"
+
+sleep 10

@@ -89,7 +89,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 await _mediator.Send(new DeletePatientCommand { PatientId = id });
                 return StatusCode(StatusCodes.Status204NoContent);
             }
-            catch (Exception ex)
+            catch
             {
                 return NotFound($"Patient with ID {id} not found.");
             }

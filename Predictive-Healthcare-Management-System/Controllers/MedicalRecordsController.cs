@@ -111,7 +111,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 await _mediator.Send(new DeleteMedicalRecordCommand { RecordId = id });
                 return StatusCode(StatusCodes.Status204NoContent);
             }
-            catch (Exception ex)
+            catch
             {
                 return NotFound($"Medical record with ID {id} not found.");
             }

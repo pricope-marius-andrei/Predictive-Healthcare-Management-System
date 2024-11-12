@@ -54,7 +54,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 await _mediator.Send(new DeleteDoctorCommand { DoctorId = id });
                 return NoContent();
             }
-            catch (Exception ex)
+            catch
             {
                 return NotFound($"Doctor with ID {id} Not Found.");
             }
