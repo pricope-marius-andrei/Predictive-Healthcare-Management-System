@@ -1,11 +1,10 @@
 ﻿using Application.DTOs;
-using Application.UseCases.QueryHandlers;
 using Application.UseCases.Queries;
+using Application.UseCases.QueryHandlers;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
-using Xunit;
 
 public class GetPatientByIdQueryHandlerTests
 {

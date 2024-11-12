@@ -1,5 +1,5 @@
-﻿using Application.UseCases.Commands;
-using Application.UseCases.CommandHandlers;
+﻿using Application.UseCases.CommandHandlers;
+using Application.UseCases.Commands;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
@@ -7,7 +7,6 @@ using Domain.Repositories;
 using FluentValidation;
 using FluentValidation.Results;
 using NSubstitute;
-using Xunit;
 
 namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 {

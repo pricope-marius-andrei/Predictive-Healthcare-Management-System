@@ -3,7 +3,6 @@ using Application.UseCases.Commands;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
-using Xunit;
 
 public class DeletePatientCommandHandlerTests
 {

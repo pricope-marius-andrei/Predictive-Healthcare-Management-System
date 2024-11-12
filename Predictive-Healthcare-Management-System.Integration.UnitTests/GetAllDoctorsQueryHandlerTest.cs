@@ -5,7 +5,6 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
-using Xunit;
 
 namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 {

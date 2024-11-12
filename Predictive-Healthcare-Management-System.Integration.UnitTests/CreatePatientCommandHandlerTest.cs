@@ -7,7 +7,6 @@ using Domain.Repositories;
 using FluentValidation;
 using FluentValidation.Results;
 using NSubstitute;
-using Xunit;
 
 public class CreatePatientCommandHandlerTests
 {
