@@ -1,0 +1,15 @@
+﻿C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\DependencyInjection.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Migrations\20241105125112_RedesignedDb4.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Migrations\20241105125112_RedesignedDb4.Designer.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Migrations\20241108140624_DbChanges.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Migrations\20241108140624_DbChanges.Designer.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Migrations\20241108143540_db-changes-razvan.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Migrations\20241108143540_db-changes-razvan.Designer.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Migrations\20241110145714_InitialCreate.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Migrations\20241110145714_InitialCreate.Designer.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Migrations\ApplicationDbContextModelSnapshot.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Persistence\ApplicationDbContext.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Repositories\DoctorRepository.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Repositories\MedicalHistoryRepository.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Repositories\MedicalRecordRepository.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Infrastracture\Repositories\PatientRepository.cs

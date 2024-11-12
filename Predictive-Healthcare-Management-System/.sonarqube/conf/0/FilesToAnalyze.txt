@@ -1,0 +1,9 @@
+﻿C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Domain\Common\Result.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Domain\Entities\Doctor.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Domain\Entities\MedicalHistory.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Domain\Entities\MedicalRecord.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Domain\Entities\Patient.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Domain\Repositories\IDoctorRepository.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Domain\Repositories\IMedicalHistoryRepository.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Domain\Repositories\IMedicalRecordRepository.cs
+C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Domain\Repositories\IPatientRepository.cs
