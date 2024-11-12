@@ -1,3 +1,4 @@
+
 ﻿C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\DependencyInjection.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\DTOs\DoctorDto.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\DTOs\MedicalHistoryDto.cs
@@ -54,3 +55,4 @@ C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\U
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\Utils\ExceptionHandlingMiddleware.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\Utils\MappingProfile.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\ValidationBehavior.cs
+

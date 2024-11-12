@@ -1,3 +1,4 @@
+
 ﻿C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Common\Result.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Entities\Doctor.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Entities\MedicalHistory.cs
