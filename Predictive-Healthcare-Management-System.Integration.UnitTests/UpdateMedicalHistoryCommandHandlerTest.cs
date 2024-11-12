@@ -24,7 +24,7 @@ public class UpdateMedicalHistoryCommandHandlerTests
     public async Task Handle_MedicalHistoryNotFound_ReturnsFailureResult()
     {
         // Arrange
-        var command = new UpdateMedicalHistoryCommand { HistoryId = Guid.NewGuid() };
+        var command = new UpdateMedicalHistoryCommand { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         _mockMedicalHistoryRepository.GetByIdAsync(command.HistoryId).Returns((MedicalHistory)null);
 
         // Act
@@ -41,7 +41,7 @@ public class UpdateMedicalHistoryCommandHandlerTests
         // Arrange
         var command = new UpdateMedicalHistoryCommand
         {
-            HistoryId = Guid.NewGuid(),
+            HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             Condition = "Updated Condition",
             DateOfDiagnosis = DateTime.UtcNow
         };
@@ -49,7 +49,7 @@ public class UpdateMedicalHistoryCommandHandlerTests
         var existingMedicalHistory = new MedicalHistory
         {
             HistoryId = command.HistoryId,
-            PatientId = Guid.NewGuid(),
+            PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             Condition = "Condition",
             DateOfDiagnosis = DateTime.UtcNow
         };

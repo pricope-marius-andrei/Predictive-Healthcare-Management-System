@@ -30,8 +30,8 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             // Arrange
             var command = new CreateMedicalRecordCommand
             {
-                PatientId = Guid.NewGuid(),
-                DoctorId = Guid.NewGuid(),
+                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 VisitReason = "Routine Checkup",
                 Symptoms = "None",
                 Diagnosis = "Healthy",
@@ -41,7 +41,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 
             var medicalRecord = new MedicalRecord
             {
-                RecordId = Guid.NewGuid(),
+                RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 PatientId = command.PatientId,
                 DoctorId = command.DoctorId,
                 VisitReason = command.VisitReason,
@@ -85,8 +85,8 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             // Arrange
             var command = new CreateMedicalRecordCommand
             {
-                PatientId = Guid.NewGuid(),
-                DoctorId = Guid.NewGuid(),
+                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 VisitReason = "Routine Checkup",
                 Symptoms = "None",
                 Diagnosis = "Healthy",
@@ -111,8 +111,8 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             // Arrange
             var command = new CreateMedicalRecordCommand
             {
-                PatientId = Guid.NewGuid(),
-                DoctorId = Guid.NewGuid(),
+                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 VisitReason = "Routine Checkup",
                 Symptoms = "None",
                 Diagnosis = "Healthy",
@@ -138,8 +138,8 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             // Arrange
             var command = new CreateMedicalRecordCommand
             {
-                PatientId = Guid.NewGuid(),
-                DoctorId = Guid.NewGuid(),
+                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 VisitReason = "Routine Checkup",
                 Symptoms = "None",
                 Diagnosis = "Healthy",
@@ -149,7 +149,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 
             var medicalRecord = new MedicalRecord
             {
-                RecordId = Guid.NewGuid(),
+                RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 PatientId = command.PatientId,
                 DoctorId = command.DoctorId,
                 VisitReason = command.VisitReason,

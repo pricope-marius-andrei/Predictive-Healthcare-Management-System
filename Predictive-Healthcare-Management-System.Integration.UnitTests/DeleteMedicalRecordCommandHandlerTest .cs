@@ -20,7 +20,7 @@ public class DeleteMedicalRecordCommandHandlerTests
     public async Task Handle_MedicalRecordNotFound_ThrowsInvalidOperationException()
     {
         // Arrange
-        var command = new DeleteMedicalRecordCommand { RecordId = Guid.NewGuid() };
+        var command = new DeleteMedicalRecordCommand { RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         _mockMedicalRecordRepository.GetByIdAsync(command.RecordId).Returns((MedicalRecord)null);
 
         // Act & Assert
@@ -32,12 +32,12 @@ public class DeleteMedicalRecordCommandHandlerTests
     public async Task Handle_ValidRequest_DeletesMedicalRecord()
     {
         // Arrange
-        var command = new DeleteMedicalRecordCommand { RecordId = Guid.NewGuid() };
+        var command = new DeleteMedicalRecordCommand { RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         var medicalRecord = new MedicalRecord
         {
             RecordId = command.RecordId,
-            PatientId = Guid.NewGuid(),
-            DoctorId = Guid.NewGuid(),
+            PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+            DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             VisitReason = "Checkup",
             Diagnosis = "Healthy",
             DateOfVisit = DateTime.UtcNow
@@ -45,7 +45,7 @@ public class DeleteMedicalRecordCommandHandlerTests
 
         var doctor = new Doctor
         {
-            DoctorId = Guid.NewGuid(),
+            DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             Username = "doctorUsername",
             Email = "doctor@example.com",
             Password = "password123",

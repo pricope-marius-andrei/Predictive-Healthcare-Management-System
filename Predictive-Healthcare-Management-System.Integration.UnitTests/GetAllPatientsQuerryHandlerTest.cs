@@ -29,7 +29,7 @@ public class GetAllPatientsQueryHandlerTests
         {
             new Patient
             {
-                PatientId = Guid.NewGuid(),
+                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 Username = "testuser1",
                 Email = "test1@example.com",
                 Password = "password",
@@ -45,7 +45,7 @@ public class GetAllPatientsQueryHandlerTests
             },
             new Patient
             {
-                PatientId = Guid.NewGuid(),
+                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 Username = "testuser2",
                 Email = "test2@example.com",
                 Password = "password",

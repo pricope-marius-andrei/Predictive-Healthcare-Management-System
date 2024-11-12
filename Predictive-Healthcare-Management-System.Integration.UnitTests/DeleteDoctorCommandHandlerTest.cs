@@ -20,7 +20,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
         public async Task Given_DeleteDoctorCommandHandler_When_DoctorExists_Then_DoctorShouldBeDeleted()
         {
             // Arrange
-            var doctorId = Guid.NewGuid();
+            var doctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
             var doctor = new Doctor
             {
                 DoctorId = doctorId,
@@ -49,7 +49,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
         public async Task Given_DeleteDoctorCommandHandler_When_DoctorDoesNotExist_Then_ShouldThrowInvalidOperationException()
         {
             // Arrange
-            var doctorId = Guid.NewGuid();
+            var doctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
             repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor?>(null));
             var command = new DeleteDoctorCommand { DoctorId = doctorId };
 

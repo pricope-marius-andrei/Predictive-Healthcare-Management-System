@@ -24,11 +24,11 @@ public class GetMedicalHistoriesByPatientIdQueryHandlerTests
     public async Task Handle_ReturnsMedicalHistoriesByPatientId()
     {
         // Arrange
-        var query = new GetMedicalHistoriesByPatientIdQuery { PatientId = Guid.NewGuid() };
+        var query = new GetMedicalHistoriesByPatientIdQuery { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         var medicalHistories = new List<MedicalHistory>
         {
-            new MedicalHistory { HistoryId = Guid.NewGuid(), PatientId = query.PatientId, Condition = "Condition1", DateOfDiagnosis = DateTime.UtcNow },
-            new MedicalHistory { HistoryId = Guid.NewGuid(), PatientId = query.PatientId, Condition = "Condition2", DateOfDiagnosis = DateTime.UtcNow }
+            new MedicalHistory { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), PatientId = query.PatientId, Condition = "Condition1", DateOfDiagnosis = DateTime.UtcNow },
+            new MedicalHistory { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), PatientId = query.PatientId, Condition = "Condition2", DateOfDiagnosis = DateTime.UtcNow }
         };
         var medicalHistoryDtos = new List<MedicalHistoryDto>
         {

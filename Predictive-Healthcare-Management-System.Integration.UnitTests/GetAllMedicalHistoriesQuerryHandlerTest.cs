@@ -27,8 +27,8 @@ public class GetAllMedicalHistoriesQueryHandlerTests
         var query = new GetAllMedicalHistoriesQuery();
         var medicalHistories = new List<MedicalHistory>
         {
-            new MedicalHistory { HistoryId = Guid.NewGuid(), PatientId = Guid.NewGuid(), Condition = "Condition1", DateOfDiagnosis = DateTime.UtcNow },
-            new MedicalHistory { HistoryId = Guid.NewGuid(), PatientId = Guid.NewGuid(), Condition = "Condition2", DateOfDiagnosis = DateTime.UtcNow }
+            new MedicalHistory { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), Condition = "Condition1", DateOfDiagnosis = DateTime.UtcNow },
+            new MedicalHistory { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), Condition = "Condition2", DateOfDiagnosis = DateTime.UtcNow }
         };
         var medicalHistoryDtos = new List<MedicalHistoryDto>
         {

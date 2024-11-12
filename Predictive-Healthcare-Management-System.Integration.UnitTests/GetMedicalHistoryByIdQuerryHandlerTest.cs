@@ -24,11 +24,11 @@ public class GetMedicalHistoryByIdQueryHandlerTests
     public async Task Handle_ReturnsMedicalHistoryById()
     {
         // Arrange
-        var query = new GetMedicalHistoryByIdQuery { HistoryId = Guid.NewGuid() };
+        var query = new GetMedicalHistoryByIdQuery { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         var medicalHistory = new MedicalHistory
         {
             HistoryId = query.HistoryId,
-            PatientId = Guid.NewGuid(),
+            PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             Condition = "Condition1",
             DateOfDiagnosis = DateTime.UtcNow
         };
@@ -54,7 +54,7 @@ public class GetMedicalHistoryByIdQueryHandlerTests
     public async Task Handle_ThrowsKeyNotFoundException_WhenMedicalHistoryNotFound()
     {
         // Arrange
-        var query = new GetMedicalHistoryByIdQuery { HistoryId = Guid.NewGuid() };
+        var query = new GetMedicalHistoryByIdQuery { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
         _mockMedicalHistoryRepository.GetByIdAsync(query.HistoryId).Returns((MedicalHistory)null);
 

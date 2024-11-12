@@ -45,7 +45,7 @@ public class CreatePatientCommandHandlerTests
         };
         var patient = new Patient
         {
-            PatientId = Guid.NewGuid(),
+            PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             Username = command.Username,
             Email = command.Email,
             Password = command.Password,
@@ -111,7 +111,7 @@ public class CreatePatientCommandHandlerTests
         };
         var patient = new Patient
         {
-            PatientId = Guid.NewGuid(),
+            PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             Username = command.Username,
             Email = command.Email,
             Password = command.Password,

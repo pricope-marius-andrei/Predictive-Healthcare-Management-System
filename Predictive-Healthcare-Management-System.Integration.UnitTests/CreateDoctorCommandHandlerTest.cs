@@ -42,7 +42,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 
             var doctor = new Doctor
             {
-                DoctorId = Guid.NewGuid(),
+                DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 Username = command.Username,
@@ -107,7 +107,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 
             var doctor = new Doctor
             {
-                DoctorId = Guid.NewGuid(),
+                DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 Username = command.Username,

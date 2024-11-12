@@ -20,7 +20,7 @@ public class DeletePatientCommandHandlerTests
     public async Task Handle_DeletesPatient_WhenPatientExists()
     {
         // Arrange
-        var command = new DeletePatientCommand { PatientId = Guid.NewGuid() };
+        var command = new DeletePatientCommand { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         var patient = new Patient
         {
             PatientId = command.PatientId,
@@ -51,7 +51,7 @@ public class DeletePatientCommandHandlerTests
     public async Task Handle_ThrowsInvalidOperationException_WhenPatientDoesNotExist()
     {
         // Arrange
-        var command = new DeletePatientCommand { PatientId = Guid.NewGuid() };
+        var command = new DeletePatientCommand { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
         _mockPatientRepository.GetByIdAsync(command.PatientId).Returns((Patient)null);
 

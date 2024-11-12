@@ -24,12 +24,12 @@ public class GetMedicalRecordByIdQueryHandlerTests
     public async Task Handle_ReturnsMedicalRecordById()
     {
         // Arrange
-        var query = new GetMedicalRecordByIdQuery { RecordId = Guid.NewGuid() };
+        var query = new GetMedicalRecordByIdQuery { RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         var medicalRecord = new MedicalRecord
         {
             RecordId = query.RecordId,
-            PatientId = Guid.NewGuid(),
-            DoctorId = Guid.NewGuid(),
+            PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+            DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             VisitReason = "Reason1",
             Symptoms = "Symptoms1",
             Diagnosis = "Diagnosis1",
@@ -62,7 +62,7 @@ public class GetMedicalRecordByIdQueryHandlerTests
     public async Task Handle_ThrowsKeyNotFoundException_WhenMedicalRecordNotFound()
     {
         // Arrange
-        var query = new GetMedicalRecordByIdQuery { RecordId = Guid.NewGuid() };
+        var query = new GetMedicalRecordByIdQuery { RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
         _mockMedicalRecordRepository.GetByIdAsync(query.RecordId).Returns((MedicalRecord)null);
 

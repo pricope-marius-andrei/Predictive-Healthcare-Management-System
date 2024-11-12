@@ -24,7 +24,7 @@ public class UpdateMedicalRecordCommandHandlerTests
     public async Task Handle_MedicalRecordNotFound_ReturnsFailureResult()
     {
         // Arrange
-        var command = new UpdateMedicalRecordCommand { RecordId = Guid.NewGuid() };
+        var command = new UpdateMedicalRecordCommand { RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         _mockMedicalRecordRepository.GetByIdAsync(command.RecordId).Returns((MedicalRecord)null);
 
         // Act
@@ -41,7 +41,7 @@ public class UpdateMedicalRecordCommandHandlerTests
         // Arrange
         var command = new UpdateMedicalRecordCommand
         {
-            RecordId = Guid.NewGuid(),
+            RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             VisitReason = "Updated Visit Reason",
             Symptoms = "Updated Symptoms",
             Diagnosis = "Updated Diagnosis",
@@ -52,8 +52,8 @@ public class UpdateMedicalRecordCommandHandlerTests
         var existingMedicalRecord = new MedicalRecord
         {
             RecordId = command.RecordId,
-            PatientId = Guid.NewGuid(),
-            DoctorId = Guid.NewGuid(),
+            PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+            DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             VisitReason = "Visit Reason",
             Symptoms = "Symptoms",
             Diagnosis = "Diagnosis",

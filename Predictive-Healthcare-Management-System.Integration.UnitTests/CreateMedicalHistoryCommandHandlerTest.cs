@@ -29,7 +29,7 @@ public class CreateMedicalHistoryCommandHandlerTests
     public async Task Handle_PatientNotFound_ReturnsFailure()
     {
         // Arrange
-        var command = new CreateMedicalHistoryCommand { PatientId = Guid.NewGuid() };
+        var command = new CreateMedicalHistoryCommand { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         _mockPatientRepository.GetByIdAsync(Arg.Any<Guid>()).Returns((Patient)null);
 
         // Act
@@ -46,12 +46,12 @@ public class CreateMedicalHistoryCommandHandlerTests
         // Arrange
         var command = new CreateMedicalHistoryCommand
         {
-            PatientId = Guid.NewGuid(),
+            PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             Condition = "Condition",
             DateOfDiagnosis = DateTime.UtcNow
         };
         var patient = new Patient { PatientId = command.PatientId };
-        var medicalHistory = new MedicalHistory { HistoryId = Guid.NewGuid() };
+        var medicalHistory = new MedicalHistory { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
         _mockPatientRepository.GetByIdAsync(Arg.Any<Guid>()).Returns(patient);
         _mockMapper.Map<MedicalHistory>(Arg.Any<CreateMedicalHistoryCommand>()).Returns(medicalHistory);
@@ -71,12 +71,12 @@ public class CreateMedicalHistoryCommandHandlerTests
         // Arrange
         var command = new CreateMedicalHistoryCommand
         {
-            PatientId = Guid.NewGuid(),
+            PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             Condition = "Condition",
             DateOfDiagnosis = DateTime.UtcNow
         };
         var patient = new Patient { PatientId = command.PatientId };
-        var medicalHistory = new MedicalHistory { HistoryId = Guid.NewGuid() };
+        var medicalHistory = new MedicalHistory { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
         _mockPatientRepository.GetByIdAsync(Arg.Any<Guid>()).Returns(patient);
         _mockMapper.Map<MedicalHistory>(Arg.Any<CreateMedicalHistoryCommand>()).Returns(medicalHistory);

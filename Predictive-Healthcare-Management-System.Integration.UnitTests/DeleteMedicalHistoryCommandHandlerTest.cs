@@ -20,7 +20,7 @@ public class DeleteMedicalHistoryCommandHandlerTests
     public async Task Handle_MedicalHistoryNotFound_ThrowsInvalidOperationException()
     {
         // Arrange
-        var command = new DeleteMedicalHistoryCommand { HistoryId = Guid.NewGuid() };
+        var command = new DeleteMedicalHistoryCommand { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         _mockMedicalHistoryRepository.GetByIdAsync(command.HistoryId).Returns((MedicalHistory)null);
 
         // Act & Assert
@@ -32,18 +32,18 @@ public class DeleteMedicalHistoryCommandHandlerTests
     public async Task Handle_ValidRequest_DeletesMedicalHistory()
     {
         // Arrange
-        var command = new DeleteMedicalHistoryCommand { HistoryId = Guid.NewGuid() };
+        var command = new DeleteMedicalHistoryCommand { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         var medicalHistory = new MedicalHistory
         {
             HistoryId = command.HistoryId,
-            PatientId = Guid.NewGuid(),
+            PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             Condition = "Condition",
             DateOfDiagnosis = DateTime.UtcNow
         };
 
         var doctor = new Doctor
         {
-            DoctorId = Guid.NewGuid(),
+            DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
             Username = "doctorUsername",
             Email = "doctor@example.com",
             Password = "password123",

@@ -24,7 +24,7 @@ public class GetPatientByIdQueryHandlerTests
     public async Task Handle_ReturnsPatientDto_WhenPatientExists()
     {
         // Arrange
-        var query = new GetPatientByIdQuery { Id = Guid.NewGuid() };
+        var query = new GetPatientByIdQuery { Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
         var patient = new Patient
         {
             PatientId = query.Id,
@@ -71,7 +71,7 @@ public class GetPatientByIdQueryHandlerTests
     public async Task Handle_ThrowsKeyNotFoundException_WhenPatientDoesNotExist()
     {
         // Arrange
-        var query = new GetPatientByIdQuery { Id = Guid.NewGuid() };
+        var query = new GetPatientByIdQuery { Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
         _mockPatientRepository.GetByIdAsync(query.Id).Returns((Patient)null);
 
