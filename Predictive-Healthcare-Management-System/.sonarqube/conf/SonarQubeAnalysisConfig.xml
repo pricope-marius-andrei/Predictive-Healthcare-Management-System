@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AnalysisConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
-  <SonarConfigDir>C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf</SonarConfigDir>
-  <SonarOutputDir>C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\out</SonarOutputDir>
-  <SonarBinDir>C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\bin</SonarBinDir>
-  <SonarScannerWorkingDirectory>C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System</SonarScannerWorkingDirectory>
-  <JavaExePath>C:\Users\puiur\.sonar\cache\4bafe2e94439c8193fc8c68247cb0dbaf4e80265b903288f63f128304f129bbe\OpenJDK17U-jre_x64_windows_hotspot_17.0.11_9.zip_extracted\jdk-17.0.11+9-jre/bin/java.exe</JavaExePath>
+
+  <SonarConfigDir>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf</SonarConfigDir>
+  <SonarOutputDir>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\out</SonarOutputDir>
+  <SonarBinDir>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\bin</SonarBinDir>
+  <SonarScannerWorkingDirectory>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System</SonarScannerWorkingDirectory>
+  <JavaExePath>C:\Users\Pricope\.sonar\cache\4bafe2e94439c8193fc8c68247cb0dbaf4e80265b903288f63f128304f129bbe\OpenJDK17U-jre_x64_windows_hotspot_17.0.11_9.zip_extracted\jdk-17.0.11+9-jre/bin/java.exe</JavaExePath>
   <ScanAllAnalysis>true</ScanAllAnalysis>
   <HasBeginStepCommandLineCredentials>true</HasBeginStepCommandLineCredentials>
   <SonarQubeHostUrl>http://localhost:9000</SonarQubeHostUrl>
@@ -15,8 +16,9 @@
     <ConfigSetting Id="TfsUri" />
     <ConfigSetting Id="VsCoverageConverterToolPath" />
     <ConfigSetting Id="UnchangedFilesPath" />
-    <ConfigSetting Id="sonar.pullrequest.cache.basepath" Value="C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System" />
-    <ConfigSetting Id="settings.file.path" Value="C:\Users\puiur\.dotnet\tools\.store\dotnet-sonarscanner\9.0.1\dotnet-sonarscanner\9.0.1\tools\netcoreapp3.1\any\SonarQube.Analysis.xml" />
+
+    <ConfigSetting Id="sonar.pullrequest.cache.basepath" Value="C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System" />
+    <ConfigSetting Id="settings.file.path" Value="C:\Users\Pricope\.dotnet\tools\.store\dotnet-sonarscanner\9.0.1\dotnet-sonarscanner\9.0.1\tools\netcoreapp3.1\any\SonarQube.Analysis.xml" />
   </AdditionalConfig>
   <ServerSettings>
     <Property Name="sonaranalyzer-cs.nuget.packageVersion">9.32.0.97167</Property>
@@ -138,8 +140,9 @@
     <Property Name="sonaranalyzer-vbnet.pluginKey">vbnet</Property>
     <Property Name="sonar.java.jvmframeworkconfig.activate">true</Property>
     <Property Name="sonar.updatecenter.url">https://downloads.sonarsource.com/sonarqube/update/update-center.properties</Property>
-    <Property Name="sonar.core.id">147B411E-AZMdMDuqIvYT5KlQuBjS</Property>
-    <Property Name="sonar.core.startTime">11/12/2024 10:58:35 AM</Property>
+
+    <Property Name="sonar.core.id">147B411E-AZMcEJgExOHtCtlR5z7i</Property>
+    <Property Name="sonar.core.startTime">11/12/2024 10:11:55 AM</Property>
   </ServerSettings>
   <LocalSettings>
     <Property Name="sonar.host.url">http://localhost:9000</Property>
@@ -147,62 +150,68 @@
   <AnalyzersSettings>
     <AnalyzerSettings>
       <Language>cs</Language>
-      <RulesetPath>C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\Sonar-cs.ruleset</RulesetPath>
-      <DeactivatedRulesetPath>C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\Sonar-cs-none.ruleset</DeactivatedRulesetPath>
+
+      <RulesetPath>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\Sonar-cs.ruleset</RulesetPath>
+      <DeactivatedRulesetPath>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\Sonar-cs-none.ruleset</DeactivatedRulesetPath>
       <AnalyzerPlugins>
         <AnalyzerPlugin Key="csharp" Version="9.32.0.97167" StaticResourceName="SonarAnalyzer-9.32.0.97167.zip">
           <AssemblyPaths>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\Google.Protobuf.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CSharp.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.ShimLayer.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\THIRD-PARTY-NOTICES.txt</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\Google.Protobuf.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CSharp.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.ShimLayer.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
         <AnalyzerPlugin Key="vbnet" Version="9.32.0.97167" StaticResourceName="SonarAnalyzer-9.32.0.97167.zip">
           <AssemblyPaths>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\Google.Protobuf.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.ShimLayer.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.VisualBasic.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\THIRD-PARTY-NOTICES.txt</Path>
+
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\Google.Protobuf.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.ShimLayer.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.VisualBasic.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
       </AnalyzerPlugins>
       <AdditionalFilePaths>
-        <Path>C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\cs\SonarLint.xml</Path>
+
+        <Path>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\cs\SonarLint.xml</Path>
       </AdditionalFilePaths>
     </AnalyzerSettings>
     <AnalyzerSettings>
       <Language>vbnet</Language>
-      <RulesetPath>C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\Sonar-vbnet.ruleset</RulesetPath>
-      <DeactivatedRulesetPath>C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\Sonar-vbnet-none.ruleset</DeactivatedRulesetPath>
+
+      <RulesetPath>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\Sonar-vbnet.ruleset</RulesetPath>
+      <DeactivatedRulesetPath>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\Sonar-vbnet-none.ruleset</DeactivatedRulesetPath>
       <AnalyzerPlugins>
         <AnalyzerPlugin Key="csharp" Version="9.32.0.97167" StaticResourceName="SonarAnalyzer-9.32.0.97167.zip">
           <AssemblyPaths>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\Google.Protobuf.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CSharp.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.ShimLayer.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\0\THIRD-PARTY-NOTICES.txt</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\Google.Protobuf.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CSharp.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.ShimLayer.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\0\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
         <AnalyzerPlugin Key="vbnet" Version="9.32.0.97167" StaticResourceName="SonarAnalyzer-9.32.0.97167.zip">
           <AssemblyPaths>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\Google.Protobuf.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.ShimLayer.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.VisualBasic.dll</Path>
-            <Path>C:\Users\puiur\AppData\Local\Temp\.sonarqube\resources\1\THIRD-PARTY-NOTICES.txt</Path>
+
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\Google.Protobuf.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.ShimLayer.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.VisualBasic.dll</Path>
+            <Path>C:\Users\Pricope\AppData\Local\Temp\.sonarqube\resources\1\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
       </AnalyzerPlugins>
       <AdditionalFilePaths>
-        <Path>C:\Users\puiur\Documents\SEM5\.net\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\vbnet\SonarLint.xml</Path>
+
+        <Path>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\vbnet\SonarLint.xml</Path>
       </AdditionalFilePaths>
     </AnalyzerSettings>
   </AnalyzersSettings>

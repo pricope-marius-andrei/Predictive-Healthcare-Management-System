@@ -96,7 +96,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 await _mediator.Send(new DeleteMedicalHistoryCommand { HistoryId = id });
                 return StatusCode(StatusCodes.Status204NoContent);
             }
-            catch (Exception ex)
+            catch
             {
                 return NotFound($"Medical history with ID {id} not found.");
             }
