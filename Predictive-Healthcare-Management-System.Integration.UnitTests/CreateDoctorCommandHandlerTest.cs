@@ -34,6 +34,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 LastName = "Doe",
                 Username = "johndoe123",
                 Email = "johndoe123@gmail.com",
+                Password = "password123",
                 Specialization = "Cardiology",
                 PhoneNumber = "1234567890",
                 DateOfRegistration = DateTime.UtcNow
@@ -46,9 +47,11 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 LastName = command.LastName,
                 Username = command.Username,
                 Email = command.Email,
+                Password = command.Password,
                 Specialization = command.Specialization,
                 PhoneNumber = command.PhoneNumber,
-                DateOfRegistration = command.DateOfRegistration
+                DateOfRegistration = command.DateOfRegistration,
+                MedicalRecords = null
             };
 
             validator.ValidateAsync(command, CancellationToken.None).Returns(Task.FromResult(new ValidationResult()));
@@ -96,6 +99,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 LastName = "Doe",
                 Username = "johndoe123",
                 Email = "johndoe123@gmail.com",
+                Password = "password123",
                 Specialization = "Cardiology",
                 PhoneNumber = "1234567890",
                 DateOfRegistration = DateTime.UtcNow
@@ -108,9 +112,11 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 LastName = command.LastName,
                 Username = command.Username,
                 Email = command.Email,
+                Password = command.Password,
                 Specialization = command.Specialization,
                 PhoneNumber = command.PhoneNumber,
-                DateOfRegistration = command.DateOfRegistration
+                DateOfRegistration = command.DateOfRegistration,
+                MedicalRecords = null
             };
 
             validator.ValidateAsync(command, CancellationToken.None).Returns(Task.FromResult(new ValidationResult()));

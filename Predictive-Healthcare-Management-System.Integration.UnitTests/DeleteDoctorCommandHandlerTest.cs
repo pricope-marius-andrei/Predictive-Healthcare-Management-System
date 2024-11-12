@@ -3,6 +3,7 @@ using Application.UseCases.CommandHandlers;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
+using Xunit;
 
 namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 {
@@ -20,7 +21,19 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
         {
             // Arrange
             var doctorId = Guid.NewGuid();
-            var doctor = new Doctor { DoctorId = doctorId };
+            var doctor = new Doctor
+            {
+                DoctorId = doctorId,
+                Username = "doctorUsername",
+                Email = "doctor@example.com",
+                Password = "password",
+                FirstName = "John",
+                LastName = "Doe",
+                PhoneNumber = "1234567890",
+                Specialization = "Cardiology",
+                DateOfRegistration = DateTime.Now,
+                MedicalRecords = null
+            };
             repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor?>(doctor));
             var command = new DeleteDoctorCommand { DoctorId = doctorId };
 
@@ -47,7 +60,5 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             // Assert
             Assert.Equal("Doctor not found.", exception.Message);
         }
-
-
     }
 }

@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
+using Xunit;
 
 namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 {
@@ -12,6 +13,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
     {
         private readonly IDoctorRepository repository;
         private readonly IMapper mapper;
+
         public GetAllDoctorsQueryHandlerTest()
         {
             repository = Substitute.For<IDoctorRepository>();
@@ -30,8 +32,8 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                     new DoctorDto
                     {
                         DoctorId = doctors[0].DoctorId,
-                        FirstName = doctors[0].FirstName,
                         Username = doctors[0].Username,
+                        FirstName = doctors[0].FirstName,
                         LastName = doctors[0].LastName,
                         Email = doctors[0].Email,
                         Specialization = doctors[0].Specialization,
@@ -88,20 +90,24 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                         FirstName = "John",
                         LastName = "Doe",
                         Email = "johndoe123@gmail.com",
-                        Specialization = "Card",
+                        Password = "password123",
+                        Specialization = "Cardiology",
                         PhoneNumber = "1234567890",
-                        DateOfRegistration = DateTime.Now
+                        DateOfRegistration = DateTime.Now,
+                        MedicalRecords = null
                     },
                     new Doctor
                     {
                         DoctorId = Guid.NewGuid(),
-                        Username = "janeDoe321",
+                        Username = "janedoe321",
                         FirstName = "Jane",
                         LastName = "Doe",
-                        Email = "janeDoe321@yahoo.com",
-                        Specialization = "Ne",
+                        Email = "janedoe321@yahoo.com",
+                        Password = "password321",
+                        Specialization = "Neurology",
                         PhoneNumber = "0987654321",
-                        DateOfRegistration = DateTime.Now
+                        DateOfRegistration = DateTime.Now,
+                        MedicalRecords = null
                     }
                 };
         }
