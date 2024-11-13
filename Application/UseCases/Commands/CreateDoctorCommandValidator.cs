@@ -2,7 +2,7 @@
 
 namespace Application.UseCases.Commands
 {
-    public class CreateDoctorCommandValidator :AbstractValidator<CreateDoctorCommand>
+    public class CreateDoctorCommandValidator : AbstractValidator<CreateDoctorCommand>
     {
         public CreateDoctorCommandValidator()
         {
@@ -31,8 +31,6 @@ namespace Application.UseCases.Commands
             RuleFor(command => command.PhoneNumber)
                 .NotEmpty().WithMessage("Phone number is required.")
                 .Length(10).WithMessage("Phone number must be 10 characters long.");
-
-
         }
     }
 }

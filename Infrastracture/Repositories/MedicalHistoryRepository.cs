@@ -8,6 +8,7 @@ namespace Infrastructure.Repositories
 {
     public class MedicalHistoryRepository : IMedicalHistoryRepository
     {
+        private const string Message = "Medical history not found.";
         private readonly ApplicationDbContext _context;
         public MedicalHistoryRepository(ApplicationDbContext context)
         {
@@ -27,12 +28,7 @@ namespace Infrastructure.Repositories
                 .Include(mh => mh.Patient)
                 .FirstOrDefaultAsync(mh => mh.HistoryId == id);
 
-            if (medicalHistory == null)
-            {
-                throw new KeyNotFoundException("Medical history not found.");
-            }
-
-            return medicalHistory;
+            return medicalHistory == null ? throw new KeyNotFoundException(Message) : medicalHistory;
         }
 
         public async Task<IEnumerable<MedicalHistory>> GetByPatientIdAsync(Guid patientId)
@@ -45,7 +41,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Result<Guid>> AddAsync(MedicalHistory medicalHistory)
         {
-            if (medicalHistory == null) throw new ArgumentNullException(nameof(medicalHistory));
+            ArgumentNullException.ThrowIfNull(medicalHistory);
             try
             {
                 await _context.MedicalHistories.AddAsync(medicalHistory);
@@ -60,13 +56,14 @@ namespace Infrastructure.Repositories
 
         public async Task<Result<MedicalHistory>> UpdateAsync(MedicalHistory medicalHistory)
         {
-            if (medicalHistory == null) throw new ArgumentNullException(nameof(medicalHistory));
+            ArgumentNullException.ThrowIfNull(medicalHistory);
             try
             {
                 var existingMedicalHistory = await _context.MedicalHistories.FindAsync(medicalHistory.HistoryId);
                 if (existingMedicalHistory == null)
                 {
-                    throw new KeyNotFoundException("Medical history not found.");
+                    throw new KeyNotFoundException(Message
+                        );
                 }
 
                 _context.Entry(existingMedicalHistory).CurrentValues.SetValues(medicalHistory);
@@ -74,13 +71,7 @@ namespace Infrastructure.Repositories
 
                 var newMedicalHistory = await _context.MedicalHistories
                     .Include(mh => mh.Patient)
-                    .FirstOrDefaultAsync(mh => mh.HistoryId == existingMedicalHistory.HistoryId);
-
-                if (newMedicalHistory == null)
-                {
-                    throw new KeyNotFoundException("Medical history not found.");
-                }
-
+                    .FirstOrDefaultAsync(mh => mh.HistoryId == existingMedicalHistory.HistoryId) ?? throw new KeyNotFoundException(Message);
                 return Result<MedicalHistory>.Success(newMedicalHistory);
             }
             catch (Exception ex)
@@ -94,7 +85,7 @@ namespace Infrastructure.Repositories
             var medicalHistory = await _context.MedicalHistories.FindAsync(id);
             if (medicalHistory == null)
             {
-                throw new KeyNotFoundException("Medical history not found.");
+                throw new KeyNotFoundException(Message);
             }
 
             _context.MedicalHistories.Remove(medicalHistory);

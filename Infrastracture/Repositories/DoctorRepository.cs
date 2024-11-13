@@ -4,10 +4,12 @@ using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Infrastructure.Repositories
 {
     public class DoctorRepository : IDoctorRepository
     {
+        private const string _doctorNotFoundMessage = "Doctor not found.";
         private readonly ApplicationDbContext _context;
 
         public DoctorRepository(ApplicationDbContext context)
@@ -16,7 +18,7 @@ namespace Infrastructure.Repositories
         }
         public async Task<Result<Guid>> AddAsync(Doctor doctor)
         {
-            if (doctor == null) throw new ArgumentNullException(nameof(doctor));
+            ArgumentNullException.ThrowIfNull(doctor);
             try
             {
                 await _context.Doctors.AddAsync(doctor);
@@ -25,7 +27,7 @@ namespace Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                return Result<Guid>.Failure(ex.InnerException!.ToString());
+                return Result<Guid>.Failure(ex.Message);
             }
         }
         public async Task<Doctor> GetByIdAsync(Guid id)
@@ -35,7 +37,7 @@ namespace Infrastructure.Repositories
 
             if (doctor == null)
             {
-                throw new KeyNotFoundException("Doctor not found.");
+                throw new KeyNotFoundException(_doctorNotFoundMessage);
             }
             return doctor;
         }
@@ -45,15 +47,10 @@ namespace Infrastructure.Repositories
         }
         public async Task<Result<Doctor>> UpdateAsync(Doctor doctor)
         {
-            if (doctor == null) throw new ArgumentNullException(nameof(doctor));
+            ArgumentNullException.ThrowIfNull(doctor);
             try
             {
-                var existingDoctor = await _context.Doctors.FindAsync(doctor.DoctorId);
-                if (existingDoctor == null)
-                {
-                    throw new KeyNotFoundException("Doctor not found.");
-                }
-
+                var existingDoctor = await _context.Doctors.FindAsync(doctor.DoctorId) ?? throw new KeyNotFoundException(_doctorNotFoundMessage);
                 doctor.DateOfRegistration = doctor.DateOfRegistration.ToUniversalTime();
 
                 _context.Entry(existingDoctor).CurrentValues.SetValues(doctor);
@@ -62,12 +59,7 @@ namespace Infrastructure.Repositories
                 var newDoctor = await _context.Doctors
                     .FirstOrDefaultAsync(d => d.DoctorId == existingDoctor.DoctorId);
 
-                if (newDoctor == null)
-                {
-                    throw new KeyNotFoundException("Doctor not found.");
-                }
-
-                return Result<Doctor>.Success(newDoctor);
+                return newDoctor == null ? throw new KeyNotFoundException(_doctorNotFoundMessage) : Result<Doctor>.Success(newDoctor);
             }
             catch (Exception ex)
             {
@@ -78,12 +70,7 @@ namespace Infrastructure.Repositories
 
         public async Task DeleteAsync(Guid id)
         {
-            var doctor = _context.Doctors.Find(id);
-            if (doctor == null)
-            {
-                throw new KeyNotFoundException("Doctor not found.");
-            }
-
+            Doctor? doctor = await _context.Doctors.FindAsync(id) ?? throw new KeyNotFoundException(_doctorNotFoundMessage);
             _context.Doctors.Remove(doctor);
             await _context.SaveChangesAsync();
         }

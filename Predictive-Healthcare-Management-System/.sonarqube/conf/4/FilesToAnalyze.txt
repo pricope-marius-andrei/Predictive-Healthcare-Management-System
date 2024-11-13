@@ -10,6 +10,8 @@ C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-He
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\obj\Debug\net8.0\Predictive-Healthcare-Management-System.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\appsettings.Development.json
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\appsettings.json
+C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\coverage.xml
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System.http
+C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\run_coverage.sh
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\run_sonarqube.sh
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\Properties\launchSettings.json

@@ -55,28 +55,17 @@ namespace Infrastructure.Repositories
 
         public async Task<Result<Patient>> UpdateAsync(Patient patient)
         {
-            if (patient == null) throw new ArgumentNullException(nameof(patient));
+            ArgumentNullException.ThrowIfNull(patient);
             try
             {
-                var existingPatient = await _context.Patients.FindAsync(patient.PatientId);
-                if (existingPatient == null)
-                {
-                    throw new KeyNotFoundException("Patient not found.");
-                }
-
+                var existingPatient = await _context.Patients.FindAsync(patient.PatientId) ?? throw new KeyNotFoundException("Patient not found.");
                 _context.Entry(existingPatient).CurrentValues.SetValues(patient);
                 await _context.SaveChangesAsync();
 
                 var newPatient = await _context.Patients
                     .Include(p => p.MedicalHistories)
                     .Include(p => p.MedicalRecords)
-                    .FirstOrDefaultAsync(p => p.PatientId == existingPatient.PatientId);
-
-                if (newPatient == null)
-                {
-                    throw new KeyNotFoundException("Patient not found.");
-                }
-
+                    .FirstOrDefaultAsync(p => p.PatientId == existingPatient.PatientId) ?? throw new KeyNotFoundException("Patient not found.");
                 return Result<Patient>.Success(newPatient);
             }
             catch (Exception ex)

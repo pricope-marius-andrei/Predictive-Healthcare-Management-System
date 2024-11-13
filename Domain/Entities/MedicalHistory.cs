@@ -9,10 +9,10 @@ namespace Domain.Entities
 
         [Required]
         public Guid PatientId { get; set; }
-        public Patient Patient { get; set; }
+        public Patient? Patient { get; set; }
 
         [Required]
-        public string Condition { get; set; }
+        public string? Condition { get; set; }
         public DateTime DateOfDiagnosis { get; set; } = DateTime.Now;
     }
 }
