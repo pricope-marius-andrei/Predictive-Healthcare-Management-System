@@ -1,13 +1,14 @@
 ﻿using FluentValidation;
 
 namespace Application.UseCases.Commands
-{
-    public class UpdateDoctorCommandValidator :AbstractValidator<UpdateDoctorCommand>
     {
-        public UpdateDoctorCommandValidator()
+        public class UpdateDoctorCommandValidator : AbstractValidator<UpdateDoctorCommand>
         {
-            RuleFor(command => command.DoctorId)
-                .NotEmpty().WithMessage("Doctor ID is required.");
+            public UpdateDoctorCommandValidator()
+            {
+                RuleFor(command => command.DoctorId)
+                    .NotEmpty().WithMessage("Doctor ID is required.");
+
 
             RuleFor(command => command.Username)
                 .NotEmpty().WithMessage("Username is required.")
@@ -36,7 +37,9 @@ namespace Application.UseCases.Commands
                 .MaximumLength(50).WithMessage("Specialization must not exceed 50 characters.");
 
             RuleFor(command => command.PhoneNumber)
-                .NotEmpty().WithMessage("Phone number is required.").Length(10).WithMessage("Phone number must be 10 characters.");
+                .NotEmpty().WithMessage("Phone number is required.")
+                .Length(10).WithMessage("Phone number must be 10 characters.");
         }
     }
 }
+

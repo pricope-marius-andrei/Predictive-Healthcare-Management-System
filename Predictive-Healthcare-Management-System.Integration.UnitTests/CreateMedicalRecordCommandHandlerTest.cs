@@ -93,7 +93,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 DateOfVisit = DateTime.UtcNow
             };
 
-            patientRepository.GetByIdAsync(command.PatientId).Returns((Patient)null);
+             patientRepository.GetByIdAsync(command.PatientId).Returns(await Task.FromResult<Patient?>(null));
 
             // Act
             var handler = new CreateMedicalRecordCommandHandler(medicalRecordRepository, patientRepository, doctorRepository, mapper);

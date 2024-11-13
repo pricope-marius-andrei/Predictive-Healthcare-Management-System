@@ -55,17 +55,17 @@ namespace Application.UseCases.Commands
                 .Must(BeAValidDateOfRegistration).WithMessage("Invalid date of registration.");
         }
 
-        private bool BeAValidGender(string gender)
+        private static bool BeAValidGender(string gender)
         {
             return gender == "Male" || gender == "Female";
         }
 
-        private bool BeAValidDateOfBirth(DateTime dateOfBirth)
+        private static bool BeAValidDateOfBirth(DateTime dateOfBirth)
         {
             return dateOfBirth <= DateTime.Now;
         }
 
-        private bool BeAValidDateOfRegistration(DateTime dateOfRegistration)
+        private static bool BeAValidDateOfRegistration(DateTime dateOfRegistration)
         {
             return dateOfRegistration <= DateTime.Now;
         }

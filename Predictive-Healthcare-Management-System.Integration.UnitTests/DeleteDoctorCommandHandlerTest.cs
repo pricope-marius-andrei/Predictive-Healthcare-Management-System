@@ -1,5 +1,5 @@
-﻿using Application.UseCases.CommandHandlers;
 using Application.UseCases.Commands;
+using Application.UseCases.CommandHandlers;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
@@ -19,21 +19,21 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
         public async Task Given_DeleteDoctorCommandHandler_When_DoctorExists_Then_DoctorShouldBeDeleted()
         {
             // Arrange
-            var doctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
+            var doctorId = Guid.NewGuid();
             var doctor = new Doctor
             {
                 DoctorId = doctorId,
-                Username = "doctorUsername",
-                Email = "doctor@example.com",
+                Username = "testuser",
+                Email = "testuser@example.com",
                 Password = "password",
-                FirstName = "John",
-                LastName = "Doe",
+                FirstName = "Test",
+                LastName = "User",
                 PhoneNumber = "1234567890",
                 Specialization = "Cardiology",
-                DateOfRegistration = DateTime.Now,
-                MedicalRecords = null
-            };
-            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor?>(doctor));
+                MedicalRecords = new List<MedicalRecord>()
+            }; ;
+            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(doctor));
+          
             var command = new DeleteDoctorCommand { DoctorId = doctorId };
 
             // Act
@@ -48,8 +48,9 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
         public async Task Given_DeleteDoctorCommandHandler_When_DoctorDoesNotExist_Then_ShouldThrowInvalidOperationException()
         {
             // Arrange
-            var doctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
-            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor?>(null));
+            var doctorId = Guid.NewGuid();
+            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(null!));
+
             var command = new DeleteDoctorCommand { DoctorId = doctorId };
 
             // Act
