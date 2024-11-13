@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RuleSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Rules for SonarQube" Description="This rule set was automatically generated from SonarQube" ToolsVersion="14.0">
   <Rules AnalyzerId="SonarAnalyzer.VisualBasic" RuleNamespace="SonarAnalyzer.VisualBasic">
-
     <Rule Id="S1133" Action="None" />
     <Rule Id="S1134" Action="None" />
     <Rule Id="S1135" Action="None" />
     <Rule Id="S1147" Action="None" />
-
     <Rule Id="S1940" Action="None" />
     <Rule Id="S2222" Action="None" />
     <Rule Id="S2225" Action="None" />
@@ -19,7 +17,6 @@
     <Rule Id="S2347" Action="None" />
     <Rule Id="S2348" Action="None" />
     <Rule Id="S2349" Action="None" />
-
     <Rule Id="S2357" Action="None" />
     <Rule Id="S2358" Action="None" />
     <Rule Id="S2583" Action="None" />
@@ -74,12 +71,10 @@
     <Rule Id="S4210" Action="None" />
     <Rule Id="S4423" Action="None" />
     <Rule Id="S4545" Action="None" />
-
     <Rule Id="S5542" Action="None" />
     <Rule Id="S5547" Action="None" />
     <Rule Id="S5659" Action="None" />
     <Rule Id="S5773" Action="None" />
-
     <Rule Id="S6513" Action="None" />
     <Rule Id="S6602" Action="None" />
     <Rule Id="S6603" Action="None" />
@@ -197,7 +192,6 @@
     <Rule Id="S4036" Action="None" />
     <Rule Id="S4143" Action="None" />
     <Rule Id="S4144" Action="None" />
-
     <Rule Id="S4159" Action="None" />
     <Rule Id="S4260" Action="None" />
     <Rule Id="S4830" Action="None" />
@@ -207,7 +201,6 @@
     <Rule Id="S6562" Action="None" />
     <Rule Id="S6563" Action="None" />
     <Rule Id="S6566" Action="None" />
-
     <Rule Id="S2094" Action="None" />
     <Rule Id="S3063" Action="None" />
     <Rule Id="S3866" Action="None" />
