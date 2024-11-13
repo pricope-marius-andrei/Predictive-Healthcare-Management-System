@@ -1,4 +1,3 @@
-using System.Net;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;

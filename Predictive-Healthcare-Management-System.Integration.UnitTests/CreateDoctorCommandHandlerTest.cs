@@ -116,6 +116,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 PhoneNumber = command.PhoneNumber,
                 DateOfRegistration = command.DateOfRegistration,
                 MedicalRecords = new List<MedicalRecord>()
+
             };
 
             validator.ValidateAsync(command, CancellationToken.None).Returns(Task.FromResult(new ValidationResult()));

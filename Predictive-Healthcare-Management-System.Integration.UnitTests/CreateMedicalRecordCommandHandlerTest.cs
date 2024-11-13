@@ -95,7 +95,6 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 
              patientRepository.GetByIdAsync(command.PatientId).Returns(await Task.FromResult<Patient?>(null));
 
-
             // Act
             var handler = new CreateMedicalRecordCommandHandler(medicalRecordRepository, patientRepository, doctorRepository, mapper);
             var result = await handler.Handle(command, CancellationToken.None);

@@ -1,4 +1,4 @@
-﻿using Application.UseCases.Commands;
+using Application.UseCases.Commands;
 using Application.UseCases.CommandHandlers;
 using Domain.Entities;
 using Domain.Repositories;
@@ -33,6 +33,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 MedicalRecords = new List<MedicalRecord>()
             }; ;
             repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(doctor));
+          
             var command = new DeleteDoctorCommand { DoctorId = doctorId };
 
             // Act
@@ -49,6 +50,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             // Arrange
             var doctorId = Guid.NewGuid();
             repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(null!));
+
             var command = new DeleteDoctorCommand { DoctorId = doctorId };
 
             // Act
@@ -58,7 +60,5 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             // Assert
             Assert.Equal("Doctor not found.", exception.Message);
         }
-
-
     }
 }

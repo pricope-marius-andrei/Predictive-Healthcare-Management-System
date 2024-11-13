@@ -1,6 +1,7 @@
-﻿C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Infrastracture\DependencyInjection.cs
+C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Infrastracture\DependencyInjection.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Infrastracture\Persistence\ApplicationDbContext.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Infrastracture\Repositories\DoctorRepository.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Infrastracture\Repositories\MedicalHistoryRepository.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Infrastracture\Repositories\MedicalRecordRepository.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Infrastracture\Repositories\PatientRepository.cs
+

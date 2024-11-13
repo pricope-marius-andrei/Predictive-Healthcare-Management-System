@@ -1,9 +1,4 @@
-using Application;
 using Application.Utils;
-using Infrastructure;
-using FluentValidation;
-using MediatR;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
