@@ -16,7 +16,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Result<Guid>> AddAsync(Patient patient)
         {
-            if (patient == null) throw new ArgumentNullException(nameof(patient));
+            ArgumentNullException.ThrowIfNull(patient);
             try
             {
                 await _context.Patients.AddAsync(patient);
@@ -36,12 +36,7 @@ namespace Infrastructure.Repositories
                 .Include(p => p.MedicalRecords)
                 .FirstOrDefaultAsync(p => p.PatientId == id);
 
-            if (patient == null)
-            {
-                throw new KeyNotFoundException("Patient not found.");
-            }
-
-            return patient;
+            return patient == null ? throw new KeyNotFoundException("Patient not found.") : patient;
         }
 
         public async Task<IEnumerable<Patient>> GetAllAsync()
@@ -54,15 +49,10 @@ namespace Infrastructure.Repositories
 
         public async Task<Result<Patient>> UpdateAsync(Patient patient)
         {
-            if (patient == null) throw new ArgumentNullException(nameof(patient));
+            ArgumentNullException.ThrowIfNull(patient);
             try
             {
-                var existingPatient = await _context.Patients.FindAsync(patient.PatientId);
-                if (existingPatient == null)
-                {
-                    throw new KeyNotFoundException("Patient not found.");
-                }
-
+                var existingPatient = await _context.Patients.FindAsync(patient.PatientId) ?? throw new KeyNotFoundException("Patient not found.");
                 _context.Entry(existingPatient).CurrentValues.SetValues(patient);
                 await _context.SaveChangesAsync();
 

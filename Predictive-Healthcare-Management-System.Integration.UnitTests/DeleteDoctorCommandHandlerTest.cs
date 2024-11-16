@@ -31,9 +31,9 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 PhoneNumber = "1234567890",
                 Specialization = "Cardiology",
                 DateOfRegistration = DateTime.Now,
-                MedicalRecords = null
+                MedicalRecords = new List<MedicalRecord>()
             };
-            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor?>(doctor));
+            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(doctor));
             var command = new DeleteDoctorCommand { DoctorId = doctorId };
 
             // Act
@@ -49,7 +49,8 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
         {
             // Arrange
             var doctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
-            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor?>(null));
+            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(null!));
+
             var command = new DeleteDoctorCommand { DoctorId = doctorId };
 
             // Act

@@ -15,8 +15,11 @@ C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\U
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\CommandHandlers\UpdateMedicalHistoryCommandHandler.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\CommandHandlers\UpdateMedicalRecordCommandHandler.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\CommandHandlers\UpdatePatientCommandHandler.cs
+C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\Commands\BaseCommand.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\Commands\BaseDoctorCommand.cs
-C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\Commands\BaseDoctorCommandValidator.cs
+C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\Commands\BasePatientCommand.cs
+C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\Commands\BasePatientCommandValidator.cs
+C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\Commands\BaseUserCommandValidator.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\Commands\CreateDoctorCommand.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\Commands\CreateDoctorCommandValidator.cs
 C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Application\UseCases\Commands\CreateMedicalHistoryCommand.cs

@@ -93,7 +93,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 DateOfVisit = DateTime.UtcNow
             };
 
-            patientRepository.GetByIdAsync(command.PatientId).Returns((Patient)null);
+            patientRepository.GetByIdAsync(command.PatientId).Returns((Patient?)null!);
 
             // Act
             var handler = new CreateMedicalRecordCommandHandler(medicalRecordRepository, patientRepository, doctorRepository, mapper);
@@ -120,7 +120,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             };
 
             patientRepository.GetByIdAsync(command.PatientId).Returns(new Patient());
-            doctorRepository.GetByIdAsync(command.DoctorId).Returns((Doctor)null);
+            doctorRepository.GetByIdAsync(command.DoctorId).Returns((Doctor)null!);
 
             // Act
             var handler = new CreateMedicalRecordCommandHandler(medicalRecordRepository, patientRepository, doctorRepository, mapper);

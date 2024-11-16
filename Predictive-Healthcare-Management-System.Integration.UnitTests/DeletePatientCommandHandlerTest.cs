@@ -4,57 +4,60 @@ using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 
-public class DeletePatientCommandHandlerTests
+namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 {
-    private readonly IPatientRepository _mockPatientRepository;
-    private readonly DeletePatientCommandHandler _handler;
-
-    public DeletePatientCommandHandlerTests()
+    public class DeletePatientCommandHandlerTests
     {
-        _mockPatientRepository = Substitute.For<IPatientRepository>();
-        _handler = new DeletePatientCommandHandler(_mockPatientRepository);
-    }
+        private readonly IPatientRepository _mockPatientRepository;
+        private readonly DeletePatientCommandHandler _handler;
 
-    [Fact]
-    public async Task Handle_DeletesPatient_WhenPatientExists()
-    {
-        // Arrange
-        var command = new DeletePatientCommand { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
-        var patient = new Patient
+        public DeletePatientCommandHandlerTests()
         {
-            PatientId = command.PatientId,
-            Username = "testuser",
-            Email = "test@example.com",
-            Password = "password",
-            FirstName = "Test",
-            LastName = "User",
-            PhoneNumber = "1234567890",
-            Address = "123 Test St",
-            Gender = "Male",
-            Height = 180,
-            Weight = 75,
-            DateOfBirth = new DateTime(1990, 1, 1),
-            DateOfRegistration = DateTime.UtcNow
-        };
+            _mockPatientRepository = Substitute.For<IPatientRepository>();
+            _handler = new DeletePatientCommandHandler(_mockPatientRepository);
+        }
 
-        _mockPatientRepository.GetByIdAsync(command.PatientId).Returns(patient);
+        [Fact]
+        public async Task Handle_DeletesPatient_WhenPatientExists()
+        {
+            // Arrange
+            var command = new DeletePatientCommand { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
+            var patient = new Patient
+            {
+                PatientId = command.PatientId,
+                Username = "testuser",
+                Email = "test@example.com",
+                Password = "password",
+                FirstName = "Test",
+                LastName = "User",
+                PhoneNumber = "1234567890",
+                Address = "123 Test St",
+                Gender = "Male",
+                Height = 180,
+                Weight = 75,
+                DateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                DateOfRegistration = DateTime.UtcNow
+            };
 
-        // Act
-        await _handler.Handle(command, CancellationToken.None);
+            _mockPatientRepository.GetByIdAsync(command.PatientId).Returns(patient);
 
-        // Assert
-        await _mockPatientRepository.Received(1).DeleteAsync(command.PatientId);
-    }
+            // Act
+            await _handler.Handle(command, CancellationToken.None);
 
-    [Fact]
-    public async Task Handle_ThrowsInvalidOperationException_WhenPatientDoesNotExist()
-    {
-        // Arrange
-        var command = new DeletePatientCommand { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
+            // Assert
+            await _mockPatientRepository.Received(1).DeleteAsync(command.PatientId);
+        }
 
-        _mockPatientRepository.GetByIdAsync(command.PatientId).Returns((Patient)null);
+        [Fact]
+        public async Task Handle_ThrowsInvalidOperationException_WhenPatientDoesNotExist()
+        {
+            // Arrange
+            var command = new DeletePatientCommand { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
-        // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(command, CancellationToken.None));
+            _mockPatientRepository.GetByIdAsync(command.PatientId).Returns((Patient?)null!);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(command, CancellationToken.None));
+        }
     }
 }

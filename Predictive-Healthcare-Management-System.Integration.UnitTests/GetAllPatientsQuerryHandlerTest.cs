@@ -6,25 +6,27 @@ using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 
-public class GetAllPatientsQueryHandlerTests
+namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 {
-    private readonly IPatientRepository _mockPatientRepository;
-    private readonly IMapper _mockMapper;
-    private readonly GetAllPatientsQueryHandler _handler;
-
-    public GetAllPatientsQueryHandlerTests()
+    public class GetAllPatientsQueryHandlerTests
     {
-        _mockPatientRepository = Substitute.For<IPatientRepository>();
-        _mockMapper = Substitute.For<IMapper>();
-        _handler = new GetAllPatientsQueryHandler(_mockPatientRepository, _mockMapper);
-    }
+        private readonly IPatientRepository _mockPatientRepository;
+        private readonly IMapper _mockMapper;
+        private readonly GetAllPatientsQueryHandler _handler;
 
-    [Fact]
-    public async Task Handle_ReturnsPatientDtos_WhenPatientsExist()
-    {
-        // Arrange
-        var query = new GetAllPatientsQuery();
-        var patients = new List<Patient>
+        public GetAllPatientsQueryHandlerTests()
+        {
+            _mockPatientRepository = Substitute.For<IPatientRepository>();
+            _mockMapper = Substitute.For<IMapper>();
+            _handler = new GetAllPatientsQueryHandler(_mockPatientRepository, _mockMapper);
+        }
+
+        [Fact]
+        public async Task Handle_ReturnsPatientDtos_WhenPatientsExist()
+        {
+            // Arrange
+            var query = new GetAllPatientsQuery();
+            var patients = new List<Patient>
         {
             new Patient
             {
@@ -39,7 +41,7 @@ public class GetAllPatientsQueryHandlerTests
                 Gender = "Male",
                 Height = 180,
                 Weight = 75,
-                DateOfBirth = new DateTime(1990, 1, 1),
+                DateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 DateOfRegistration = DateTime.UtcNow
             },
             new Patient
@@ -55,11 +57,11 @@ public class GetAllPatientsQueryHandlerTests
                 Gender = "Female",
                 Height = 165,
                 Weight = 60,
-                DateOfBirth = new DateTime(1992, 2, 2),
+                DateOfBirth = new DateTime(1990, 2, 2, 0, 0, 0, DateTimeKind.Utc),
                 DateOfRegistration = DateTime.UtcNow
             }
         };
-        var patientDtos = new List<PatientDto>
+            var patientDtos = new List<PatientDto>
         {
             new PatientDto
             {
@@ -93,31 +95,32 @@ public class GetAllPatientsQueryHandlerTests
             }
         };
 
-        _mockPatientRepository.GetAllAsync().Returns(patients);
-        _mockMapper.Map<IEnumerable<PatientDto>>(patients).Returns(patientDtos);
+            _mockPatientRepository.GetAllAsync().Returns(patients);
+            _mockMapper.Map<IEnumerable<PatientDto>>(patients).Returns(patientDtos);
 
-        // Act
-        var response = await _handler.Handle(query, CancellationToken.None);
+            // Act
+            var response = await _handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        Assert.Equal(patientDtos, response);
-    }
+            // Assert
+            Assert.Equal(patientDtos, response);
+        }
 
-    [Fact]
-    public async Task Handle_ReturnsEmptyList_WhenNoPatientsExist()
-    {
-        // Arrange
-        var query = new GetAllPatientsQuery();
-        var patients = new List<Patient>();
-        var patientDtos = new List<PatientDto>();
+        [Fact]
+        public async Task Handle_ReturnsEmptyList_WhenNoPatientsExist()
+        {
+            // Arrange
+            var query = new GetAllPatientsQuery();
+            var patients = new List<Patient>();
+            var patientDtos = new List<PatientDto>();
 
-        _mockPatientRepository.GetAllAsync().Returns(patients);
-        _mockMapper.Map<IEnumerable<PatientDto>>(patients).Returns(patientDtos);
+            _mockPatientRepository.GetAllAsync().Returns(patients);
+            _mockMapper.Map<IEnumerable<PatientDto>>(patients).Returns(patientDtos);
 
-        // Act
-        var response = await _handler.Handle(query, CancellationToken.None);
+            // Act
+            var response = await _handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        Assert.Empty(response);
+            // Assert
+            Assert.Empty(response);
+        }
     }
 }

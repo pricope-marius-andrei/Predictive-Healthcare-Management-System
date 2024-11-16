@@ -6,58 +6,61 @@ using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 
-public class GetMedicalHistoryByIdQueryHandlerTests
+namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 {
-    private readonly IMedicalHistoryRepository _mockMedicalHistoryRepository;
-    private readonly IMapper _mockMapper;
-    private readonly GetMedicalHistoryByIdQueryHandler _handler;
-
-    public GetMedicalHistoryByIdQueryHandlerTests()
+    public class GetMedicalHistoryByIdQueryHandlerTests
     {
-        _mockMedicalHistoryRepository = Substitute.For<IMedicalHistoryRepository>();
-        _mockMapper = Substitute.For<IMapper>();
-        _handler = new GetMedicalHistoryByIdQueryHandler(_mockMedicalHistoryRepository, _mockMapper);
-    }
+        private readonly IMedicalHistoryRepository _mockMedicalHistoryRepository;
+        private readonly IMapper _mockMapper;
+        private readonly GetMedicalHistoryByIdQueryHandler _handler;
 
-    [Fact]
-    public async Task Handle_ReturnsMedicalHistoryById()
-    {
-        // Arrange
-        var query = new GetMedicalHistoryByIdQuery { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
-        var medicalHistory = new MedicalHistory
+        public GetMedicalHistoryByIdQueryHandlerTests()
         {
-            HistoryId = query.HistoryId,
-            PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
-            Condition = "Condition1",
-            DateOfDiagnosis = DateTime.UtcNow
-        };
-        var medicalHistoryDto = new MedicalHistoryDto
+            _mockMedicalHistoryRepository = Substitute.For<IMedicalHistoryRepository>();
+            _mockMapper = Substitute.For<IMapper>();
+            _handler = new GetMedicalHistoryByIdQueryHandler(_mockMedicalHistoryRepository, _mockMapper);
+        }
+
+        [Fact]
+        public async Task Handle_ReturnsMedicalHistoryById()
         {
-            HistoryId = medicalHistory.HistoryId,
-            PatientId = medicalHistory.PatientId,
-            Condition = "Condition1",
-            DateOfDiagnosis = DateTime.UtcNow
-        };
+            // Arrange
+            var query = new GetMedicalHistoryByIdQuery { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
+            var medicalHistory = new MedicalHistory
+            {
+                HistoryId = query.HistoryId,
+                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                Condition = "Condition1",
+                DateOfDiagnosis = DateTime.UtcNow
+            };
+            var medicalHistoryDto = new MedicalHistoryDto
+            {
+                HistoryId = medicalHistory.HistoryId,
+                PatientId = medicalHistory.PatientId,
+                Condition = "Condition1",
+                DateOfDiagnosis = DateTime.UtcNow
+            };
 
-        _mockMedicalHistoryRepository.GetByIdAsync(query.HistoryId).Returns(medicalHistory);
-        _mockMapper.Map<MedicalHistoryDto>(medicalHistory).Returns(medicalHistoryDto);
+            _mockMedicalHistoryRepository.GetByIdAsync(query.HistoryId).Returns(medicalHistory);
+            _mockMapper.Map<MedicalHistoryDto>(medicalHistory).Returns(medicalHistoryDto);
 
-        // Act
-        var result = await _handler.Handle(query, CancellationToken.None);
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        Assert.Equal(medicalHistoryDto, result);
-    }
+            // Assert
+            Assert.Equal(medicalHistoryDto, result);
+        }
 
-    [Fact]
-    public async Task Handle_ThrowsKeyNotFoundException_WhenMedicalHistoryNotFound()
-    {
-        // Arrange
-        var query = new GetMedicalHistoryByIdQuery { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
+        [Fact]
+        public async Task Handle_ThrowsKeyNotFoundException_WhenMedicalHistoryNotFound()
+        {
+            // Arrange
+            var query = new GetMedicalHistoryByIdQuery { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
-        _mockMedicalHistoryRepository.GetByIdAsync(query.HistoryId).Returns((MedicalHistory)null);
+            _mockMedicalHistoryRepository.GetByIdAsync(query.HistoryId).Returns((MedicalHistory?)null!);
 
-        // Act & Assert
-        await Assert.ThrowsAsync<KeyNotFoundException>(() => _handler.Handle(query, CancellationToken.None));
+            // Act & Assert
+            await Assert.ThrowsAsync<KeyNotFoundException>(() => _handler.Handle(query, CancellationToken.None));
+        }
     }
 }
