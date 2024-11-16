@@ -45,7 +45,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Result<Guid>> AddAsync(MedicalHistory medicalHistory)
         {
-            if (medicalHistory == null) throw new ArgumentNullException(nameof(medicalHistory));
+            ArgumentNullException.ThrowIfNull(medicalHistory);
             try
             {
                 await _context.MedicalHistories.AddAsync(medicalHistory);
@@ -54,13 +54,13 @@ namespace Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                return Result<Guid>.Failure(ex.InnerException.ToString());
+                return Result<Guid>.Failure(ex.InnerException?.ToString() ?? ex.Message);
             }
         }
 
         public async Task<Result<MedicalHistory>> UpdateAsync(MedicalHistory medicalHistory)
         {
-            if (medicalHistory == null) throw new ArgumentNullException(nameof(medicalHistory));
+            ArgumentNullException.ThrowIfNull(medicalHistory);
             try
             {
                 var existingMedicalHistory = await _context.MedicalHistories.FindAsync(medicalHistory.HistoryId);
@@ -85,7 +85,7 @@ namespace Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                return Result<MedicalHistory>.Failure(ex.InnerException.ToString());
+                return Result<MedicalHistory>.Failure(ex.InnerException?.ToString() ?? ex.Message);
             }
         }
 

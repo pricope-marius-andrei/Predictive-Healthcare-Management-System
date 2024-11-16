@@ -8,6 +8,7 @@ namespace Infrastructure.Repositories
 {
     public class DoctorRepository : IDoctorRepository
     {
+        private const string DOCTOR_NOT_FOUND = "Doctor not found.";
         private readonly ApplicationDbContext _context;
 
         public DoctorRepository(ApplicationDbContext context)
@@ -16,7 +17,7 @@ namespace Infrastructure.Repositories
         }
         public async Task<Result<Guid>> AddAsync(Doctor doctor)
         {
-            if (doctor == null) throw new ArgumentNullException(nameof(doctor));
+            ArgumentNullException.ThrowIfNull(doctor);
             try
             {
                 await _context.Doctors.AddAsync(doctor);
@@ -35,7 +36,7 @@ namespace Infrastructure.Repositories
 
             if (doctor == null)
             {
-                throw new KeyNotFoundException("Doctor not found.");
+                throw new KeyNotFoundException(DOCTOR_NOT_FOUND);
             }
             return doctor;
         }
@@ -45,13 +46,13 @@ namespace Infrastructure.Repositories
         }
         public async Task<Result<Doctor>> UpdateAsync(Doctor doctor)
         {
-            if (doctor == null) throw new ArgumentNullException(nameof(doctor));
+            ArgumentNullException.ThrowIfNull(doctor);
             try
             {
                 var existingDoctor = await _context.Doctors.FindAsync(doctor.DoctorId);
                 if (existingDoctor == null)
                 {
-                    throw new KeyNotFoundException("Doctor not found.");
+                    throw new KeyNotFoundException(DOCTOR_NOT_FOUND);
                 }
 
                 doctor.DateOfRegistration = doctor.DateOfRegistration.ToUniversalTime();
@@ -64,7 +65,7 @@ namespace Infrastructure.Repositories
 
                 if (newDoctor == null)
                 {
-                    throw new KeyNotFoundException("Doctor not found.");
+                    throw new KeyNotFoundException(DOCTOR_NOT_FOUND);
                 }
 
                 return Result<Doctor>.Success(newDoctor);
@@ -78,10 +79,10 @@ namespace Infrastructure.Repositories
 
         public async Task DeleteAsync(Guid id)
         {
-            var doctor = _context.Doctors.Find(id);
+            var doctor = await _context.Doctors.FindAsync(id);
             if (doctor == null)
             {
-                throw new KeyNotFoundException("Doctor not found.");
+                throw new KeyNotFoundException(DOCTOR_NOT_FOUND);
             }
 
             _context.Doctors.Remove(doctor);

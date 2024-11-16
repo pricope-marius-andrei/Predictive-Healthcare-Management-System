@@ -7,7 +7,7 @@ namespace Application.UseCases.Commands
     public class CreateMedicalHistoryCommand : IRequest<Result<Guid>>
     {
         public Guid PatientId { get; set; }
-        public string Condition { get; set; }
+        public string? Condition { get; set; }
         public DateTime DateOfDiagnosis { get; set; } = DateTime.Now;
 
     }

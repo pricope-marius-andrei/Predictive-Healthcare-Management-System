@@ -93,7 +93,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                         Specialization = "Cardiology",
                         PhoneNumber = "1234567890",
                         DateOfRegistration = DateTime.Now,
-                        MedicalRecords = null
+                        MedicalRecords = new List<MedicalRecord>()
                     },
                     new Doctor
                     {
@@ -106,7 +106,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                         Specialization = "Neurology",
                         PhoneNumber = "0987654321",
                         DateOfRegistration = DateTime.Now,
-                        MedicalRecords = null
+                        MedicalRecords = new List<MedicalRecord>()
                     }
                 };
         }
