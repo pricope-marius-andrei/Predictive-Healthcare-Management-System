@@ -2,43 +2,25 @@
 
 namespace Domain.Entities
 {
-    public class Patient
-    {
-        [Key]
-        public Guid PatientId { get; set; }
+	public class Patient : Person
+	{
+		[Required]
+		public DateTime DateOfBirth { get; set; }
 
-        [Required]
-        public string? Username { get; set; }
+		[MaxLength(100)]
+		public string? Address { get; set; }
 
-        [Required]
-        public string? Email { get; set; }
+		[MaxLength(10)]
+		public string? Gender { get; set; }
 
-        [Required]
-        public string? Password { get; set; }
+		[Range(0, 300)]
+		public decimal Height { get; set; }
 
-        [Required]
-        public string? FirstName { get; set; }
+		[Range(0, 500)]
+		public decimal Weight { get; set; }
 
-        [Required]
-        public string? LastName { get; set; }
+		public ICollection<MedicalHistory>? MedicalHistories { get; set; }
 
-        [Required]
-        public DateTime DateOfBirth { get; set; }
-
-        [Required]
-        public string? PhoneNumber { get; set; }
-
-        public string? Address { get; set; }
-
-        public string? Gender { get; set; }
-
-        public decimal Height { get; set; }
-
-        public decimal Weight { get; set; }
-
-        public DateTime DateOfRegistration { get; set; } = DateTime.Now;
-
-        public ICollection<MedicalHistory>? MedicalHistories { get; set; }
-        public ICollection<MedicalRecord>? MedicalRecords { get; set; }
-    }
+		public ICollection<MedicalRecord>? MedicalRecords { get; set; }
+	}
 }

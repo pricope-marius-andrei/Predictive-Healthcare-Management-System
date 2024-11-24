@@ -1,5 +1,5 @@
-﻿using Application.UseCases.CommandHandlers;
-using Application.UseCases.Commands;
+﻿using Application.UseCases.CommandHandlers.MedicalHistoryCommandHandlers;
+using Application.UseCases.Commands.MedicalHistoryCommands;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
@@ -51,7 +51,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 Condition = "Condition",
                 DateOfDiagnosis = DateTime.UtcNow
             };
-            var patient = new Patient { PatientId = command.PatientId };
+            var patient = new Patient { PersonId = command.PatientId };
             var medicalHistory = new MedicalHistory { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
             _mockPatientRepository.GetByIdAsync(Arg.Any<Guid>()).Returns(patient);
@@ -76,7 +76,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 Condition = "Condition",
                 DateOfDiagnosis = DateTime.UtcNow
             };
-            var patient = new Patient { PatientId = command.PatientId };
+            var patient = new Patient { PersonId = command.PatientId };
             var medicalHistory = new MedicalHistory { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
             _mockPatientRepository.GetByIdAsync(Arg.Any<Guid>()).Returns(patient);

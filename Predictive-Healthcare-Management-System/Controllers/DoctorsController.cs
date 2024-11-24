@@ -1,6 +1,6 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Commands;
-using Application.UseCases.Queries;
+using Application.UseCases.Commands.DoctorCommands;
+using Application.UseCases.Queries.DoctorQueries;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
@@ -37,7 +37,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var doctor = await _mediator.Send(new GetDoctorByIdQuery { Id = id });
+                var doctor = await _mediator.Send(new GetDoctorByIdQuery { DoctorId = id });
                 return Ok(doctor);
             }
             catch (Exception ex)
@@ -51,7 +51,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                await _mediator.Send(new DeleteDoctorCommand { DoctorId = id });
+                await _mediator.Send(new DeleteDoctorCommand { PersonId = id });
                 return NoContent();
             }
             catch
@@ -94,4 +94,4 @@ namespace Predictive_Healthcare_Management_System.Controllers
             }
         }
     }
-}   
+}

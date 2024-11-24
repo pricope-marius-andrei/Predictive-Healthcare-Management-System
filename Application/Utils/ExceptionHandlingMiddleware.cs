@@ -41,7 +41,6 @@ public class ExceptionHandlingMiddleware
         }
         else
         {
-            // Log the exception (use a logging framework)
             status = HttpStatusCode.InternalServerError;
             message = JsonSerializer.Serialize(new { Message = "An unexpected error occurred." });
         }

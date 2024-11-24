@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Application.DTOs;
-using Application.UseCases.Commands;
 using Microsoft.AspNetCore.Mvc;
-using Application.UseCases.Queries;
 using Domain.Entities;
 using Domain.Common;
+using Application.UseCases.Commands.PatientCommands;
+using Application.UseCases.Queries.PatientQueries;
 
 namespace Predictive_Healthcare_Management_System.Controllers
 {
@@ -38,7 +38,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var patient = await _mediator.Send(new GetPatientByIdQuery { Id = id });
+                var patient = await _mediator.Send(new GetPatientByIdQuery { PatientId = id });
                 return Ok(patient);
             }
             catch (Exception ex)
@@ -86,7 +86,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                await _mediator.Send(new DeletePatientCommand { PatientId = id });
+                await _mediator.Send(new DeletePatientCommand { PersonId = id });
                 return StatusCode(StatusCodes.Status204NoContent);
             }
             catch

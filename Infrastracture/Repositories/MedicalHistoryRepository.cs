@@ -6,99 +6,100 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class MedicalHistoryRepository : IMedicalHistoryRepository
-    {
-        private readonly ApplicationDbContext _context;
-        public MedicalHistoryRepository(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+	public class MedicalHistoryRepository : IMedicalHistoryRepository
+	{
+		private readonly ApplicationDbContext _context;
 
-        public async Task<IEnumerable<MedicalHistory>> GetAllAsync()
-        {
-            return await _context.MedicalHistories
-                .Include(mh => mh.Patient)
-                .ToListAsync();
-        }
+		public MedicalHistoryRepository(ApplicationDbContext context)
+		{
+			_context = context;
+		}
 
-        public async Task<MedicalHistory> GetByIdAsync(Guid id)
-        {
-            var medicalHistory = await _context.MedicalHistories
-                .Include(mh => mh.Patient)
-                .FirstOrDefaultAsync(mh => mh.HistoryId == id);
+		public async Task<IEnumerable<MedicalHistory>> GetAllAsync()
+		{
+			return await _context.MedicalHistories
+				.Include(mh => mh.Patient)
+				.ToListAsync();
+		}
 
-            if (medicalHistory == null)
-            {
-                throw new KeyNotFoundException("Medical history not found.");
-            }
+		public async Task<MedicalHistory> GetByIdAsync(Guid id)
+		{
+			var medicalHistory = await _context.MedicalHistories
+				.Include(mh => mh.Patient)
+				.FirstOrDefaultAsync(mh => mh.HistoryId == id);
 
-            return medicalHistory;
-        }
+			if (medicalHistory == null)
+			{
+				throw new KeyNotFoundException("Medical history not found.");
+			}
 
-        public async Task<IEnumerable<MedicalHistory>> GetByPatientIdAsync(Guid patientId)
-        {
-            return await _context.MedicalHistories
-                .Include(mh => mh.Patient)
-                .Where(mh => mh.PatientId == patientId)
-                .ToListAsync();
-        }
+			return medicalHistory;
+		}
 
-        public async Task<Result<Guid>> AddAsync(MedicalHistory medicalHistory)
-        {
-            ArgumentNullException.ThrowIfNull(medicalHistory);
-            try
-            {
-                await _context.MedicalHistories.AddAsync(medicalHistory);
-                await _context.SaveChangesAsync();
-                return Result<Guid>.Success(medicalHistory.HistoryId);
-            }
-            catch (Exception ex)
-            {
-                return Result<Guid>.Failure(ex.InnerException?.ToString() ?? ex.Message);
-            }
-        }
+		public async Task<IEnumerable<MedicalHistory>> GetByPatientIdAsync(Guid patientId)
+		{
+			return await _context.MedicalHistories
+				.Where(mh => mh.PatientId == patientId)
+				.Include(mh => mh.Patient)
+				.ToListAsync();
+		}
 
-        public async Task<Result<MedicalHistory>> UpdateAsync(MedicalHistory medicalHistory)
-        {
-            ArgumentNullException.ThrowIfNull(medicalHistory);
-            try
-            {
-                var existingMedicalHistory = await _context.MedicalHistories.FindAsync(medicalHistory.HistoryId);
-                if (existingMedicalHistory == null)
-                {
-                    throw new KeyNotFoundException("Medical history not found.");
-                }
+		public async Task<Result<Guid>> AddAsync(MedicalHistory medicalHistory)
+		{
+			ArgumentNullException.ThrowIfNull(medicalHistory);
+			try
+			{
+				await _context.MedicalHistories.AddAsync(medicalHistory);
+				await _context.SaveChangesAsync();
+				return Result<Guid>.Success(medicalHistory.HistoryId);
+			}
+			catch (Exception ex)
+			{
+				return Result<Guid>.Failure(ex.Message);
+			}
+		}
 
-                _context.Entry(existingMedicalHistory).CurrentValues.SetValues(medicalHistory);
-                await _context.SaveChangesAsync();
+		public async Task<Result<MedicalHistory>> UpdateAsync(MedicalHistory medicalHistory)
+		{
+			ArgumentNullException.ThrowIfNull(medicalHistory);
+			try
+			{
+				var existingMedicalHistory = await _context.MedicalHistories.FindAsync(medicalHistory.HistoryId);
+				if (existingMedicalHistory == null)
+				{
+					throw new KeyNotFoundException("Medical history not found.");
+				}
 
-                var newMedicalHistory = await _context.MedicalHistories
-                    .Include(mh => mh.Patient)
-                    .FirstOrDefaultAsync(mh => mh.HistoryId == existingMedicalHistory.HistoryId);
+				_context.Entry(existingMedicalHistory).CurrentValues.SetValues(medicalHistory);
+				await _context.SaveChangesAsync();
 
-                if (newMedicalHistory == null)
-                {
-                    throw new KeyNotFoundException("Medical history not found.");
-                }
+				var updatedMedicalHistory = await _context.MedicalHistories
+					.Include(mh => mh.Patient)
+					.FirstOrDefaultAsync(mh => mh.HistoryId == existingMedicalHistory.HistoryId);
 
-                return Result<MedicalHistory>.Success(newMedicalHistory);
-            }
-            catch (Exception ex)
-            {
-                return Result<MedicalHistory>.Failure(ex.InnerException?.ToString() ?? ex.Message);
-            }
-        }
+				if (updatedMedicalHistory == null)
+				{
+					throw new KeyNotFoundException("Medical history not found.");
+				}
 
-        public async Task DeleteAsync(Guid id)
-        {
-            var medicalHistory = await _context.MedicalHistories.FindAsync(id);
-            if (medicalHistory == null)
-            {
-                throw new KeyNotFoundException("Medical history not found.");
-            }
+				return Result<MedicalHistory>.Success(updatedMedicalHistory);
+			}
+			catch (Exception ex)
+			{
+				return Result<MedicalHistory>.Failure(ex.Message);
+			}
+		}
 
-            _context.MedicalHistories.Remove(medicalHistory);
-            await _context.SaveChangesAsync();
-        }
-    }
+		public async Task DeleteAsync(Guid id)
+		{
+			var medicalHistory = await _context.MedicalHistories.FindAsync(id);
+			if (medicalHistory == null)
+			{
+				throw new KeyNotFoundException("Medical history not found.");
+			}
+
+			_context.MedicalHistories.Remove(medicalHistory);
+			await _context.SaveChangesAsync();
+		}
+	}
 }

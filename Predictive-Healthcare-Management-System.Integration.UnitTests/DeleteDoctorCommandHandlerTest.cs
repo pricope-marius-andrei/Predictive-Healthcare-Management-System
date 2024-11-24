@@ -1,64 +1,63 @@
-﻿using Application.UseCases.CommandHandlers;
-using Application.UseCases.Commands;
+﻿using Application.UseCases.CommandHandlers.DoctorCommandHandlers;
+using Application.UseCases.Commands.DoctorCommands;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 
 namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 {
-    public class DeleteDoctorCommandHandlerTest
-    {
-        private readonly IDoctorRepository repository;
+	public class DeleteDoctorCommandHandlerTest
+	{
+		private readonly IDoctorRepository _mockRepository;
 
-        public DeleteDoctorCommandHandlerTest()
-        {
-            repository = Substitute.For<IDoctorRepository>();
-        }
+		public DeleteDoctorCommandHandlerTest()
+		{
+			_mockRepository = Substitute.For<IDoctorRepository>();
+		}
 
-        [Fact]
-        public async Task Given_DeleteDoctorCommandHandler_When_DoctorExists_Then_DoctorShouldBeDeleted()
-        {
-            // Arrange
-            var doctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
-            var doctor = new Doctor
-            {
-                DoctorId = doctorId,
-                Username = "doctorUsername",
-                Email = "doctor@example.com",
-                Password = "password",
-                FirstName = "John",
-                LastName = "Doe",
-                PhoneNumber = "1234567890",
-                Specialization = "Cardiology",
-                DateOfRegistration = DateTime.Now,
-                MedicalRecords = new List<MedicalRecord>()
-            };
-            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(doctor));
-            var command = new DeleteDoctorCommand { DoctorId = doctorId };
+		[Fact]
+		public async Task Handle_ShouldDeleteDoctor_WhenDoctorExists()
+		{
+			// Arrange
+			var personId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
+			var doctor = new Doctor
+			{
+				PersonId = personId,
+				Username = "doctorUsername",
+				Email = "doctor@example.com",
+				Password = "password",
+				FirstName = "John",
+				LastName = "Doe",
+				PhoneNumber = "1234567890",
+				Specialization = "Cardiology",
+				DateOfRegistration = DateTime.UtcNow
+			};
 
-            // Act
-            var handler = new DeleteDoctorCommandHandler(repository);
-            await handler.Handle(command, CancellationToken.None);
+			_mockRepository.GetByIdAsync(personId).Returns(doctor);
+			var command = new DeleteDoctorCommand { PersonId = personId };
 
-            // Assert
-            await repository.Received(1).DeleteAsync(doctorId);
-        }
+			var handler = new DeleteDoctorCommandHandler(_mockRepository);
 
-        [Fact]
-        public async Task Given_DeleteDoctorCommandHandler_When_DoctorDoesNotExist_Then_ShouldThrowInvalidOperationException()
-        {
-            // Arrange
-            var doctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
-            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(null!));
+			// Act
+			await handler.Handle(command, CancellationToken.None);
 
-            var command = new DeleteDoctorCommand { DoctorId = doctorId };
+			// Assert
+			await _mockRepository.Received(1).DeleteAsync(personId);
+		}
 
-            // Act
-            var handler = new DeleteDoctorCommandHandler(repository);
-            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
+		[Fact]
+		public async Task Handle_ShouldThrowInvalidOperationException_WhenDoctorDoesNotExist()
+		{
+			// Arrange
+			var personId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
+			_mockRepository.GetByIdAsync(personId).Returns((Doctor?)null);
 
-            // Assert
-            Assert.Equal("Doctor not found.", exception.Message);
-        }
-    }
+			var command = new DeleteDoctorCommand { PersonId = personId };
+			var handler = new DeleteDoctorCommandHandler(_mockRepository);
+
+			// Act & Assert
+			var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
+			Assert.Equal("Doctor not found.", exception.Message);
+		}
+	}
 }

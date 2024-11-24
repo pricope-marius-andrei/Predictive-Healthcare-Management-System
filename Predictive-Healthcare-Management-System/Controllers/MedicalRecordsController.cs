@@ -1,10 +1,10 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Commands;
-using Application.UseCases.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Common;
 using Domain.Entities;
+using Application.UseCases.Commands.MedicalRecordCommands;
+using Application.UseCases.Queries.MedicalRecordsQueries;
 
 namespace Predictive_Healthcare_Management_System.Controllers
 {
@@ -47,12 +47,12 @@ namespace Predictive_Healthcare_Management_System.Controllers
             }
         }
 
-        [HttpGet("patient/{patientId}")]
-        public async Task<ActionResult<IEnumerable<MedicalRecordDto>>> GetMedicalRecordsByPatientId(Guid patientId)
+        [HttpGet("patient/{PersonId}")]
+        public async Task<ActionResult<IEnumerable<MedicalRecordDto>>> GetMedicalRecordsByPersonId(Guid PersonId)
         {
             try
             {
-                var query = new GetMedicalRecordsByPatientIdQuery { PatientId = patientId };
+                var query = new GetMedicalRecordsByPatientIdQuery { PatientId = PersonId };
                 var result = await _mediator.Send(query);
                 return Ok(result);
             }

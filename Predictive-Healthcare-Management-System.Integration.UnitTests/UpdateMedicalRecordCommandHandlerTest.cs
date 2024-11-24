@@ -1,5 +1,5 @@
-﻿using Application.UseCases.CommandHandlers;
-using Application.UseCases.Commands;
+﻿using Application.UseCases.CommandHandlers.MedicalRecordCommandHandlers;
+using Application.UseCases.Commands.MedicalRecordCommands;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
@@ -8,82 +8,86 @@ using NSubstitute;
 
 namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 {
-    public class UpdateMedicalRecordCommandHandlerTests
-    {
-        private readonly IMedicalRecordRepository _mockMedicalRecordRepository;
-        private readonly IMapper _mockMapper;
-        private readonly UpdateMedicalRecordCommandHandler _handler;
+	public class UpdateMedicalRecordCommandHandlerTests
+	{
+		private readonly IMedicalRecordRepository _mockMedicalRecordRepository;
+		private readonly IMapper _mockMapper;
+		private readonly UpdateMedicalRecordCommandHandler _handler;
 
-        public UpdateMedicalRecordCommandHandlerTests()
-        {
-            _mockMedicalRecordRepository = Substitute.For<IMedicalRecordRepository>();
-            _mockMapper = Substitute.For<IMapper>();
-            _handler = new UpdateMedicalRecordCommandHandler(_mockMedicalRecordRepository, _mockMapper);
-        }
+		public UpdateMedicalRecordCommandHandlerTests()
+		{
+			_mockMedicalRecordRepository = Substitute.For<IMedicalRecordRepository>();
+			_mockMapper = Substitute.For<IMapper>();
+			_handler = new UpdateMedicalRecordCommandHandler(_mockMedicalRecordRepository, _mockMapper);
+		}
 
-        [Fact]
-        public async Task Handle_MedicalRecordNotFound_ReturnsFailureResult()
-        {
-            // Arrange
-            var command = new UpdateMedicalRecordCommand { RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
-            _mockMedicalRecordRepository.GetByIdAsync(command.RecordId).Returns((MedicalRecord?)null!);
+		[Fact]
+		public async Task Handle_ShouldReturnFailure_WhenMedicalRecordNotFound()
+		{
+			// Arrange
+			var command = new UpdateMedicalRecordCommand { RecordId = Guid.NewGuid() };
+			_mockMedicalRecordRepository.GetByIdAsync(command.RecordId).Returns((MedicalRecord?)null);
 
-            // Act
-            var result = await _handler.Handle(command, CancellationToken.None);
+			// Act
+			var result = await _handler.Handle(command, CancellationToken.None);
 
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.Equal("Medical record not found.", result.ErrorMessage);
-        }
+			// Assert
+			Assert.False(result.IsSuccess);
+			Assert.Equal("Medical record not found.", result.ErrorMessage);
+		}
 
-        [Fact]
-        public async Task Handle_ValidRequest_UpdatesMedicalRecord()
-        {
-            // Arrange
-            var command = new UpdateMedicalRecordCommand
-            {
-                RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
-                VisitReason = "Updated Visit Reason",
-                Symptoms = "Updated Symptoms",
-                Diagnosis = "Updated Diagnosis",
-                DoctorNotes = "Updated Doctor Notes",
-                DateOfVisit = DateTime.UtcNow
-            };
+		[Fact]
+		public async Task Handle_ShouldUpdateMedicalRecord_WhenRequestIsValid()
+		{
+			// Arrange
+			var command = new UpdateMedicalRecordCommand
+			{
+				RecordId = Guid.NewGuid(),
+				VisitReason = "Updated Visit Reason",
+				Symptoms = "Updated Symptoms",
+				Diagnosis = "Updated Diagnosis",
+				DoctorNotes = "Updated Doctor Notes",
+				DateOfVisit = DateTime.UtcNow
+			};
 
-            var existingMedicalRecord = new MedicalRecord
-            {
-                RecordId = command.RecordId,
-                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
-                DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
-                VisitReason = "Visit Reason",
-                Symptoms = "Symptoms",
-                Diagnosis = "Diagnosis",
-                DoctorNotes = "Doctor Notes",
-                DateOfVisit = DateTime.UtcNow
-            };
+			var existingMedicalRecord = new MedicalRecord
+			{
+				RecordId = command.RecordId,
+				PatientId = Guid.NewGuid(),
+				DoctorId = Guid.NewGuid(),
+				VisitReason = "Initial Visit Reason",
+				Symptoms = "Initial Symptoms",
+				Diagnosis = "Initial Diagnosis",
+				DoctorNotes = "Initial Doctor Notes",
+				DateOfVisit = DateTime.UtcNow.AddDays(-7)
+			};
 
-            var updatedMedicalRecord = new MedicalRecord
-            {
-                RecordId = command.RecordId,
-                PatientId = existingMedicalRecord.PatientId,
-                DoctorId = existingMedicalRecord.DoctorId,
-                VisitReason = command.VisitReason,
-                Symptoms = command.Symptoms,
-                Diagnosis = command.Diagnosis,
-                DoctorNotes = command.DoctorNotes,
-                DateOfVisit = command.DateOfVisit
-            };
+			_mockMedicalRecordRepository.GetByIdAsync(command.RecordId).Returns(existingMedicalRecord);
 
-            _mockMedicalRecordRepository.GetByIdAsync(command.RecordId).Returns(existingMedicalRecord);
-            _mockMapper.Map<MedicalRecord>(command).Returns(updatedMedicalRecord);
-            _mockMedicalRecordRepository.UpdateAsync(updatedMedicalRecord).Returns(Result<MedicalRecord>.Success(updatedMedicalRecord));
+			// Corrected AutoMapper mock setup
+			_mockMapper.When(m => m.Map(command, existingMedicalRecord)).Do(_ =>
+			{
+				existingMedicalRecord.VisitReason = command.VisitReason;
+				existingMedicalRecord.Symptoms = command.Symptoms;
+				existingMedicalRecord.Diagnosis = command.Diagnosis;
+				existingMedicalRecord.DoctorNotes = command.DoctorNotes;
+				existingMedicalRecord.DateOfVisit = command.DateOfVisit;
+			});
 
-            // Act
-            var result = await _handler.Handle(command, CancellationToken.None);
+			// Corrected repository mock setup
+			_mockMedicalRecordRepository.UpdateAsync(existingMedicalRecord).Returns(Result<MedicalRecord>.Success(existingMedicalRecord));
 
-            // Assert
-            Assert.True(result.IsSuccess);
-            Assert.Equal(updatedMedicalRecord, result.Data);
-        }
-    }
+			// Act
+			var result = await _handler.Handle(command, CancellationToken.None);
+
+			// Assert
+			Assert.True(result.IsSuccess);
+			Assert.NotNull(result.Data);
+			Assert.Equal(existingMedicalRecord.VisitReason, result.Data.VisitReason);
+			Assert.Equal(existingMedicalRecord.Symptoms, result.Data.Symptoms);
+			Assert.Equal(existingMedicalRecord.Diagnosis, result.Data.Diagnosis);
+			Assert.Equal(existingMedicalRecord.DoctorNotes, result.Data.DoctorNotes);
+			Assert.Equal(existingMedicalRecord.DateOfVisit, result.Data.DateOfVisit);
+		}
+	}
 }

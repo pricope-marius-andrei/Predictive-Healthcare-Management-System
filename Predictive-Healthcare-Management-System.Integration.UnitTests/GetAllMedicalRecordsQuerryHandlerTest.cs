@@ -1,6 +1,6 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Queries;
-using Application.UseCases.QueryHandlers;
+using Application.UseCases.Queries.MedicalRecordsQueries;
+using Application.UseCases.QueryHandlers.MedicalRecordQueryHandlers;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
@@ -43,8 +43,9 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
-            // Assert
-            Assert.Equal(medicalRecordDtos, result);
-        }
-    }
+			// Assert
+			Assert.True(result.IsSuccess);
+			Assert.Equal(medicalRecordDtos, result.Data);
+		}
+	}
 }

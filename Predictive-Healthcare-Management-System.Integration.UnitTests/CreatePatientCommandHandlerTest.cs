@@ -1,5 +1,5 @@
-﻿using Application.UseCases.CommandHandlers;
-using Application.UseCases.Commands;
+﻿using Application.UseCases.CommandHandlers.PatientCommandHandlers;
+using Application.UseCases.Commands.PatientCommands;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
@@ -46,7 +46,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             };
             var patient = new Patient
             {
-                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                PersonId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 Username = command.Username,
                 Email = command.Email,
                 Password = command.Password,
@@ -55,12 +55,12 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 PhoneNumber = command.PhoneNumber,
                 Address = command.Address,
                 Gender = command.Gender,
-                Height = command.Height.Value,
-                Weight = command.Weight.Value,
+                Height = command.Height,
+                Weight = command.Weight,
                 DateOfBirth = command.DateOfBirth,
                 DateOfRegistration = command.DateOfRegistration
             };
-            var result = Result<Guid>.Success(patient.PatientId);
+            var result = Result<Guid>.Success(patient.PersonId);
 
             _mockValidator.ValidateAsync(command, CancellationToken.None).Returns(new ValidationResult());
             _mockMapper.Map<Patient>(command).Returns(patient);
@@ -112,7 +112,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             };
             var patient = new Patient
             {
-                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                PersonId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 Username = command.Username,
                 Email = command.Email,
                 Password = command.Password,
@@ -121,8 +121,8 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 PhoneNumber = command.PhoneNumber,
                 Address = command.Address,
                 Gender = command.Gender,
-                Height = command.Height.Value,
-                Weight = command.Weight.Value,
+                Height = command.Height,
+                Weight = command.Weight,
                 DateOfBirth = command.DateOfBirth,
                 DateOfRegistration = command.DateOfRegistration
             };

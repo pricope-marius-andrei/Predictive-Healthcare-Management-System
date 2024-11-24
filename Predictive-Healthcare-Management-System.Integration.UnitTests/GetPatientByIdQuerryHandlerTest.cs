@@ -1,6 +1,6 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Queries;
-using Application.UseCases.QueryHandlers;
+using Application.UseCases.Queries.PatientQueries;
+using Application.UseCases.QueryHandlers.PatientQueryHandlers;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
@@ -25,10 +25,10 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
         public async Task Handle_ReturnsPatientDto_WhenPatientExists()
         {
             // Arrange
-            var query = new GetPatientByIdQuery { Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
+            var query = new GetPatientByIdQuery { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
             var patient = new Patient
             {
-                PatientId = query.Id,
+                PersonId = query.PatientId,
                 Username = "testuser",
                 Email = "test@example.com",
                 Password = "password",
@@ -44,7 +44,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             };
             var patientDto = new PatientDto
             {
-                PatientId = patient.PatientId,
+                PatientId = patient.PersonId,
                 Username = patient.Username,
                 Email = patient.Email,
                 FirstName = patient.FirstName,
@@ -58,26 +58,28 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 DateOfRegistration = patient.DateOfRegistration
             };
 
-            _mockPatientRepository.GetByIdAsync(query.Id).Returns(patient);
+            _mockPatientRepository.GetByIdAsync(query.PatientId).Returns(patient);
             _mockMapper.Map<PatientDto>(patient).Returns(patientDto);
 
             // Act
             var response = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.Equal(patientDto, response);
-        }
+            Assert.True(response.IsSuccess);
+            Assert.Equal(patientDto, response.Data);
+		}
 
         [Fact]
         public async Task Handle_ThrowsKeyNotFoundException_WhenPatientDoesNotExist()
         {
-            // Arrange
-            var query = new GetPatientByIdQuery { Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
+	        // Arrange
+	        var query = new GetPatientByIdQuery { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
-            _mockPatientRepository.GetByIdAsync(query.Id).Returns((Patient?)null!);
+	        _mockPatientRepository.GetByIdAsync(query.PatientId).Returns((Patient?)null);
 
-            // Act & Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => _handler.Handle(query, CancellationToken.None));
+	        // Act & Assert
+	        var exception = await Assert.ThrowsAsync<KeyNotFoundException>(() => _handler.Handle(query, CancellationToken.None));
+	        Assert.Equal($"Patient with ID {query.PatientId} was not found.", exception.Message);
         }
-    }
+	}
 }
