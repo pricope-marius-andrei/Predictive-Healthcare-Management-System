@@ -6,7 +6,7 @@ using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 
-namespace Predictive_Healthcare_Management_System.Integration.UnitTests
+namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
 	public class GetMedicalRecordByIdQueryHandlerTests
 	{

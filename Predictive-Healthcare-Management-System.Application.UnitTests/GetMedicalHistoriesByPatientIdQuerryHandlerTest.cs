@@ -6,39 +6,39 @@ using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 
-namespace Predictive_Healthcare_Management_System.Integration.UnitTests
+namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
-	public class GetAllMedicalHistoriesQueryHandlerTests
+	public class GetMedicalHistoriesByPatientIdQueryHandlerTests
 	{
 		private readonly IMedicalHistoryRepository _mockMedicalHistoryRepository;
 		private readonly IMapper _mockMapper;
-		private readonly GetAllMedicalHistoriesQueryHandler _handler;
+		private readonly GetMedicalHistoriesByPatientIdQueryHandler _handler;
 
-		public GetAllMedicalHistoriesQueryHandlerTests()
+		public GetMedicalHistoriesByPatientIdQueryHandlerTests()
 		{
 			_mockMedicalHistoryRepository = Substitute.For<IMedicalHistoryRepository>();
 			_mockMapper = Substitute.For<IMapper>();
-			_handler = new GetAllMedicalHistoriesQueryHandler(_mockMedicalHistoryRepository, _mockMapper);
+			_handler = new GetMedicalHistoriesByPatientIdQueryHandler(_mockMedicalHistoryRepository, _mockMapper);
 		}
 
 		[Fact]
-		public async Task Handle_ShouldReturnAllMedicalHistories_WhenHistoriesExist()
+		public async Task Handle_ReturnsMedicalHistories_WhenHistoriesExistForPatient()
 		{
 			// Arrange
-			var query = new GetAllMedicalHistoriesQuery();
+			var query = new GetMedicalHistoriesByPatientIdQuery { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 			var medicalHistories = new List<MedicalHistory>
 			{
 				new MedicalHistory
 				{
-					HistoryId = Guid.NewGuid(),
-					PatientId = Guid.NewGuid(),
+					HistoryId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+					PatientId = query.PatientId,
 					Condition = "Condition1",
 					DateOfDiagnosis = DateTime.UtcNow
 				},
 				new MedicalHistory
 				{
-					HistoryId = Guid.NewGuid(),
-					PatientId = Guid.NewGuid(),
+					HistoryId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+					PatientId = query.PatientId,
 					Condition = "Condition2",
 					DateOfDiagnosis = DateTime.UtcNow
 				}
@@ -62,7 +62,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 				}
 			};
 
-			_mockMedicalHistoryRepository.GetAllAsync().Returns(medicalHistories);
+			_mockMedicalHistoryRepository.GetByPatientIdAsync(query.PatientId).Returns(medicalHistories);
 			_mockMapper.Map<IEnumerable<MedicalHistoryDto>>(medicalHistories).Returns(medicalHistoryDtos);
 
 			// Act
@@ -70,28 +70,23 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 
 			// Assert
 			Assert.True(result.IsSuccess);
-			Assert.NotNull(result.Data);
 			Assert.Equal(medicalHistoryDtos, result.Data);
 		}
 
 		[Fact]
-		public async Task Handle_ShouldReturnEmptyResult_WhenNoHistoriesExist()
+		public async Task Handle_ReturnsFailureResult_WhenNoHistoriesExistForPatient()
 		{
 			// Arrange
-			var query = new GetAllMedicalHistoriesQuery();
-			var medicalHistories = new List<MedicalHistory>(); // Empty list
-			var medicalHistoryDtos = new List<MedicalHistoryDto>(); // Empty list
+			var query = new GetMedicalHistoriesByPatientIdQuery { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
-			_mockMedicalHistoryRepository.GetAllAsync().Returns(medicalHistories);
-			_mockMapper.Map<IEnumerable<MedicalHistoryDto>>(medicalHistories).Returns(medicalHistoryDtos);
+			_mockMedicalHistoryRepository.GetByPatientIdAsync(query.PatientId).Returns(new List<MedicalHistory>());
 
 			// Act
 			var result = await _handler.Handle(query, CancellationToken.None);
 
 			// Assert
-			Assert.True(result.IsSuccess); // Now expecting a successful result
-			Assert.NotNull(result.Data);
-			Assert.Empty(result.Data); // Data should be an empty collection
+			Assert.False(result.IsSuccess);
+			Assert.Equal("No medical histories found for the specified patient.", result.ErrorMessage);
 		}
 	}
 }
