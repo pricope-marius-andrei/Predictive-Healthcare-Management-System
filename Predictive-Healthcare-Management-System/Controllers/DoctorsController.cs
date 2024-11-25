@@ -10,21 +10,14 @@ namespace Predictive_Healthcare_Management_System.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class DoctorsController : ControllerBase
+    public class DoctorsController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public DoctorsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpPost]
         public async Task<ActionResult<Result<Guid>>> CreateDoctor(CreateDoctorCommand command)
         {
             try
             {
-                var result = await _mediator.Send(command);
+                var result = await mediator.Send(command);
                 return CreatedAtAction(nameof(GetDoctorById), new { id = result.Data }, result.Data);
             }
             catch (Exception ex)
@@ -37,7 +30,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var doctor = await _mediator.Send(new GetDoctorByIdQuery { DoctorId = id });
+                var doctor = await mediator.Send(new GetDoctorByIdQuery { DoctorId = id });
                 return Ok(doctor);
             }
             catch (Exception ex)
@@ -51,7 +44,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                await _mediator.Send(new DeleteDoctorCommand { PersonId = id });
+                await mediator.Send(new DeleteDoctorCommand { PersonId = id });
                 return NoContent();
             }
             catch
@@ -65,7 +58,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var doctors = await _mediator.Send(new GetAllDoctorsQuery());
+                var doctors = await mediator.Send(new GetAllDoctorsQuery());
                 return Ok(doctors);
             }
             catch (Exception ex)
@@ -84,7 +77,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
 
             try
             {
-                var result = await _mediator.Send(command);
+                var result = await mediator.Send(command);
 
                 return Ok(result.Data);
             }

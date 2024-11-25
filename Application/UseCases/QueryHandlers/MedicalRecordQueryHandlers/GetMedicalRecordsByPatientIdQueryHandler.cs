@@ -7,27 +7,19 @@ using MediatR;
 
 namespace Application.UseCases.QueryHandlers.MedicalRecordQueryHandlers
 {
-	public class GetMedicalRecordsByPatientIdQueryHandler : IRequestHandler<GetMedicalRecordsByPatientIdQuery, Result<IEnumerable<MedicalRecordDto>>>
-	{
-		private readonly IMedicalRecordRepository _repository;
-		private readonly IMapper _mapper;
-
-		public GetMedicalRecordsByPatientIdQueryHandler(IMedicalRecordRepository repository, IMapper mapper)
+	public class GetMedicalRecordsByPatientIdQueryHandler(IMedicalRecordRepository repository, IMapper mapper)
+        : IRequestHandler<GetMedicalRecordsByPatientIdQuery, Result<IEnumerable<MedicalRecordDto>>>
+    {
+        public async Task<Result<IEnumerable<MedicalRecordDto>>> Handle(GetMedicalRecordsByPatientIdQuery request, CancellationToken cancellationToken)
 		{
-			_repository = repository;
-			_mapper = mapper;
-		}
-
-		public async Task<Result<IEnumerable<MedicalRecordDto>>> Handle(GetMedicalRecordsByPatientIdQuery request, CancellationToken cancellationToken)
-		{
-			var medicalRecords = await _repository.GetByPatientIdAsync(request.PatientId);
+			var medicalRecords = await repository.GetByPatientIdAsync(request.PatientId);
 
 			if (medicalRecords == null || !medicalRecords.Any())
 			{
 				return Result<IEnumerable<MedicalRecordDto>>.Failure("No medical records found for the specified patient.");
 			}
 
-			var medicalRecordDtos = _mapper.Map<IEnumerable<MedicalRecordDto>>(medicalRecords);
+			var medicalRecordDtos = mapper.Map<IEnumerable<MedicalRecordDto>>(medicalRecords);
 			return Result<IEnumerable<MedicalRecordDto>>.Success(medicalRecordDtos);
 		}
 	}

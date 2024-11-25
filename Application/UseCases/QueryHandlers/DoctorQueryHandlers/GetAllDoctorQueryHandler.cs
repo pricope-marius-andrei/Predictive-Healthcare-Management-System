@@ -7,27 +7,19 @@ using MediatR;
 
 namespace Application.UseCases.QueryHandlers.DoctorQueryHandlers
 {
-	public class GetAllDoctorsQueryHandler : IRequestHandler<GetAllDoctorsQuery, Result<IEnumerable<DoctorDto>>>
-	{
-		private readonly IDoctorRepository _doctorRepository;
-		private readonly IMapper _mapper;
-
-		public GetAllDoctorsQueryHandler(IDoctorRepository doctorRepository, IMapper mapper)
+	public class GetAllDoctorsQueryHandler(IDoctorRepository doctorRepository, IMapper mapper)
+        : IRequestHandler<GetAllDoctorsQuery, Result<IEnumerable<DoctorDto>>>
+    {
+        public async Task<Result<IEnumerable<DoctorDto>>> Handle(GetAllDoctorsQuery request, CancellationToken cancellationToken)
 		{
-			_doctorRepository = doctorRepository;
-			_mapper = mapper;
-		}
-
-		public async Task<Result<IEnumerable<DoctorDto>>> Handle(GetAllDoctorsQuery request, CancellationToken cancellationToken)
-		{
-			var doctors = await _doctorRepository.GetAllAsync();
+			var doctors = await doctorRepository.GetAllAsync();
 
 			if (doctors == null)
 			{
 				return Result<IEnumerable<DoctorDto>>.Failure("An error occurred while retrieving doctors.");
 			}
 
-			var doctorDtos = _mapper.Map<IEnumerable<DoctorDto>>(doctors);
+			var doctorDtos = mapper.Map<IEnumerable<DoctorDto>>(doctors);
 
 			return Result<IEnumerable<DoctorDto>>.Success(doctorDtos);
 		}

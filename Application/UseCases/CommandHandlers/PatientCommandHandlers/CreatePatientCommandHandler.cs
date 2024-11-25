@@ -8,30 +8,22 @@ using MediatR;
 
 namespace Application.UseCases.CommandHandlers.PatientCommandHandlers
 {
-	public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand, Result<Guid>>
-	{
-		private readonly IPatientRepository _repository;
-		private readonly IMapper _mapper;
-		private readonly IValidator<CreatePatientCommand> _validator;
-
-		public CreatePatientCommandHandler(IPatientRepository repository, IMapper mapper,
-			IValidator<CreatePatientCommand> validator)
+	public class CreatePatientCommandHandler(
+        IPatientRepository repository,
+        IMapper mapper,
+        IValidator<CreatePatientCommand> validator)
+        : IRequestHandler<CreatePatientCommand, Result<Guid>>
+    {
+        public async Task<Result<Guid>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
 		{
-			_repository = repository;
-			_mapper = mapper;
-			_validator = validator;
-		}
-
-		public async Task<Result<Guid>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
-		{
-			var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+			var validationResult = await validator.ValidateAsync(request, cancellationToken);
 			if (!validationResult.IsValid)
 			{
 				throw new ValidationException(validationResult.Errors);
 			}
 
-			var patient = _mapper.Map<Patient>(request);
-			var result = await _repository.AddAsync(patient);
+			var patient = mapper.Map<Patient>(request);
+			var result = await repository.AddAsync(patient);
 
 			if (result.IsSuccess)
 			{

@@ -10,21 +10,14 @@ namespace Predictive_Healthcare_Management_System.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class PatientsController : ControllerBase
+    public class PatientsController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public PatientsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpPost]
         public async Task<ActionResult<Result<Guid>>> CreatePatient(CreatePatientCommand command)
         {
             try
             {
-                var result = await _mediator.Send(command);
+                var result = await mediator.Send(command);
                 return CreatedAtAction(nameof(GetPatientById), new { id = result.Data }, result.Data);
             }
             catch (Exception ex)
@@ -38,7 +31,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var patient = await _mediator.Send(new GetPatientByIdQuery { PatientId = id });
+                var patient = await mediator.Send(new GetPatientByIdQuery { PatientId = id });
                 return Ok(patient);
             }
             catch (Exception ex)
@@ -52,7 +45,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var patients = await _mediator.Send(new GetAllPatientsQuery());
+                var patients = await mediator.Send(new GetAllPatientsQuery());
                 return Ok(patients);
             }
             catch (Exception ex)
@@ -71,7 +64,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
 
             try
             {
-                var result = await _mediator.Send(command);
+                var result = await mediator.Send(command);
 
                 return Ok(result.Data);
             }
@@ -86,7 +79,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                await _mediator.Send(new DeletePatientCommand { PersonId = id });
+                await mediator.Send(new DeletePatientCommand { PersonId = id });
                 return StatusCode(StatusCodes.Status204NoContent);
             }
             catch

@@ -4,24 +4,17 @@ using MediatR;
 
 namespace Application.UseCases.CommandHandlers.PatientCommandHandlers
 {
-	public class DeletePatientCommandHandler : IRequestHandler<DeletePatientCommand>
-	{
-		private readonly IPatientRepository _repository;
-
-		public DeletePatientCommandHandler(IPatientRepository repository)
+	public class DeletePatientCommandHandler(IPatientRepository repository) : IRequestHandler<DeletePatientCommand>
+    {
+        public async Task Handle(DeletePatientCommand request, CancellationToken cancellationToken)
 		{
-			_repository = repository;
-		}
-
-		public async Task Handle(DeletePatientCommand request, CancellationToken cancellationToken)
-		{
-			var patient = await _repository.GetByIdAsync(request.PersonId);
+			var patient = await repository.GetByIdAsync(request.PersonId);
 			if (patient == null)
 			{
 				throw new InvalidOperationException("Patient not found.");
 			}
 
-			await _repository.DeleteAsync(request.PersonId);
+			await repository.DeleteAsync(request.PersonId);
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using Application.UseCases.Commands.BaseCommands;
 using Domain.Common;
-using FluentValidation;
 
 namespace Application.UseCases.Commands.DoctorCommands
 {

@@ -8,29 +8,22 @@ using MediatR;
 
 namespace Application.UseCases.CommandHandlers.DoctorCommandHandlers
 {
-    public class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand, Result<Guid>>
+    public class CreateDoctorCommandHandler(
+        IDoctorRepository repository,
+        IMapper mapper,
+        IValidator<CreateDoctorCommand> validator)
+        : IRequestHandler<CreateDoctorCommand, Result<Guid>>
     {
-        readonly IDoctorRepository _repository;
-        readonly IMapper _mapper;
-        readonly IValidator<CreateDoctorCommand> _validator;
-
-        public CreateDoctorCommandHandler(IDoctorRepository repository, IMapper mapper, IValidator<CreateDoctorCommand> validator)
-        {
-            _repository = repository;
-            _mapper = mapper;
-            _validator = validator;
-        }
-
         public async Task<Result<Guid>> Handle(CreateDoctorCommand request, CancellationToken cancellationToken)
         {
-            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
             }
 
-            var doctor = _mapper.Map<Doctor>(request);
-            var result = await _repository.AddAsync(doctor);
+            var doctor = mapper.Map<Doctor>(request);
+            var result = await repository.AddAsync(doctor);
 
             if (result.IsSuccess)
             {

@@ -6,23 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-	public class DoctorRepository : IDoctorRepository
-	{
+	public class DoctorRepository(ApplicationDbContext context) : IDoctorRepository
+    {
 		private const string DoctorNotFound = "Doctor not found.";
-		private readonly ApplicationDbContext _context;
 
-		public DoctorRepository(ApplicationDbContext context)
-		{
-			_context = context;
-		}
-
-		public async Task<Result<Guid>> AddAsync(Doctor doctor)
+        public async Task<Result<Guid>> AddAsync(Doctor doctor)
 		{
 			ArgumentNullException.ThrowIfNull(doctor);
 			try
 			{
-				await _context.Doctors.AddAsync(doctor);
-				await _context.SaveChangesAsync();
+				await context.Doctors.AddAsync(doctor);
+				await context.SaveChangesAsync();
 				return Result<Guid>.Success(doctor.PersonId);
 			}
 			catch (Exception ex)
@@ -33,7 +27,7 @@ namespace Infrastructure.Repositories
 
 		public async Task<Doctor> GetByIdAsync(Guid id)
 		{
-			var doctor = await _context.Doctors
+			var doctor = await context.Doctors
 				.FirstOrDefaultAsync(d => d.PersonId == id);
 
 			if (doctor == null)
@@ -46,7 +40,7 @@ namespace Infrastructure.Repositories
 
 		public async Task<IEnumerable<Doctor>> GetAllAsync()
 		{
-			return await _context.Doctors.ToListAsync();
+			return await context.Doctors.ToListAsync();
 		}
 
 		public async Task<Result<Doctor>> UpdateAsync(Doctor doctor)
@@ -54,7 +48,7 @@ namespace Infrastructure.Repositories
 			ArgumentNullException.ThrowIfNull(doctor);
 			try
 			{
-				var existingDoctor = await _context.Doctors.FindAsync(doctor.PersonId);
+				var existingDoctor = await context.Doctors.FindAsync(doctor.PersonId);
 				if (existingDoctor == null)
 				{
 					throw new KeyNotFoundException(DoctorNotFound);
@@ -62,10 +56,10 @@ namespace Infrastructure.Repositories
 
 				existingDoctor.DateOfRegistration = existingDoctor.DateOfRegistration.ToUniversalTime();
 
-				_context.Entry(existingDoctor).CurrentValues.SetValues(doctor);
-				await _context.SaveChangesAsync();
+				context.Entry(existingDoctor).CurrentValues.SetValues(doctor);
+				await context.SaveChangesAsync();
 
-				var updatedDoctor = await _context.Doctors
+				var updatedDoctor = await context.Doctors
 					.FirstOrDefaultAsync(d => d.PersonId == existingDoctor.PersonId);
 
 				if (updatedDoctor == null)
@@ -83,14 +77,14 @@ namespace Infrastructure.Repositories
 
 		public async Task DeleteAsync(Guid id)
 		{
-			var doctor = await _context.Doctors.FindAsync(id);
+			var doctor = await context.Doctors.FindAsync(id);
 			if (doctor == null)
 			{
 				throw new KeyNotFoundException(DoctorNotFound);
 			}
 
-			_context.Doctors.Remove(doctor);
-			await _context.SaveChangesAsync();
+			context.Doctors.Remove(doctor);
+			await context.SaveChangesAsync();
 		}
 	}
 }

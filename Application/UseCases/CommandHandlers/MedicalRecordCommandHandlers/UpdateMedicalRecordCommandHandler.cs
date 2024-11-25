@@ -7,29 +7,21 @@ using MediatR;
 
 namespace Application.UseCases.CommandHandlers.MedicalRecordCommandHandlers
 {
-	public class UpdateMedicalRecordCommandHandler : IRequestHandler<UpdateMedicalRecordCommand, Result<MedicalRecord>>
-	{
-		private readonly IMedicalRecordRepository _medicalRecordRepository;
-		private readonly IMapper _mapper;
-
-		public UpdateMedicalRecordCommandHandler(IMedicalRecordRepository medicalRecordRepository, IMapper mapper)
+	public class UpdateMedicalRecordCommandHandler(IMedicalRecordRepository medicalRecordRepository, IMapper mapper)
+        : IRequestHandler<UpdateMedicalRecordCommand, Result<MedicalRecord>>
+    {
+        public async Task<Result<MedicalRecord>> Handle(UpdateMedicalRecordCommand request, CancellationToken cancellationToken)
 		{
-			_medicalRecordRepository = medicalRecordRepository;
-			_mapper = mapper;
-		}
-
-		public async Task<Result<MedicalRecord>> Handle(UpdateMedicalRecordCommand request, CancellationToken cancellationToken)
-		{
-			var existingMedicalRecord = await _medicalRecordRepository.GetByIdAsync(request.RecordId);
+			var existingMedicalRecord = await medicalRecordRepository.GetByIdAsync(request.RecordId);
 
 			if (existingMedicalRecord == null)
 			{
 				return Result<MedicalRecord>.Failure("Medical record not found.");
 			}
 
-			_mapper.Map(request, existingMedicalRecord);
+			mapper.Map(request, existingMedicalRecord);
 
-			var updateResult = await _medicalRecordRepository.UpdateAsync(existingMedicalRecord);
+			var updateResult = await medicalRecordRepository.UpdateAsync(existingMedicalRecord);
 
 			if (!updateResult.IsSuccess)
 			{

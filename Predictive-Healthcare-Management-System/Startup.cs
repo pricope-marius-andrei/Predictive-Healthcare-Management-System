@@ -3,14 +3,9 @@ using Infrastructure;
 
 namespace Predictive_Healthcare_Management_System
 {
-    public class Startup
+    public class Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; } = configuration;
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -25,7 +20,7 @@ namespace Predictive_Healthcare_Management_System
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-                    options.JsonSerializerOptions.MaxDepth = 64; // Optional: Increase the maximum depth if needed
+                    options.JsonSerializerOptions.MaxDepth = 64;
                 });
         }
 

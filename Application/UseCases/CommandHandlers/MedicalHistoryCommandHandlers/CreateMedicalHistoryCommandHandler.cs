@@ -7,33 +7,23 @@ using MediatR;
 
 namespace Application.UseCases.CommandHandlers.MedicalHistoryCommandHandlers
 {
-	public class CreateMedicalHistoryCommandHandler : IRequestHandler<CreateMedicalHistoryCommand, Result<Guid>>
-	{
-	    private readonly IMedicalHistoryRepository _repository;
-	    private readonly IPatientRepository _patientRepository;
-	    private readonly IMapper _mapper;
-
-	    public CreateMedicalHistoryCommandHandler(
-	        IMedicalHistoryRepository repository,
-	        IPatientRepository patientRepository,
-	        IMapper mapper)
+	public class CreateMedicalHistoryCommandHandler(
+        IMedicalHistoryRepository repository,
+        IPatientRepository patientRepository,
+        IMapper mapper)
+        : IRequestHandler<CreateMedicalHistoryCommand, Result<Guid>>
+    {
+        public async Task<Result<Guid>> Handle(CreateMedicalHistoryCommand request, CancellationToken cancellationToken)
 	    {
-	        _repository = repository;
-	        _patientRepository = patientRepository;
-	        _mapper = mapper;
-	    }
-
-	    public async Task<Result<Guid>> Handle(CreateMedicalHistoryCommand request, CancellationToken cancellationToken)
-	    {
-	        var patientExists = await _patientRepository.GetByIdAsync(request.PatientId) != null;
+	        var patientExists = await patientRepository.GetByIdAsync(request.PatientId) != null;
 	        if (!patientExists)
 	        {
 	            return Result<Guid>.Failure("Patient not found.");
 	        }
 
-	        var medicalHistory = _mapper.Map<MedicalHistory>(request);
+	        var medicalHistory = mapper.Map<MedicalHistory>(request);
 
-	        var result = await _repository.AddAsync(medicalHistory);
+	        var result = await repository.AddAsync(medicalHistory);
 	        if (result.IsSuccess)
 	        {
 	            return Result<Guid>.Success(result.Data);

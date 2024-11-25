@@ -13,11 +13,12 @@ public class UpdateMedicalHistoryCommandHandler(IMedicalHistoryRepository reposi
 	public async Task<Result<MedicalHistory>> Handle(UpdateMedicalHistoryCommand request, CancellationToken cancellationToken)
     {
         var existingMedicalHistory = await repository.GetByIdAsync(request.HistoryId);
+        
         if (existingMedicalHistory == null)
         {
             return Result<MedicalHistory>.Failure("Medical history not found.");
         }
-
+        
         var medicalHistory = mapper.Map<MedicalHistory>(request);
         medicalHistory.PatientId = existingMedicalHistory.PatientId;
 

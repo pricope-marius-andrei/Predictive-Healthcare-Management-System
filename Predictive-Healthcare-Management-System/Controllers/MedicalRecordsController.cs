@@ -10,21 +10,14 @@ namespace Predictive_Healthcare_Management_System.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class MedicalRecordsController : ControllerBase
+    public class MedicalRecordsController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public MedicalRecordsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MedicalRecordDto>>> GetAllMedicalRecords()
         {
             try
             {
-                var medicalRecords = await _mediator.Send(new GetAllMedicalRecordsQuery());
+                var medicalRecords = await mediator.Send(new GetAllMedicalRecordsQuery());
                 return Ok(medicalRecords);
             }
             catch (Exception ex)
@@ -38,7 +31,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var medicalRecord = await _mediator.Send(new GetMedicalRecordByIdQuery { RecordId = id });
+                var medicalRecord = await mediator.Send(new GetMedicalRecordByIdQuery { RecordId = id });
                 return Ok(medicalRecord);
             }
             catch (Exception ex)
@@ -53,7 +46,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
             try
             {
                 var query = new GetMedicalRecordsByPatientIdQuery { PatientId = PersonId };
-                var result = await _mediator.Send(query);
+                var result = await mediator.Send(query);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -67,7 +60,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var result = await _mediator.Send(command);
+                var result = await mediator.Send(command);
                 if (result.IsSuccess)
                 {
                     return CreatedAtAction(nameof(GetMedicalRecordById), new { id = result.Data }, result.Data);
@@ -90,7 +83,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
 
             try
             {
-                var result = await _mediator.Send(command);
+                var result = await mediator.Send(command);
                 if (result.IsSuccess)
                 {
                     return Ok(result.Data);
@@ -108,7 +101,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                await _mediator.Send(new DeleteMedicalRecordCommand { RecordId = id });
+                await mediator.Send(new DeleteMedicalRecordCommand { RecordId = id });
                 return StatusCode(StatusCodes.Status204NoContent);
             }
             catch

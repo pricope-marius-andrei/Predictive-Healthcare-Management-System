@@ -1,7 +1,4 @@
-﻿using Application.UseCases.Commands.PatientCommands;
-using Domain.Common;
-using Domain.Entities;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Application.UseCases.Commands.BaseCommands
 {

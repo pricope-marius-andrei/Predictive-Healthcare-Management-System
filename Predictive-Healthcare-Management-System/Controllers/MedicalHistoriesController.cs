@@ -10,21 +10,14 @@ namespace Predictive_Healthcare_Management_System.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class MedicalHistoriesController : ControllerBase
+    public class MedicalHistoriesController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public MedicalHistoriesController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MedicalHistoryDto>>> GetAllMedicalHistories()
         {
             try
             {
-                var medicalHistories = await _mediator.Send(new GetAllMedicalHistoriesQuery());
+                var medicalHistories = await mediator.Send(new GetAllMedicalHistoriesQuery());
                 return Ok(medicalHistories);
             }
             catch (Exception ex)
@@ -38,7 +31,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var medicalHistory = await _mediator.Send(new GetMedicalHistoryByIdQuery { HistoryId = id });
+                var medicalHistory = await mediator.Send(new GetMedicalHistoryByIdQuery { HistoryId = id });
                 return Ok(medicalHistory);
             }
             catch (Exception ex)
@@ -51,7 +44,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         public async Task<ActionResult<IEnumerable<MedicalRecordDto>>> GetMedicalHistoriesByPersonId(Guid PersonId)
         {
             var query = new GetMedicalHistoriesByPatientIdQuery { PatientId = PersonId };
-            var result = await _mediator.Send(query);
+            var result = await mediator.Send(query);
             return Ok(result);
         }
 
@@ -60,7 +53,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                var result = await _mediator.Send(command);
+                var result = await mediator.Send(command);
                 return CreatedAtAction(nameof(GetMedicalHistoryById), new { id = result.Data }, result.Data);
             }
             catch (Exception ex)
@@ -79,7 +72,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
 
             try
             {
-                var result = await _mediator.Send(command);
+                var result = await mediator.Send(command);
                 return Ok(result.Data);
             }
             catch (Exception ex)
@@ -93,7 +86,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                await _mediator.Send(new DeleteMedicalHistoryCommand { HistoryId = id });
+                await mediator.Send(new DeleteMedicalHistoryCommand { HistoryId = id });
                 return StatusCode(StatusCodes.Status204NoContent);
             }
             catch

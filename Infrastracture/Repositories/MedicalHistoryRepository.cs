@@ -6,25 +6,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-	public class MedicalHistoryRepository : IMedicalHistoryRepository
-	{
-		private readonly ApplicationDbContext _context;
-
-		public MedicalHistoryRepository(ApplicationDbContext context)
+	public class MedicalHistoryRepository(ApplicationDbContext context) : IMedicalHistoryRepository
+    {
+        public async Task<IEnumerable<MedicalHistory>> GetAllAsync()
 		{
-			_context = context;
-		}
-
-		public async Task<IEnumerable<MedicalHistory>> GetAllAsync()
-		{
-			return await _context.MedicalHistories
+			return await context.MedicalHistories
 				.Include(mh => mh.Patient)
 				.ToListAsync();
 		}
 
 		public async Task<MedicalHistory> GetByIdAsync(Guid id)
 		{
-			var medicalHistory = await _context.MedicalHistories
+			var medicalHistory = await context.MedicalHistories
 				.Include(mh => mh.Patient)
 				.FirstOrDefaultAsync(mh => mh.HistoryId == id);
 
@@ -38,7 +31,7 @@ namespace Infrastructure.Repositories
 
 		public async Task<IEnumerable<MedicalHistory>> GetByPatientIdAsync(Guid patientId)
 		{
-			return await _context.MedicalHistories
+			return await context.MedicalHistories
 				.Where(mh => mh.PatientId == patientId)
 				.Include(mh => mh.Patient)
 				.ToListAsync();
@@ -49,8 +42,8 @@ namespace Infrastructure.Repositories
 			ArgumentNullException.ThrowIfNull(medicalHistory);
 			try
 			{
-				await _context.MedicalHistories.AddAsync(medicalHistory);
-				await _context.SaveChangesAsync();
+				await context.MedicalHistories.AddAsync(medicalHistory);
+				await context.SaveChangesAsync();
 				return Result<Guid>.Success(medicalHistory.HistoryId);
 			}
 			catch (Exception ex)
@@ -64,16 +57,16 @@ namespace Infrastructure.Repositories
 			ArgumentNullException.ThrowIfNull(medicalHistory);
 			try
 			{
-				var existingMedicalHistory = await _context.MedicalHistories.FindAsync(medicalHistory.HistoryId);
+				var existingMedicalHistory = await context.MedicalHistories.FindAsync(medicalHistory.HistoryId);
 				if (existingMedicalHistory == null)
 				{
 					throw new KeyNotFoundException("Medical history not found.");
 				}
 
-				_context.Entry(existingMedicalHistory).CurrentValues.SetValues(medicalHistory);
-				await _context.SaveChangesAsync();
+				context.Entry(existingMedicalHistory).CurrentValues.SetValues(medicalHistory);
+				await context.SaveChangesAsync();
 
-				var updatedMedicalHistory = await _context.MedicalHistories
+				var updatedMedicalHistory = await context.MedicalHistories
 					.Include(mh => mh.Patient)
 					.FirstOrDefaultAsync(mh => mh.HistoryId == existingMedicalHistory.HistoryId);
 
@@ -92,14 +85,14 @@ namespace Infrastructure.Repositories
 
 		public async Task DeleteAsync(Guid id)
 		{
-			var medicalHistory = await _context.MedicalHistories.FindAsync(id);
+			var medicalHistory = await context.MedicalHistories.FindAsync(id);
 			if (medicalHistory == null)
 			{
 				throw new KeyNotFoundException("Medical history not found.");
 			}
 
-			_context.MedicalHistories.Remove(medicalHistory);
-			await _context.SaveChangesAsync();
+			context.MedicalHistories.Remove(medicalHistory);
+			await context.SaveChangesAsync();
 		}
 	}
 }

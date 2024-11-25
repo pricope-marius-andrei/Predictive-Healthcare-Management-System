@@ -4,24 +4,18 @@ using MediatR;
 
 namespace Application.UseCases.CommandHandlers.MedicalHistoryCommandHandlers
 {
-	public class DeleteMedicalHistoryCommandHandler : IRequestHandler<DeleteMedicalHistoryCommand>
-	{
-		private readonly IMedicalHistoryRepository _repository;
-
-		public DeleteMedicalHistoryCommandHandler(IMedicalHistoryRepository repository)
+	public class DeleteMedicalHistoryCommandHandler(IMedicalHistoryRepository repository)
+        : IRequestHandler<DeleteMedicalHistoryCommand>
+    {
+        public async Task Handle(DeleteMedicalHistoryCommand request, CancellationToken cancellationToken)
 		{
-			_repository = repository;
-		}
-
-		public async Task Handle(DeleteMedicalHistoryCommand request, CancellationToken cancellationToken)
-		{
-			var medicalHistory = await _repository.GetByIdAsync(request.HistoryId);
+			var medicalHistory = await repository.GetByIdAsync(request.HistoryId);
 			if (medicalHistory == null)
 			{
 				throw new InvalidOperationException("Medical history not found.");
 			}
 
-			await _repository.DeleteAsync(request.HistoryId);
+			await repository.DeleteAsync(request.HistoryId);
 		}
 	}
 }

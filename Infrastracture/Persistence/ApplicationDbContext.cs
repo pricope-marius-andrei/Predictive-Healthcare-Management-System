@@ -4,13 +4,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence
 {
-	public class ApplicationDbContext : DbContext
-	{
-		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-		{
-		}
-
-		public DbSet<Person> People { get; set; }
+	public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+    {
+        public DbSet<Person> People { get; set; }
 		public DbSet<Patient> Patients { get; set; }
 		public DbSet<Doctor> Doctors { get; set; }
 		public DbSet<MedicalRecord> MedicalRecords { get; set; }
@@ -20,16 +16,13 @@ namespace Infrastructure.Persistence
 		{
 			modelBuilder.HasPostgresExtension("uuid-ossp");
 
-			// Map Person to "People" table
 			modelBuilder.Entity<Person>()
 				.ToTable("People");
 
-			// Map Patient to "Patients" table and specify base type
 			modelBuilder.Entity<Patient>()
 				.ToTable("Patients")
 				.HasBaseType<Person>();
 
-			// Map Doctor to "Doctors" table and specify base type
 			modelBuilder.Entity<Doctor>()
 				.ToTable("Doctors")
 				.HasBaseType<Person>();
