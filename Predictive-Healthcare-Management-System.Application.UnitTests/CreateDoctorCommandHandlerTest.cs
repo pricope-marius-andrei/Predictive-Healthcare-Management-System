@@ -1,5 +1,4 @@
-﻿using Application.UseCases.CommandHandlers;
-using Application.UseCases.CommandHandlers.Doctor;
+﻿using Application.UseCases.CommandHandlers.Doctor;
 using Application.UseCases.Commands.Doctor;
 using AutoMapper;
 using Domain.Common;
@@ -9,19 +8,19 @@ using FluentValidation;
 using FluentValidation.Results;
 using NSubstitute;
 
-namespace Predictive_Healthcare_Management_System.Integration.UnitTests
+namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
     public class CreateDoctorCommandHandlerTest
     {
-        private readonly IDoctorRepository repository;
-        private readonly IMapper mapper;
-        private readonly IValidator<CreateDoctorCommand> validator;
+        private readonly IDoctorRepository _repository;
+        private readonly IMapper _mapper;
+        private readonly IValidator<CreateDoctorCommand> _validator;
 
         public CreateDoctorCommandHandlerTest()
         {
-            repository = Substitute.For<IDoctorRepository>();
-            mapper = Substitute.For<IMapper>();
-            validator = Substitute.For<IValidator<CreateDoctorCommand>>();
+            _repository = Substitute.For<IDoctorRepository>();
+            _mapper = Substitute.For<IMapper>();
+            _validator = Substitute.For<IValidator<CreateDoctorCommand>>();
         }
 
         [Fact]
@@ -54,12 +53,12 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 MedicalRecords = new List<MedicalRecord>()
             };
 
-            validator.ValidateAsync(command, CancellationToken.None).Returns(Task.FromResult(new ValidationResult()));
-            mapper.Map<Doctor>(command).Returns(doctor);
-            repository.AddAsync(doctor).Returns(Result<Guid>.Success(doctor.DoctorId));
+            _validator.ValidateAsync(command, CancellationToken.None).Returns(Task.FromResult(new ValidationResult()));
+            _mapper.Map<Doctor>(command).Returns(doctor);
+            _repository.AddAsync(doctor).Returns(Result<Guid>.Success(doctor.DoctorId));
 
             // Act
-            var handler = new CreateDoctorCommandHandler(repository, mapper, validator);
+            var handler = new CreateDoctorCommandHandler(_repository, _mapper, _validator);
             var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
@@ -79,10 +78,10 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             };
             var validationResult = new ValidationResult(validationFailures);
 
-            validator.ValidateAsync(command, CancellationToken.None).Returns(Task.FromResult(validationResult));
+            _validator.ValidateAsync(command, CancellationToken.None).Returns(Task.FromResult(validationResult));
 
             // Act
-            var handler = new CreateDoctorCommandHandler(repository, mapper, validator);
+            var handler = new CreateDoctorCommandHandler(_repository, _mapper, _validator);
             var exception = await Assert.ThrowsAsync<ValidationException>(() => handler.Handle(command, CancellationToken.None));
 
             // Assert
@@ -120,12 +119,12 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
 
             };
 
-            validator.ValidateAsync(command, CancellationToken.None).Returns(Task.FromResult(new ValidationResult()));
-            mapper.Map<Doctor>(command).Returns(doctor);
-            repository.AddAsync(doctor).Returns(Result<Guid>.Failure("Error adding doctor"));
+            _validator.ValidateAsync(command, CancellationToken.None).Returns(Task.FromResult(new ValidationResult()));
+            _mapper.Map<Doctor>(command).Returns(doctor);
+            _repository.AddAsync(doctor).Returns(Result<Guid>.Failure("Error adding doctor"));
 
             // Act
-            var handler = new CreateDoctorCommandHandler(repository, mapper, validator);
+            var handler = new CreateDoctorCommandHandler(_repository, _mapper, _validator);
             var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert

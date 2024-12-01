@@ -1,5 +1,4 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Queries;
 using Application.UseCases.Queries.MedicalRecord;
 using Application.UseCases.QueryHandlers.MedicalRecord;
 using AutoMapper;
@@ -7,30 +6,30 @@ using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 
-namespace Predictive_Healthcare_Management_System.Integration.UnitTests
+namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
-    public class GetAllMedicalRecordsQueryHandlerTests
+    public class GetMedicalRecordsByPatientIdQueryHandlerTests
     {
         private readonly IMedicalRecordRepository _mockMedicalRecordRepository;
         private readonly IMapper _mockMapper;
-        private readonly GetAllMedicalRecordsQueryHandler _handler;
+        private readonly GetMedicalRecordsByPatientIdQueryHandler _handler;
 
-        public GetAllMedicalRecordsQueryHandlerTests()
+        public GetMedicalRecordsByPatientIdQueryHandlerTests()
         {
             _mockMedicalRecordRepository = Substitute.For<IMedicalRecordRepository>();
             _mockMapper = Substitute.For<IMapper>();
-            _handler = new GetAllMedicalRecordsQueryHandler(_mockMedicalRecordRepository, _mockMapper);
+            _handler = new GetMedicalRecordsByPatientIdQueryHandler(_mockMedicalRecordRepository, _mockMapper);
         }
 
         [Fact]
-        public async Task Handle_ReturnsAllMedicalRecords()
+        public async Task Handle_ReturnsMedicalRecordsByPatientId()
         {
             // Arrange
-            var query = new GetAllMedicalRecordsQuery();
+            var query = new GetMedicalRecordsByPatientIdQuery { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
             var medicalRecords = new List<MedicalRecord>
         {
-            new MedicalRecord { RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), VisitReason = "Reason1", Symptoms = "Symptoms1", Diagnosis = "Diagnosis1", DoctorNotes = "Notes1", DateOfVisit = DateTime.UtcNow },
-            new MedicalRecord { RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), VisitReason = "Reason2", Symptoms = "Symptoms2", Diagnosis = "Diagnosis2", DoctorNotes = "Notes2", DateOfVisit = DateTime.UtcNow }
+            new MedicalRecord { RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), PatientId = query.PatientId, DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), VisitReason = "Reason1", Symptoms = "Symptoms1", Diagnosis = "Diagnosis1", DoctorNotes = "Notes1", DateOfVisit = DateTime.UtcNow },
+            new MedicalRecord { RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), PatientId = query.PatientId, DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"), VisitReason = "Reason2", Symptoms = "Symptoms2", Diagnosis = "Diagnosis2", DoctorNotes = "Notes2", DateOfVisit = DateTime.UtcNow }
         };
             var medicalRecordDtos = new List<MedicalRecordDto>
         {
@@ -38,7 +37,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
             new MedicalRecordDto { RecordId = medicalRecords[1].RecordId, PatientId = medicalRecords[1].PatientId, DoctorId = medicalRecords[1].DoctorId, VisitReason = "Reason2", Symptoms = "Symptoms2", Diagnosis = "Diagnosis2", DoctorNotes = "Notes2", DateOfVisit = DateTime.UtcNow }
         };
 
-            _mockMedicalRecordRepository.GetAllAsync().Returns(medicalRecords);
+            _mockMedicalRecordRepository.GetByPatientIdAsync(query.PatientId).Returns(medicalRecords);
             _mockMapper.Map<IEnumerable<MedicalRecordDto>>(medicalRecords).Returns(medicalRecordDtos);
 
             // Act

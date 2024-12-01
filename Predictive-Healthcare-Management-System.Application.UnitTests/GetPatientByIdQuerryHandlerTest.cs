@@ -1,5 +1,4 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Queries;
 using Application.UseCases.Queries.Patient;
 using Application.UseCases.QueryHandlers.Patient;
 using AutoMapper;
@@ -7,7 +6,7 @@ using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 
-namespace Predictive_Healthcare_Management_System.Integration.UnitTests
+namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
     public class GetPatientByIdQueryHandlerTests
     {

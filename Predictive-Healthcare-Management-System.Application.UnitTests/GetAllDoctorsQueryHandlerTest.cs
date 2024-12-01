@@ -1,24 +1,22 @@
 using Application.DTOs;
-using Application.UseCases.Queries;
 using Application.UseCases.Queries.Doctor;
-using Application.UseCases.QueryHandlers;
 using Application.UseCases.QueryHandlers.Doctor;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 
-namespace Predictive_Healthcare_Management_System.Integration.UnitTests
+namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
     public class GetAllDoctorsQueryHandlerTest
     {
-        private readonly IDoctorRepository repository;
-        private readonly IMapper mapper;
+        private readonly IDoctorRepository _repository;
+        private readonly IMapper _mapper;
 
         public GetAllDoctorsQueryHandlerTest()
         {
-            repository = Substitute.For<IDoctorRepository>();
-            mapper = Substitute.For<IMapper>();
+            _repository = Substitute.For<IDoctorRepository>();
+            _mapper = Substitute.For<IMapper>();
         }
 
         [Fact]
@@ -26,9 +24,9 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
         {
             // Arrange
             List<Doctor> doctors = GenerateDoctors();
-            repository.GetAllAsync().Returns(doctors);
+            _repository.GetAllAsync().Returns(doctors);
             var query = new GetAllDoctorsQuery();
-            mapper.Map<IEnumerable<DoctorDto>>(doctors).Returns(new List<DoctorDto>
+            _mapper.Map<IEnumerable<DoctorDto>>(doctors).Returns(new List<DoctorDto>
                 {
                     new DoctorDto
                     {
@@ -53,7 +51,7 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                         DateOfRegistration = doctors[1].DateOfRegistration
                     }
                 });
-            var handler = new GetAllDoctorQueryHandler(repository, mapper);
+            var handler = new GetAllDoctorQueryHandler(_repository, _mapper);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);

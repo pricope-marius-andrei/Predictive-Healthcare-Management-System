@@ -1,20 +1,18 @@
-﻿using Application.UseCases.CommandHandlers;
-using Application.UseCases.CommandHandlers.Doctor;
-using Application.UseCases.Commands;
+﻿using Application.UseCases.CommandHandlers.Doctor;
 using Application.UseCases.Commands.Doctor;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 
-namespace Predictive_Healthcare_Management_System.Integration.UnitTests
+namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
     public class DeleteDoctorCommandHandlerTest
     {
-        private readonly IDoctorRepository repository;
+        private readonly IDoctorRepository _repository;
 
         public DeleteDoctorCommandHandlerTest()
         {
-            repository = Substitute.For<IDoctorRepository>();
+            _repository = Substitute.For<IDoctorRepository>();
         }
 
         [Fact]
@@ -35,15 +33,15 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 DateOfRegistration = DateTime.Now,
                 MedicalRecords = new List<MedicalRecord>()
             };
-            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(doctor));
+            _repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(doctor));
             var command = new DeleteDoctorCommand { DoctorId = doctorId };
 
             // Act
-            var handler = new DeleteDoctorCommandHandler(repository);
+            var handler = new DeleteDoctorCommandHandler(_repository);
             await handler.Handle(command, CancellationToken.None);
 
             // Assert
-            await repository.Received(1).DeleteAsync(doctorId);
+            await _repository.Received(1).DeleteAsync(doctorId);
         }
 
         [Fact]
@@ -51,12 +49,12 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
         {
             // Arrange
             var doctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
-            repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(null!));
+            _repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(null!));
 
             var command = new DeleteDoctorCommand { DoctorId = doctorId };
 
             // Act
-            var handler = new DeleteDoctorCommandHandler(repository);
+            var handler = new DeleteDoctorCommandHandler(_repository);
             var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
 
             // Assert

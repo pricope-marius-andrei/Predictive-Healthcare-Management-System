@@ -1,6 +1,4 @@
-﻿using Application.UseCases.CommandHandlers;
-using Application.UseCases.CommandHandlers.MedicalRecord;
-using Application.UseCases.Commands;
+﻿using Application.UseCases.CommandHandlers.MedicalRecord;
 using Application.UseCases.Commands.MedicalRecord;
 using AutoMapper;
 using Domain.Common;
@@ -8,21 +6,21 @@ using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 
-namespace Predictive_Healthcare_Management_System.Integration.UnitTests
+namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
     public class CreateMedicalRecordCommandHandlerTest
     {
-        private readonly IMedicalRecordRepository medicalRecordRepository;
-        private readonly IPatientRepository patientRepository;
-        private readonly IDoctorRepository doctorRepository;
-        private readonly IMapper mapper;
+        private readonly IMedicalRecordRepository _medicalRecordRepository;
+        private readonly IPatientRepository _patientRepository;
+        private readonly IDoctorRepository _doctorRepository;
+        private readonly IMapper _mapper;
 
         public CreateMedicalRecordCommandHandlerTest()
         {
-            medicalRecordRepository = Substitute.For<IMedicalRecordRepository>();
-            patientRepository = Substitute.For<IPatientRepository>();
-            doctorRepository = Substitute.For<IDoctorRepository>();
-            mapper = Substitute.For<IMapper>();
+            _medicalRecordRepository = Substitute.For<IMedicalRecordRepository>();
+            _patientRepository = Substitute.For<IPatientRepository>();
+            _doctorRepository = Substitute.For<IDoctorRepository>();
+            _mapper = Substitute.For<IMapper>();
         }
 
         [Fact]
@@ -66,13 +64,13 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 MedicalRecords = new List<MedicalRecord>()
             };
 
-            patientRepository.GetByIdAsync(command.PatientId).Returns(new Patient());
-            doctorRepository.GetByIdAsync(command.DoctorId).Returns(doctor);
-            mapper.Map<MedicalRecord>(command).Returns(medicalRecord);
-            medicalRecordRepository.AddAsync(medicalRecord).Returns(Result<Guid>.Success(medicalRecord.RecordId));
+            _patientRepository.GetByIdAsync(command.PatientId).Returns(new Patient());
+            _doctorRepository.GetByIdAsync(command.DoctorId).Returns(doctor);
+            _mapper.Map<MedicalRecord>(command).Returns(medicalRecord);
+            _medicalRecordRepository.AddAsync(medicalRecord).Returns(Result<Guid>.Success(medicalRecord.RecordId));
 
             // Act
-            var handler = new CreateMedicalRecordCommandHandler(medicalRecordRepository, patientRepository, doctorRepository, mapper);
+            var handler = new CreateMedicalRecordCommandHandler(_medicalRecordRepository, _patientRepository, _doctorRepository, _mapper);
             var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
@@ -95,10 +93,10 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 DateOfVisit = DateTime.UtcNow
             };
 
-            patientRepository.GetByIdAsync(command.PatientId).Returns((Patient?)null!);
+            _patientRepository.GetByIdAsync(command.PatientId).Returns((Patient?)null!);
 
             // Act
-            var handler = new CreateMedicalRecordCommandHandler(medicalRecordRepository, patientRepository, doctorRepository, mapper);
+            var handler = new CreateMedicalRecordCommandHandler(_medicalRecordRepository, _patientRepository, _doctorRepository, _mapper);
             var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
@@ -121,11 +119,11 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 DateOfVisit = DateTime.UtcNow
             };
 
-            patientRepository.GetByIdAsync(command.PatientId).Returns(new Patient());
-            doctorRepository.GetByIdAsync(command.DoctorId).Returns((Doctor)null!);
+            _patientRepository.GetByIdAsync(command.PatientId).Returns(new Patient());
+            _doctorRepository.GetByIdAsync(command.DoctorId).Returns((Doctor)null!);
 
             // Act
-            var handler = new CreateMedicalRecordCommandHandler(medicalRecordRepository, patientRepository, doctorRepository, mapper);
+            var handler = new CreateMedicalRecordCommandHandler(_medicalRecordRepository, _patientRepository, _doctorRepository, _mapper);
             var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
@@ -174,13 +172,13 @@ namespace Predictive_Healthcare_Management_System.Integration.UnitTests
                 MedicalRecords = new List<MedicalRecord>()
             };
 
-            patientRepository.GetByIdAsync(command.PatientId).Returns(new Patient());
-            doctorRepository.GetByIdAsync(command.DoctorId).Returns(doctor);
-            mapper.Map<MedicalRecord>(command).Returns(medicalRecord);
-            medicalRecordRepository.AddAsync(medicalRecord).Returns(Result<Guid>.Failure("Error adding medical record"));
+            _patientRepository.GetByIdAsync(command.PatientId).Returns(new Patient());
+            _doctorRepository.GetByIdAsync(command.DoctorId).Returns(doctor);
+            _mapper.Map<MedicalRecord>(command).Returns(medicalRecord);
+            _medicalRecordRepository.AddAsync(medicalRecord).Returns(Result<Guid>.Failure("Error adding medical record"));
 
             // Act
-            var handler = new CreateMedicalRecordCommandHandler(medicalRecordRepository, patientRepository, doctorRepository, mapper);
+            var handler = new CreateMedicalRecordCommandHandler(_medicalRecordRepository, _patientRepository, _doctorRepository, _mapper);
             var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
