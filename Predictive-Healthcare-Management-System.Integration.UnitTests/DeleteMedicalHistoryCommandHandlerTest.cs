@@ -1,5 +1,6 @@
-﻿using Application.UseCases.CommandHandlers;
+﻿using Application.UseCases.CommandHandlers.MedicalHistory;
 using Application.UseCases.Commands;
+using Application.UseCases.Commands.MedicalHistory;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;

@@ -1,6 +1,8 @@
 using Application.DTOs;
 using Application.UseCases.Queries;
+using Application.UseCases.Queries.Doctor;
 using Application.UseCases.QueryHandlers;
+using Application.UseCases.QueryHandlers.Doctor;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;

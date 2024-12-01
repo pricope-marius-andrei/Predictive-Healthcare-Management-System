@@ -1,10 +1,14 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Commands;
 using Application.UseCases.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Common;
 using Domain.Entities;
+using Application.Utils;
+using Application.UseCases.Commands.MedicalRecord;
+using Application.UseCases.Queries.MedicalRecord;
+using Application.UseCases.Queries.MedicalHistory;
+using Application.UseCases.Queries.Doctor;
 
 namespace Predictive_Healthcare_Management_System.Controllers
 {
@@ -115,6 +119,18 @@ namespace Predictive_Healthcare_Management_System.Controllers
             {
                 return NotFound($"Medical record with ID {id} not found.");
             }
+        }
+
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PagedResult<MedicalRecordDto>>> GetPaginatedMedicalRecords([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var query = new GetPaginatedMedicalRecordsQuery
+            {
+                Page = page,
+                PageSize = pageSize
+            };
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
     }
 }

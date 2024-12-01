@@ -1,5 +1,7 @@
 ﻿using Application.UseCases.CommandHandlers;
+using Application.UseCases.CommandHandlers.Doctor;
 using Application.UseCases.Commands;
+using Application.UseCases.Commands.Doctor;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;

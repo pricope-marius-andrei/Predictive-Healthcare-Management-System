@@ -17,7 +17,7 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
@@ -105,14 +105,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("DoctorNotes")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Symptoms")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("VisitReason")
@@ -135,7 +133,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateOfBirth")

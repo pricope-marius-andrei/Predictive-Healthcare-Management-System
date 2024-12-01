@@ -1,5 +1,6 @@
 ﻿using Application.UseCases.CommandHandlers;
-using Application.UseCases.Commands;
+using Application.UseCases.CommandHandlers.Doctor;
+using Application.UseCases.Commands.Doctor;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;

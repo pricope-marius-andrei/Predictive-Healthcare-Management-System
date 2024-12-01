@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.UseCases.Queries;
-using Application.UseCases.QueryHandlers;
+using Application.UseCases.Queries.MedicalHistory;
+using Application.UseCases.QueryHandlers.MedicalHistory;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;

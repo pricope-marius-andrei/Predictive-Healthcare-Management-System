@@ -1,5 +1,8 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Commands;
+using Application.UseCases.Commands.Doctor;
+using Application.UseCases.Commands.MedicalHistory;
+using Application.UseCases.Commands.MedicalRecord;
+using Application.UseCases.Commands.Patient;
 using AutoMapper;
 using Domain.Entities;
 

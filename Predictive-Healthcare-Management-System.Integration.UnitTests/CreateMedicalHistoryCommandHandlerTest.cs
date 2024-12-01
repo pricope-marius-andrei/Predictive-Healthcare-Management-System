@@ -1,5 +1,5 @@
-﻿using Application.UseCases.CommandHandlers;
-using Application.UseCases.Commands;
+﻿using Application.UseCases.CommandHandlers.MedicalHistory;
+using Application.UseCases.Commands.MedicalHistory;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
