@@ -1,6 +1,5 @@
 ﻿using Application.DTOs;
 using Application.UseCases.Commands.Doctor;
-using Application.UseCases.Queries;
 using Application.UseCases.Queries.Doctor;
 using Application.Utils;
 using Domain.Common;
@@ -106,6 +105,18 @@ namespace Predictive_Healthcare_Management_System.Controllers
             };
             var result = await _mediator.Send(query);
             return Ok(result);
+        }
+
+        [HttpGet("sorted")]
+        public async Task<ActionResult<Result<List<DoctorDto>>>> GetSortedDoctors([FromQuery] DoctorSortBy sortBy)
+        {
+            var query = new GetDoctorsSortedQuery(sortBy);
+            var result = await _mediator.Send(query);
+
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(result.ErrorMessage);
         }
     }
 }   

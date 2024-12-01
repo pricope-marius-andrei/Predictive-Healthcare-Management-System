@@ -1,11 +1,9 @@
 ﻿using MediatR;
 using Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using Application.UseCases.Queries;
 using Domain.Entities;
 using Domain.Common;
 using Application.Utils;
-using Microsoft.AspNetCore.Components.Forms;
 using Application.UseCases.Commands.Patient;
 using Application.UseCases.Queries.Patient;
 
@@ -108,6 +106,23 @@ namespace Predictive_Healthcare_Management_System.Controllers
             };
             var result = await _mediator.Send(query);
             return Ok(result);
+        }
+
+        [HttpGet("sorted")]
+        public async Task<ActionResult<Result<List<PatientDto>>>> GetSortedPatients([FromQuery] PatientSortBy sortBy)
+        {
+            try
+            {
+                var query = new GetPatientsSortedQuery(sortBy);
+                var result = await _mediator.Send(query);
+                if (result.IsSuccess)
+                    return Ok(result.Data);
+                return BadRequest(result.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }

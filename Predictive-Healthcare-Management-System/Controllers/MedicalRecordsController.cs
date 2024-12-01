@@ -1,5 +1,4 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Common;
@@ -7,8 +6,6 @@ using Domain.Entities;
 using Application.Utils;
 using Application.UseCases.Commands.MedicalRecord;
 using Application.UseCases.Queries.MedicalRecord;
-using Application.UseCases.Queries.MedicalHistory;
-using Application.UseCases.Queries.Doctor;
 
 namespace Predictive_Healthcare_Management_System.Controllers
 {
@@ -131,6 +128,18 @@ namespace Predictive_Healthcare_Management_System.Controllers
             };
             var result = await _mediator.Send(query);
             return Ok(result);
+        }
+
+        [HttpGet("sorted")]
+        public async Task<ActionResult<Result<List<MedicalRecordDto>>>> GetSortedMedicalRecords([FromQuery] MedicalRecordSortBy sortBy)
+        {
+            var query = new GetMedicalRecordsSortedQuery(sortBy);
+            var result = await _mediator.Send(query);
+
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(result.ErrorMessage);
         }
     }
 }

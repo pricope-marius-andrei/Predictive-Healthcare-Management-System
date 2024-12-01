@@ -114,5 +114,17 @@ namespace Predictive_Healthcare_Management_System.Controllers
             var result = await _mediator.Send(query);
             return Ok(result);
         }
+
+        [HttpGet("sorted")]
+        public async Task<ActionResult<Result<List<MedicalHistoryDto>>>> GetSortedMedicalHistories([FromQuery] MedicalHistorySortBy sortBy)
+        {
+            var query = new GetMedicalHistoriesSortedQuery(sortBy);
+            var result = await _mediator.Send(query);
+
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(result.ErrorMessage);
+        }
     }
 }
