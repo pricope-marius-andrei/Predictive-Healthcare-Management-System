@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Commands;
-using Application.UseCases.Queries;
+using Application.UseCases.Commands.Doctor;
+using Application.UseCases.Queries.Doctor;
+using Application.Utils;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
@@ -92,6 +93,30 @@ namespace Predictive_Healthcare_Management_System.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PagedResult<DoctorDto>>> GetPaginatedDoctors([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var query = new GetPaginatedDoctorsQuery
+            {
+                Page = page,
+                PageSize = pageSize
+            };
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("sorted")]
+        public async Task<ActionResult<Result<List<DoctorDto>>>> GetSortedDoctors([FromQuery] DoctorSortBy sortBy)
+        {
+            var query = new GetDoctorsSortedQuery(sortBy);
+            var result = await _mediator.Send(query);
+
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(result.ErrorMessage);
         }
     }
 }   

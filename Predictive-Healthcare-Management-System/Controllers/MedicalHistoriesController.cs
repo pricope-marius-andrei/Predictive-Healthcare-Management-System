@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Commands;
-using Application.UseCases.Queries;
+using Application.UseCases.Commands.MedicalHistory;
+using Application.UseCases.Queries.MedicalHistory;
+using Application.Utils;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
@@ -100,6 +101,30 @@ namespace Predictive_Healthcare_Management_System.Controllers
             {
                 return NotFound($"Medical history with ID {id} not found.");
             }
+        }
+
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PagedResult<MedicalHistoryDto>>> GetPaginatedMedicalHistories([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var query = new GetPaginatedMedicalHistoriesQuery
+            {
+                Page = page,
+                PageSize = pageSize
+            };
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("sorted")]
+        public async Task<ActionResult<Result<List<MedicalHistoryDto>>>> GetSortedMedicalHistories([FromQuery] MedicalHistorySortBy sortBy)
+        {
+            var query = new GetMedicalHistoriesSortedQuery(sortBy);
+            var result = await _mediator.Send(query);
+
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(result.ErrorMessage);
         }
     }
 }

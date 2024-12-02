@@ -30,6 +30,6 @@ namespace Domain.Entities
 
         public DateTime DateOfRegistration { get; set; } = DateTime.Now;
 
-        public required ICollection<MedicalRecord> MedicalRecords { get; set; }
+        public required ICollection<MedicalRecord>? MedicalRecords { get; set; }
     }
 }
