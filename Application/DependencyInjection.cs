@@ -3,6 +3,7 @@ using System.Reflection;
 using FluentValidation;
 using MediatR;
 using Application.Utils;
+using Application.UseCases.Commands;
 
 namespace Application
 {
@@ -15,6 +16,7 @@ namespace Application
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            //services.AddTransient<IValidator<CreatePatientCommand>, CreatePatientCommandValidator>();
 
             return services;
         }

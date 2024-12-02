@@ -1,9 +1,0 @@
-﻿C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Common\Result.cs
-C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Entities\Doctor.cs
-C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Entities\MedicalHistory.cs
-C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Entities\MedicalRecord.cs
-C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Entities\Patient.cs
-C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Repositories\IDoctorRepository.cs
-C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Repositories\IMedicalHistoryRepository.cs
-C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Repositories\IMedicalRecordRepository.cs
-C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Domain\Repositories\IPatientRepository.cs
