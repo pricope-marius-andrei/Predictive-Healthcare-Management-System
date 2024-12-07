@@ -16,13 +16,16 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '7.0' # Update this based on your project framework
+          dotnet-version: '7.0' # Match your project target framework
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Restore dependencies
+        run: dotnet restore Predictive-Healthcare-Management-System.sln
 
-      - name: Publish app
-        run: dotnet publish --configuration Release --output ./publish
+      - name: Build application
+        run: dotnet build Predictive-Healthcare-Management-System.sln --configuration Release
+
+      - name: Publish application
+        run: dotnet publish Predictive-Healthcare-Management-System.sln --configuration Release --output ./publish
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
@@ -35,9 +38,6 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write # Required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -53,9 +53,7 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Predictive-Healthcare-Management-SystemApi'
-          slot-name: 'Production'
           package: ./publish
