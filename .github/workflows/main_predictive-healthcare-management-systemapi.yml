@@ -21,6 +21,9 @@ jobs:
       - name: Navigate to Solution Directory
         run: cd Predictive-Healthcare-Management-System
 
+      - name: List working directory
+        run: pwd
+
       - name: Restore dependencies
         run: dotnet restore Predictive-Healthcare-Management-System.sln
 
