@@ -60,13 +60,13 @@ jobs:
       - name: Install dotnet-ef CLI tool
         run: |
           dotnet tool install --global dotnet-ef
+          
+      - name: Back
+        run: cd ../../
 
       - name: List directory contents for debugging
         run: |
           ls
-
-      - name: Back
-        run: cd ../
 
       - name: Apply migrations
         run: |
