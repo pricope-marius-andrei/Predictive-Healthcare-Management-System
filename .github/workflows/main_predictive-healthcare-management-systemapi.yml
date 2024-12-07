@@ -63,7 +63,7 @@ jobs:
 
       - name: List directory contents for debugging
         run: |
-          ls -R
+          ls
 
       - name: Apply migrations
         run: |
