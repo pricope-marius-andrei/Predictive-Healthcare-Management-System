@@ -60,7 +60,6 @@ jobs:
       - name: Install dotnet-ef CLI tool
         run: |
           dotnet tool install --global dotnet-ef
-          echo "::add-path::$(dotnet --info | grep -i 'Base Path' | cut -d ' ' -f 5)/.dotnet/tools"
 
       - name: Apply migrations
         run: |
