@@ -61,16 +61,13 @@ jobs:
         run: |
           dotnet tool install --global dotnet-ef
           
-      - name: Back
-        run: cd ../../
-
-      - name: List directory contents for debugging
-        run: |
-          ls
-
       - name: Apply migrations
         run: |
           dotnet ef database update --connection "$DB_CONNECTION_STRING" --project ./Predictive-Healthcare-Management-System.csproj
-
+          working-directory: Predictive-Healthcare-Management-System/Predictive-Healthcare-Management-System
         env:
           DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}  # Add the DB connection string to GitHub Secrets
+          
+      - name: List directory contents for debugging
+        run: |
+          ls
