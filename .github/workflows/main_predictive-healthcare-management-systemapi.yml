@@ -12,6 +12,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - with:
+         path: . 
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
@@ -20,11 +22,11 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
-        working-directory: ./Predictive-Healthcare-Management-System
+        working-directory: .
 
       - name: dotnet publish
         run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/Predictive-Healthcare-Management-System"
-        working-directory: ./Predictive-Healthcare-Management-System
+        working-directory: .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
