@@ -118,5 +118,18 @@ namespace Predictive_Healthcare_Management_System.Controllers
 
             return BadRequest(result.ErrorMessage);
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> GetDoctorsByUsername([FromQuery] string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return BadRequest("Username query parameter is required.");
+            }
+
+            var query = new GetDoctorsByUsernameFilterQuery(username);
+            var doctors = await _mediator.Send(query);
+            return Ok(doctors);
+        }
     }
 }   
