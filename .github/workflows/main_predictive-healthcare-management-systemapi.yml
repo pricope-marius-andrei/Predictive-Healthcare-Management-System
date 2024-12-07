@@ -63,7 +63,8 @@ jobs:
           echo "Current working directory: $(pwd)"
           echo "Listing all directories:"
           ls -R .  # Recursively list all directories to find the csproj file
-          
+        working-directory: ${{env.DOTNET_ROOT}}
+        
       - name: Apply migrations
         run: |
           # Specify the full path to the csproj file if needed
