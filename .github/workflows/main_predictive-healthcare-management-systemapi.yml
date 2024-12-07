@@ -64,5 +64,6 @@ jobs:
       - name: Apply migrations
         run: |
           dotnet ef database update --connection "$DB_CONNECTION_STRING"
+        working-directory: ./Predictive-Healthcare-Management-System
         env:
           DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}  # Add the DB connection string to GitHub Secrets
