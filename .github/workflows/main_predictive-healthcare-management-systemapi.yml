@@ -72,15 +72,8 @@ jobs:
           echo "Listing all directories:"
           ls .  # Recursively list all directories to find the csproj file
         working-directory: ${{env.DOTNET_ROOT}}
-
-      - name: Debug connection string
-        run: |
-          echo "Connection string being used:"
-          echo ${{ secrets.DB_CONNECTION_STRING }}
         
       - name: Apply migrations
         run: |
           # Specify the full path to the csproj file if needed
-          dotnet ef database update --connection "$DB_CONNECTION_STRING" --project Predictive-Healthcare-Management-System/Predictive-Healthcare-Management-System.csproj
-        env:
-          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
+          dotnet ef database update --connection "${{ secrets.DB_CONNECTION_STRING }}" --project Predictive-Healthcare-Management-System/Predictive-Healthcare-Management-System.csproj
