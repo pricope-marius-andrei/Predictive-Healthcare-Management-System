@@ -60,7 +60,7 @@ jobs:
 
       - name: List directory contents for debugging
         run: |
-          cd ../../
+          cd ${{ github.workspace }}
           echo "Current working directory: $(pwd)"
           echo "Listing all directories:"
           ls .  # Recursively list all directories to find the csproj file
