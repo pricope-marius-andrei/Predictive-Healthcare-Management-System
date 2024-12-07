@@ -124,5 +124,18 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> GetPatientsByUsername([FromQuery] string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return BadRequest("Username query parameter is required.");
+            }
+
+            var query = new GetPatientsByUsernameFilterQuery(username);
+            var patients = await _mediator.Send(query);
+            return Ok(patients);
+        }
     }
 }
