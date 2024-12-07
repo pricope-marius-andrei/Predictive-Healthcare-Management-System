@@ -76,9 +76,7 @@ jobs:
       - name: Debug connection string
         run: |
           echo "Connection string being used:"
-          echo $DB_CONNECTION_STRING
-        env:
-          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
+          echo ${{ secrets.DB_CONNECTION_STRING }}
         
       - name: Apply migrations
         run: |
