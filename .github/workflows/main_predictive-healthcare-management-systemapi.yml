@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - Predictive-Healthcare-Management-SystemApi
 
 on:
@@ -63,11 +60,11 @@ jobs:
           
       - name: Apply migrations
         run: |
-          dotnet ef database update --connection "$DB_CONNECTION_STRING" 
-        working-directory: ./Predictive-Healthcare-Management-System
+          dotnet ef database update --connection "$DB_CONNECTION_STRING"
+        working-directory: ./Predictive-Healthcare-Management-System  # Ensure correct working directory for .csproj file
         env:
           DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}  # Add the DB connection string to GitHub Secrets
-        
+
       - name: List directory contents for debugging
         run: |
-          ls
+          ls -R
