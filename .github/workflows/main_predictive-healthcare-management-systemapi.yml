@@ -56,3 +56,9 @@ jobs:
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AA2A8CCCA096427282F4D93457D87619 }}
+
+      - name: Apply migrations
+        run: |
+          dotnet ef database update --connection "$DB_CONNECTION_STRING"
+        env:
+          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}  # Add the DB connection string to GitHub Secrets
