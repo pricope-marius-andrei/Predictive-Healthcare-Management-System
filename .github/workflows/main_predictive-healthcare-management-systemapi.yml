@@ -60,8 +60,7 @@ jobs:
 
       - name: List directory contents for debugging
         run: |
-          cd ${{ github.workspace }}
-          echo "Current working directory: $(pwd)"
+          echo "Current working directory: ${{ github.workspace }}"
           echo "Listing all directories:"
           ls .  # Recursively list all directories to find the csproj file
         working-directory: ${{env.DOTNET_ROOT}}
