@@ -72,6 +72,13 @@ jobs:
           echo "Listing all directories:"
           ls .  # Recursively list all directories to find the csproj file
         working-directory: ${{env.DOTNET_ROOT}}
+
+      - name: Debug connection string
+        run: |
+          echo "Connection string being used:"
+          echo $DB_CONNECTION_STRING
+        env:
+          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
         
       - name: Apply migrations
         run: |
