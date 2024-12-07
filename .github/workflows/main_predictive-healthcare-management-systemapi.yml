@@ -57,6 +57,11 @@ jobs:
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AA2A8CCCA096427282F4D93457D87619 }}
 
+      - name: Install dotnet-ef CLI tool
+        run: |
+          dotnet tool install --global dotnet-ef
+          echo "::add-path::$(dotnet --info | grep -i 'Base Path' | cut -d ' ' -f 5)/.dotnet/tools"
+
       - name: Apply migrations
         run: |
           dotnet ef database update --connection "$DB_CONNECTION_STRING"
