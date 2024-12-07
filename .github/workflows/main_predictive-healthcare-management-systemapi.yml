@@ -60,10 +60,10 @@ jobs:
 
       - name: List directory contents for debugging
         run: |
-          cd ../
+          cd ../../
           echo "Current working directory: $(pwd)"
           echo "Listing all directories:"
-          ls -R .  # Recursively list all directories to find the csproj file
+          ls .  # Recursively list all directories to find the csproj file
         working-directory: ${{env.DOTNET_ROOT}}
         
       - name: Apply migrations
