@@ -60,11 +60,11 @@ jobs:
           
       - name: Apply migrations
         run: |
-          dotnet ef database update --connection "$DB_CONNECTION_STRING"
-        working-directory: ./Predictive-Healthcare-Management-System  # Ensure correct working directory for .csproj file
+          # Specify the full path to the csproj file if needed
+          dotnet ef database update --connection "$DB_CONNECTION_STRING" --project ./Predictive-Healthcare-Management-System/Predictive-Healthcare-Management-System.csproj
         env:
-          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}  # Add the DB connection string to GitHub Secrets
+          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
 
       - name: List directory contents for debugging
         run: |
-          ls -R
+          ls -R ./Predictive-Healthcare-Management-System
