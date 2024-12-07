@@ -61,6 +61,10 @@ jobs:
         run: |
           dotnet tool install --global dotnet-ef
 
+      - name: List directory contents for debugging
+        run: |
+          ls -R
+
       - name: Apply migrations
         run: |
           dotnet ef database update --connection "$DB_CONNECTION_STRING" --project ./Predictive-Healthcare-Management-System.csproj
