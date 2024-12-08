@@ -10,5 +10,6 @@ namespace Domain.Repositories
         Task<Result<Guid>> AddAsync(Doctor doctor);
         Task<Result<Doctor>> UpdateAsync(Doctor doctor);
         Task DeleteAsync(Guid id);
+        Task<IEnumerable<Doctor>> GetDoctorsByUsernameFilterAsync(string username);
     }
 }

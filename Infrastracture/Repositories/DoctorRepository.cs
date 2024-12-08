@@ -88,5 +88,14 @@ namespace Infrastructure.Repositories
             _context.Doctors.Remove(doctor);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Doctor>> GetDoctorsByUsernameFilterAsync(string username)
+        {
+            return await _context.Doctors
+                .AsNoTracking()
+                .Include(d => d.MedicalRecords)
+                .Where(d => d.Username.Contains(username))
+                .ToListAsync();
+        }
     }
 }
