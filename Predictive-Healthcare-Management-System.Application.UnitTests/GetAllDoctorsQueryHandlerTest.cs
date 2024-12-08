@@ -30,7 +30,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 {
                     new DoctorDto
                     {
-                        DoctorId = doctors[0].DoctorId,
+                        DoctorId = doctors[0].Id,
                         Username = doctors[0].Username,
                         FirstName = doctors[0].FirstName,
                         LastName = doctors[0].LastName,
@@ -41,7 +41,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                     },
                     new DoctorDto
                     {
-                        DoctorId = doctors[1].DoctorId,
+                        DoctorId = doctors[1].Id,
                         Username = doctors[1].Username,
                         FirstName = doctors[1].FirstName,
                         LastName = doctors[1].LastName,
@@ -59,7 +59,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             // Assert
             Assert.NotNull(result);
             Assert.Equal(2, result.Count());
-            Assert.Equal(doctors[0].DoctorId, result.First().DoctorId);
+            Assert.Equal(doctors[0].Id, result.First().DoctorId);
             Assert.Equal(doctors[0].FirstName, result.First().FirstName);
             Assert.Equal(doctors[0].Username, result.First().Username);
             Assert.Equal(doctors[0].LastName, result.First().LastName);
@@ -68,7 +68,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             Assert.Equal(doctors[0].PhoneNumber, result.First().PhoneNumber);
             Assert.Equal(doctors[0].DateOfRegistration, result.First().DateOfRegistration);
 
-            Assert.Equal(doctors[1].DoctorId, result.Last().DoctorId);
+            Assert.Equal(doctors[1].Id, result.Last().DoctorId);
             Assert.Equal(doctors[1].FirstName, result.Last().FirstName);
             Assert.Equal(doctors[1].Username, result.Last().Username);
             Assert.Equal(doctors[1].LastName, result.Last().LastName);
@@ -84,7 +84,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 {
                     new Doctor
                     {
-                        DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                        Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                         Username = "johndoe123",
                         FirstName = "John",
                         LastName = "Doe",
@@ -97,7 +97,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                     },
                     new Doctor
                     {
-                        DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                        Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                         Username = "janedoe321",
                         FirstName = "Jane",
                         LastName = "Doe",

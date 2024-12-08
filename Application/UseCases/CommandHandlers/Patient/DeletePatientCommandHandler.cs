@@ -15,12 +15,12 @@ public class DeletePatientCommandHandler : IRequestHandler<DeletePatientCommand>
 
     public async Task Handle(DeletePatientCommand request, CancellationToken cancellationToken)
     {
-        var patient = await _repository.GetByIdAsync(request.PatientId);
+        var patient = await _repository.GetByIdAsync(request.Id);
         if (patient == null)
         {
             throw new InvalidOperationException("Patient not found.");
         }
 
-        await _repository.DeleteAsync(request.PatientId);
+        await _repository.DeleteAsync(request.Id);
     }
 }

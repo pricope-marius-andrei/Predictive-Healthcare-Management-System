@@ -28,14 +28,14 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             var query = new GetPatientByIdQuery { Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
             var patient = new Patient
             {
-                PatientId = query.Id,
+                Id = query.Id,
                 Username = "testuser",
                 Email = "test@example.com",
                 Password = "password",
                 FirstName = "Test",
                 LastName = "User",
                 PhoneNumber = "1234567890",
-                Address = "123 Test St",
+                // Address = "123 Test St",
                 Gender = "Male",
                 Height = 180,
                 Weight = 75,
@@ -44,13 +44,13 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             };
             var patientDto = new PatientDto
             {
-                PatientId = patient.PatientId,
+                PatientId = patient.Id,
                 Username = patient.Username,
                 Email = patient.Email,
                 FirstName = patient.FirstName,
                 LastName = patient.LastName,
                 PhoneNumber = patient.PhoneNumber,
-                Address = patient.Address,
+                // Address = patient.Address,
                 Gender = patient.Gender,
                 Height = patient.Height,
                 Weight = patient.Weight,

@@ -41,7 +41,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
 
             var doctor = new Doctor
             {
-                DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 Username = command.Username,
@@ -55,7 +55,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
 
             _validator.ValidateAsync(command, CancellationToken.None).Returns(Task.FromResult(new ValidationResult()));
             _mapper.Map<Doctor>(command).Returns(doctor);
-            _repository.AddAsync(doctor).Returns(Result<Guid>.Success(doctor.DoctorId));
+            _repository.AddAsync(doctor).Returns(Result<Guid>.Success(doctor.Id));
 
             // Act
             var handler = new CreateDoctorCommandHandler(_repository, _mapper, _validator);
@@ -63,7 +63,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
 
             // Assert
             Assert.True(result.IsSuccess);
-            Assert.Equal(doctor.DoctorId, result.Data);
+            Assert.Equal(doctor.Id, result.Data);
         }
 
         [Fact]
@@ -106,7 +106,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
 
             var doctor = new Doctor
             {
-                DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 Username = command.Username,

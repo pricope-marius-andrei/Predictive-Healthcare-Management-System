@@ -28,7 +28,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             {
                 new Domain.Entities.Doctor
                 {
-                    DoctorId = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Username = "doctor1",
                     Email = "doctor1@example.com",
                     Password = "Password123!",
@@ -40,7 +40,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 },
                 new Domain.Entities.Doctor
                 {
-                    DoctorId = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Username = "doctor2",
                     Email = "doctor2@example.com",
                     Password = "SecurePass456!",
@@ -55,7 +55,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
 
             var doctorDtos = doctors.Select(d => new DoctorDto
             {
-                DoctorId = d.DoctorId,
+                DoctorId = d.Id,
                 Username = d.Username,
                 Email = d.Email,
                 FirstName = d.FirstName,

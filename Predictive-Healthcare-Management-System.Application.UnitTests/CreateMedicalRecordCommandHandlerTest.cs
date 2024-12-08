@@ -52,7 +52,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
 
             var doctor = new Doctor
             {
-                DoctorId = command.DoctorId,
+                Id = command.DoctorId,
                 Username = "doctorUsername",
                 Email = "doctor@example.com",
                 Password = "password123",
@@ -160,7 +160,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
 
             var doctor = new Doctor
             {
-                DoctorId = command.DoctorId,
+                Id = command.DoctorId,
                 Username = "doctorUsername",
                 Email = "doctor@example.com",
                 Password = "password123",

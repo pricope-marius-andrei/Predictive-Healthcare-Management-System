@@ -65,7 +65,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<Result<Patient>>> UpdatePatient(Guid id, UpdatePatientCommand command)
         {
-            if (id != command.PatientId)
+            if (id != command.Id)
             {
                 return BadRequest("Patient ID in the path does not match the ID in the request body.");
             }
@@ -87,7 +87,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                await _mediator.Send(new DeletePatientCommand { PatientId = id });
+                await _mediator.Send(new DeletePatientCommand { Id = id });
                 return StatusCode(StatusCodes.Status204NoContent);
             }
             catch
