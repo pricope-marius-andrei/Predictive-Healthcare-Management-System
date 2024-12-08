@@ -5,5 +5,5 @@
   <FilesToAnalyzePath>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\conf\0\FilesToAnalyze.txt</FilesToAnalyzePath>
   <OutPath>C:\Users\Pricope\Documents\Predictive-Healthcare-Management-System\Predictive-Healthcare-Management-System\.sonarqube\out\0</OutPath>
   <ProjectType>Product</ProjectType>
-  <TargetFramework>net8.0</TargetFramework>
+  <TargetFramework>net9.0</TargetFramework>
 </SonarProjectConfig>
