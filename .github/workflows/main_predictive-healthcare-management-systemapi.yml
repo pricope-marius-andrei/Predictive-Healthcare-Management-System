@@ -81,7 +81,7 @@ jobs:
           $DB_PASSWORD = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$2')
           $DB_HOST = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$3')
           $DB_PORT = 5432 # Default port for PostgreSQL
-          $DB_NAME = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$5')_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$5')
+          $DB_NAME = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$5')
 
           Write-Host "DB_HOST: $DB_HOST"
           Write-Host "DB_USER: $DB_USER"
