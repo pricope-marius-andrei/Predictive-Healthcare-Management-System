@@ -66,14 +66,23 @@ jobs:
         run: |
           dotnet tool install --global dotnet-ef
 
-      - name: List directory contents for debugging
+      - name: Drop and recreate database
         run: |
-          echo "Current working directory: ${{ github.workspace }}"
-          echo "Listing all directories:"
-          ls .  # Recursively list all directories to find the csproj file
-        working-directory: ${{env.DOTNET_ROOT}}
+          # Extract database connection details from DB_CONNECTION_STRING
+          DB_HOST=$(echo $DB_CONNECTION_STRING | sed -E 's/^postgresql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/([^?]+).*/\3/')
+          DB_USER=$(echo $DB_CONNECTION_STRING | sed -E 's/^postgresql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/([^?]+).*/\1/')
+          DB_PASSWORD=$(echo $DB_CONNECTION_STRING | sed -E 's/^postgresql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/([^?]+).*/\2/')
+          DB_NAME=$(echo $DB_CONNECTION_STRING | sed -E 's/^postgresql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/([^?]+).*/\5/')
+          DB_PORT=5432  # Default port for PostgreSQL
+      
+          # Drop and recreate the database
+          PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -U $DB_USER -p $DB_PORT -c "DROP DATABASE IF EXISTS $DB_NAME;"
+          PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -U $DB_USER -p $DB_PORT -c "CREATE DATABASE $DB_NAME;"
+        env:
+          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
+
         
       - name: Apply migrations
         run: |
           # Specify the full path to the csproj file if needed
-          dotnet ef database update --connection "${{ secrets.DB_CONNECTION_STRING }}" --force --project Predictive-Healthcare-Management-System/Predictive-Healthcare-Management-System.csproj 
+          dotnet ef database update --connection "${{ secrets.DB_CONNECTION_STRING }}" --project Predictive-Healthcare-Management-System/Predictive-Healthcare-Management-System.csproj 
