@@ -75,14 +75,19 @@ jobs:
           # Extract database connection details from DB_CONNECTION_STRING
           $env:PATH += ";C:\Program Files\PostgreSQL\17\bin"
           $DB_CONNECTION_STRING = $env:DB_CONNECTION_STRING
-      
+          
           # Extract the host, user, password, and database name from the connection string
           $DB_USER = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$1')
           $DB_PASSWORD = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$2')
           $DB_HOST = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$3')
-          $DB_PORT = 5432
-          $DB_NAME = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$5')
-      
+          $DB_PORT = 5432 # Default port for PostgreSQL
+          $DB_NAME = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$5')_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$5')
+
+          Write-Host "DB_HOST: $DB_HOST"
+          Write-Host "DB_USER: $DB_USER"
+          Write-Host "DB_PASSWORD: $DB_PASSWORD"
+          Write-Host "DB_NAME: $DB_NAME"
+          Write-Host "DB_PORT: $DB_PORT"
           # Drop and recreate the database
           $env:PGPASSWORD = $DB_PASSWORD
           # Example command to drop and recreate the database
