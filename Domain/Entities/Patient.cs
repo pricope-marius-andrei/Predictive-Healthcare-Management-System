@@ -9,7 +9,7 @@ namespace Domain.Entities
         public string? Gender { get; set; }
         public decimal Height { get; set; }
         public decimal Weight { get; set; }
-        public Guid DoctorId { get; set; }
+        public Guid? DoctorId { get; set; }
         public Doctor? Doctor { get; set; }
         public ICollection<MedicalHistory>? MedicalHistories { get; set; }
         public ICollection<MedicalRecord>? MedicalRecords { get; set; }

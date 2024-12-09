@@ -25,6 +25,12 @@ namespace Infrastructure.Persistence
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
+            modelBuilder.Entity<User>()
+                .HasDiscriminator<string>("Discriminator")
+                .HasValue<User>("User")
+                .HasValue<Doctor>("Doctor")
+                .HasValue<Patient>("Patient");
+
             modelBuilder.Entity<Patient>()
                 .HasOne(p => p.Doctor)
                 .WithMany(d => d.Patients)
