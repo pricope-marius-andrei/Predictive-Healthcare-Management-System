@@ -65,6 +65,11 @@ jobs:
       - name: Install dotnet-ef CLI tool
         run: |
           dotnet tool install --global dotnet-ef
+      
+      - name: Install PostgreSQL client tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
 
       - name: Drop and recreate database
         run: |
