@@ -2,19 +2,10 @@
 
 namespace Domain.Entities
 {
-    public class Patient
+    public class Patient : User
     {
-        [Key]
-        public Guid PatientId { get; set; }
-
         [Required]
         public string? Username { get; set; }
-
-        [Required]
-        public string? Email { get; set; }
-
-        [Required]
-        public string? Password { get; set; }
 
         [Required]
         public string? FirstName { get; set; }
@@ -28,7 +19,7 @@ namespace Domain.Entities
         [Required]
         public string? PhoneNumber { get; set; }
 
-        public string? Address { get; set; }
+        // public string? Address { get; set; }
 
         public string? Gender { get; set; }
 

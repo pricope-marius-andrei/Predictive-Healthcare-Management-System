@@ -9,7 +9,7 @@ namespace Application.UseCases.Commands.Doctor
     {
         public UpdateDoctorCommandValidator() : base()
         {
-            RuleFor(command => command.DoctorId)
+            RuleFor(command => command.Id)
                 .NotEmpty().WithMessage("Doctor ID is required.");
         }
     }

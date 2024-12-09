@@ -46,21 +46,21 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             };
             var patient = new Patient
             {
-                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 Username = command.Username,
                 Email = command.Email,
                 Password = command.Password,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 PhoneNumber = command.PhoneNumber,
-                Address = command.Address,
+                // Address = command.Address,
                 Gender = command.Gender,
                 Height = command.Height.Value,
                 Weight = command.Weight.Value,
                 DateOfBirth = command.DateOfBirth,
                 DateOfRegistration = command.DateOfRegistration
             };
-            var result = Result<Guid>.Success(patient.PatientId);
+            var result = Result<Guid>.Success(patient.Id);
 
             _mockValidator.ValidateAsync(command, CancellationToken.None).Returns(new ValidationResult());
             _mockMapper.Map<Patient>(command).Returns(patient);
@@ -112,14 +112,14 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             };
             var patient = new Patient
             {
-                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 Username = command.Username,
                 Email = command.Email,
                 Password = command.Password,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 PhoneNumber = command.PhoneNumber,
-                Address = command.Address,
+                // Address = command.Address,
                 Gender = command.Gender,
                 Height = command.Height.Value,
                 Weight = command.Weight.Value,

@@ -7,6 +7,6 @@ namespace Application.UseCases.Commands.Patient
 {
     public class UpdatePatientCommand : BasePatientCommand<Result<Domain.Entities.Patient>>
     {
-        public Guid PatientId { get; set; }
+        public Guid Id { get; set; }
     }
 }

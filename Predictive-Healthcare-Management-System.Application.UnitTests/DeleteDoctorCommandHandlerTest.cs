@@ -22,7 +22,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             var doctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
             var doctor = new Doctor
             {
-                DoctorId = doctorId,
+                Id = doctorId,
                 Username = "doctorUsername",
                 Email = "doctor@example.com",
                 Password = "password",
@@ -34,7 +34,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 MedicalRecords = new List<MedicalRecord>()
             };
             _repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(doctor));
-            var command = new DeleteDoctorCommand { DoctorId = doctorId };
+            var command = new DeleteDoctorCommand { Id = doctorId };
 
             // Act
             var handler = new DeleteDoctorCommandHandler(_repository);
@@ -51,7 +51,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             var doctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
             _repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(null!));
 
-            var command = new DeleteDoctorCommand { DoctorId = doctorId };
+            var command = new DeleteDoctorCommand { Id = doctorId };
 
             // Act
             var handler = new DeleteDoctorCommandHandler(_repository);

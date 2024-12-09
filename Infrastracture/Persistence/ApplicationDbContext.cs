@@ -10,6 +10,9 @@ namespace Infrastructure.Persistence
         {
 
         }
+
+        public DbSet<User> Users { get; set; }
+
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
@@ -18,6 +21,11 @@ namespace Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresExtension("uuid-ossp");
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
             modelBuilder.Entity<MedicalRecord>()
                 .HasOne(mr => mr.Patient)
                 .WithMany(p => p.MedicalRecords)

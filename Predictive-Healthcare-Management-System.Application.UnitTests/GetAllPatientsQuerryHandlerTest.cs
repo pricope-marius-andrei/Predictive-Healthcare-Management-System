@@ -30,14 +30,14 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         {
             new Patient
             {
-                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 Username = "testuser1",
                 Email = "test1@example.com",
                 Password = "password",
                 FirstName = "Test1",
                 LastName = "User1",
                 PhoneNumber = "1234567890",
-                Address = "123 Test St",
+                // Address = "123 Test St",
                 Gender = "Male",
                 Height = 180,
                 Weight = 75,
@@ -46,14 +46,14 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             },
             new Patient
             {
-                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
+                Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
                 Username = "testuser2",
                 Email = "test2@example.com",
                 Password = "password",
                 FirstName = "Test2",
                 LastName = "User2",
                 PhoneNumber = "1234567890",
-                Address = "123 Test St",
+                // Address = "123 Test St",
                 Gender = "Female",
                 Height = 165,
                 Weight = 60,
@@ -65,13 +65,13 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         {
             new PatientDto
             {
-                PatientId = patients[0].PatientId,
+                PatientId = patients[0].Id,
                 Username = patients[0].Username,
                 Email = patients[0].Email,
                 FirstName = patients[0].FirstName,
                 LastName = patients[0].LastName,
                 PhoneNumber = patients[0].PhoneNumber,
-                Address = patients[0].Address,
+                // Address = patients[0].Address,
                 Gender = patients[0].Gender,
                 Height = patients[0].Height,
                 Weight = patients[0].Weight,
@@ -80,13 +80,13 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             },
             new PatientDto
             {
-                PatientId = patients[1].PatientId,
+                PatientId = patients[1].Id,
                 Username = patients[1].Username,
                 Email = patients[1].Email,
                 FirstName = patients[1].FirstName,
                 LastName = patients[1].LastName,
                 PhoneNumber = patients[1].PhoneNumber,
-                Address = patients[1].Address,
+                // Address = patients[1].Address,
                 Gender = patients[1].Gender,
                 Height = patients[1].Height,
                 Weight = patients[1].Weight,

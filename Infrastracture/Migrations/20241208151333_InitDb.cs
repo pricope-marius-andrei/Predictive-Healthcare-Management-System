@@ -6,48 +6,41 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class RedesignedDb4 : Migration
+    public partial class InitDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Doctors",
-                columns: table => new
-                {
-                    DoctorId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Username = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
-                    Specialization = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Doctors", x => x.DoctorId);
-                });
+            migrationBuilder.AlterDatabase()
+                .Annotation("Npgsql:PostgresExtension:uuid-ossp", ",,");
 
             migrationBuilder.CreateTable(
-                name: "Patients",
+                name: "Users",
                 columns: table => new
                 {
-                    PatientId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Username = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: false),
-                    Gender = table.Column<string>(type: "text", nullable: false),
-                    Height = table.Column<decimal>(type: "numeric", nullable: false),
-                    Weight = table.Column<decimal>(type: "numeric", nullable: false)
+                    Discriminator = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
+                    Doctor_Username = table.Column<string>(type: "text", nullable: true),
+                    Doctor_FirstName = table.Column<string>(type: "text", nullable: true),
+                    Doctor_LastName = table.Column<string>(type: "text", nullable: true),
+                    Doctor_PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    Specialization = table.Column<string>(type: "text", nullable: true),
+                    Doctor_DateOfRegistration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Username = table.Column<string>(type: "text", nullable: true),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    Gender = table.Column<string>(type: "text", nullable: true),
+                    Height = table.Column<decimal>(type: "numeric", nullable: true),
+                    Weight = table.Column<decimal>(type: "numeric", nullable: true),
+                    DateOfRegistration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Patients", x => x.PatientId);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,17 +49,17 @@ namespace Infrastructure.Migrations
                 {
                     HistoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     PatientId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Illness = table.Column<string>(type: "text", nullable: false),
+                    Condition = table.Column<string>(type: "text", nullable: false),
                     DateOfDiagnosis = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MedicalHistories", x => x.HistoryId);
                     table.ForeignKey(
-                        name: "FK_MedicalHistories_Patients_PatientId",
+                        name: "FK_MedicalHistories_Users_PatientId",
                         column: x => x.PatientId,
-                        principalTable: "Patients",
-                        principalColumn: "PatientId",
+                        principalTable: "Users",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -78,24 +71,25 @@ namespace Infrastructure.Migrations
                     PatientId = table.Column<Guid>(type: "uuid", nullable: false),
                     DoctorId = table.Column<Guid>(type: "uuid", nullable: false),
                     VisitReason = table.Column<string>(type: "text", nullable: false),
-                    Symptoms = table.Column<string>(type: "text", nullable: false),
+                    Symptoms = table.Column<string>(type: "text", nullable: true),
                     Diagnosis = table.Column<string>(type: "text", nullable: false),
-                    DoctorNotes = table.Column<string>(type: "text", nullable: false)
+                    DoctorNotes = table.Column<string>(type: "text", nullable: true),
+                    DateOfVisit = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MedicalRecords", x => x.RecordId);
                     table.ForeignKey(
-                        name: "FK_MedicalRecords_Doctors_DoctorId",
+                        name: "FK_MedicalRecords_Users_DoctorId",
                         column: x => x.DoctorId,
-                        principalTable: "Doctors",
-                        principalColumn: "DoctorId",
+                        principalTable: "Users",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MedicalRecords_Patients_PatientId",
+                        name: "FK_MedicalRecords_Users_PatientId",
                         column: x => x.PatientId,
-                        principalTable: "Patients",
-                        principalColumn: "PatientId",
+                        principalTable: "Users",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -113,6 +107,12 @@ namespace Infrastructure.Migrations
                 name: "IX_MedicalRecords_PatientId",
                 table: "MedicalRecords",
                 column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -125,10 +125,7 @@ namespace Infrastructure.Migrations
                 name: "MedicalRecords");
 
             migrationBuilder.DropTable(
-                name: "Doctors");
-
-            migrationBuilder.DropTable(
-                name: "Patients");
+                name: "Users");
         }
     }
 }

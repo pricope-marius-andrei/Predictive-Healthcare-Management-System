@@ -21,7 +21,7 @@ namespace Infrastructure.Repositories
             {
                 await _context.Patients.AddAsync(patient);
                 await _context.SaveChangesAsync();
-                return Result<Guid>.Success(patient.PatientId);
+                return Result<Guid>.Success(patient.Id);
             }
             catch (Exception ex)
             {
@@ -34,7 +34,7 @@ namespace Infrastructure.Repositories
             var patient = await _context.Patients
                 .Include(p => p.MedicalHistories)
                 .Include(p => p.MedicalRecords)
-                .FirstOrDefaultAsync(p => p.PatientId == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             return patient == null ? throw new KeyNotFoundException("Patient not found.") : patient;
         }
@@ -52,14 +52,14 @@ namespace Infrastructure.Repositories
             ArgumentNullException.ThrowIfNull(patient);
             try
             {
-                var existingPatient = await _context.Patients.FindAsync(patient.PatientId) ?? throw new KeyNotFoundException("Patient not found.");
+                var existingPatient = await _context.Patients.FindAsync(patient.Id) ?? throw new KeyNotFoundException("Patient not found.");
                 _context.Entry(existingPatient).CurrentValues.SetValues(patient);
                 await _context.SaveChangesAsync();
 
                 var newPatient = await _context.Patients
                     .Include(p => p.MedicalHistories)
                     .Include(p => p.MedicalRecords)
-                    .FirstOrDefaultAsync(p => p.PatientId == existingPatient.PatientId);
+                    .FirstOrDefaultAsync(p => p.Id == existingPatient.Id);
 
                 if (newPatient == null)
                 {
@@ -72,8 +72,6 @@ namespace Infrastructure.Repositories
             {
                 return Result<Patient>.Failure(ex.InnerException!.ToString());
             }
-
-            
         }
 
         public async Task DeleteAsync(Guid id)
@@ -96,6 +94,16 @@ namespace Infrastructure.Repositories
                 .Include(p => p.MedicalRecords)
                 .Where(p => p.Username.Contains(username))
                 .ToListAsync();
+        }
+
+        public Task<Guid> Register(Patient patient, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> Login(Patient patient)
+        {
+            throw new NotImplementedException();
         }
     }
 }

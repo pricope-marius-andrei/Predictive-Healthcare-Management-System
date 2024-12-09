@@ -52,7 +52,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             try
             {
-                await _mediator.Send(new DeleteDoctorCommand { DoctorId = id });
+                await _mediator.Send(new DeleteDoctorCommand { Id = id });
                 return NoContent();
             }
             catch
@@ -78,7 +78,7 @@ namespace Predictive_Healthcare_Management_System.Controllers
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<Result<Doctor>>> UpdateDoctor(Guid id, UpdateDoctorCommand command)
         {
-            if (id != command.DoctorId)
+            if (id != command.Id)
             {
                 return BadRequest($"Doctor {id} in the path does not match the ID in the request body.");
             }

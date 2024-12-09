@@ -40,7 +40,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             {
                 new Domain.Entities.Patient
                 {
-                    PatientId = patientId,
+                    Id = patientId,
                     Username = "patient1",
                     Email = "patient1@example.com",
                     FirstName = "John",
@@ -49,7 +49,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                     Gender = "Male",
                     Height = 180,
                     Weight = 75,
-                    Address = "123 Street",
+                    // Address = "123 Street",
                     DateOfBirth = new DateTime(1990, 1, 1),
                     DateOfRegistration = DateTime.UtcNow,
                     MedicalHistories = new List<Domain.Entities.MedicalHistory>
@@ -85,7 +85,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             // Prepare the expected DTOs
             var patientDtos = patients.Select(p => new PatientDto
             {
-                PatientId = p.PatientId,
+                PatientId = p.Id,
                 Username = p.Username,
                 Email = p.Email,
                 FirstName = p.FirstName,
@@ -94,7 +94,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 Gender = p.Gender,
                 Height = p.Height,
                 Weight = p.Weight,
-                Address = p.Address,
+                // Address = p.Address,
                 DateOfBirth = p.DateOfBirth,
                 DateOfRegistration = p.DateOfRegistration,
                 MedicalHistories = p.MedicalHistories.Select(mh => new MedicalHistoryDto

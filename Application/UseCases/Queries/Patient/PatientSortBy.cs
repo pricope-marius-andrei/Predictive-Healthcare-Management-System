@@ -7,7 +7,7 @@
         Weight
 
         /*
-        PatientId
+        Id
         Username
         Email
         FirstName

@@ -142,7 +142,7 @@ namespace Predictive_Healthcare_Management_System.IntegrationTests
                 FirstName = "John",
                 LastName = "Doe",
                 PhoneNumber = "123456789",
-                Address = "123 Main Street",
+                // Address = "123 Main Street",
                 Gender = "Male",
                 Height = 180.0m,
                 Weight = 75.0m,

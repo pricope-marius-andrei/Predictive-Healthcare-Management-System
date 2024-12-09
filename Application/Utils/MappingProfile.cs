@@ -16,6 +16,7 @@ namespace Application.Utils
             // Patient Mappings
             // -----------------------------
             CreateMap<Patient, PatientDto>()
+                .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.MedicalHistories, opt => opt.MapFrom(src => src.MedicalHistories))
                 .ForMember(dest => dest.MedicalRecords, opt => opt.MapFrom(src => src.MedicalRecords));
 
@@ -39,7 +40,8 @@ namespace Application.Utils
             // -----------------------------
             // Doctor Mappings
             // -----------------------------
-            CreateMap<Doctor, DoctorDto>();
+            CreateMap<Doctor, DoctorDto>()
+                .ForMember(dest => dest.DoctorId, opt => opt.MapFrom(src => src.Id));
 
             CreateMap<CreateDoctorCommand, Doctor>();
             CreateMap<UpdateDoctorCommand, Doctor>();

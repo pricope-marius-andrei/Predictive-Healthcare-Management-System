@@ -8,13 +8,14 @@ namespace Infrastructure.Repositories
 {
     public class DoctorRepository : IDoctorRepository
     {
-        private const string DOCTOR_NOT_FOUND = "Doctor not found.";
+        private const string DoctorNotFound = "Doctor not found.";
         private readonly ApplicationDbContext _context;
 
         public DoctorRepository(ApplicationDbContext context)
         {
             _context = context;
         }
+
         public async Task<Result<Guid>> AddAsync(Doctor doctor)
         {
             ArgumentNullException.ThrowIfNull(doctor);
@@ -22,37 +23,40 @@ namespace Infrastructure.Repositories
             {
                 await _context.Doctors.AddAsync(doctor);
                 await _context.SaveChangesAsync();
-                return Result<Guid>.Success(doctor.DoctorId);
+                return Result<Guid>.Success(doctor.Id);
             }
             catch (Exception ex)
             {
                 return Result<Guid>.Failure(ex.InnerException!.ToString());
             }
         }
+
         public async Task<Doctor> GetByIdAsync(Guid id)
         {
-            var doctor = await _context.Doctors // include doctor's related entities records and other stuff 
-                .FirstOrDefaultAsync(d => d.DoctorId == id);
+            var doctor = await _context.Doctors
+                .FirstOrDefaultAsync(d => d.Id == id);
 
             if (doctor == null)
             {
-                throw new KeyNotFoundException(DOCTOR_NOT_FOUND);
+                throw new KeyNotFoundException(DoctorNotFound);
             }
             return doctor;
         }
+
         public async Task<IEnumerable<Doctor>> GetAllAsync()
         {
             return await _context.Doctors.ToListAsync();
         }
+
         public async Task<Result<Doctor>> UpdateAsync(Doctor doctor)
         {
             ArgumentNullException.ThrowIfNull(doctor);
             try
             {
-                var existingDoctor = await _context.Doctors.FindAsync(doctor.DoctorId);
+                var existingDoctor = await _context.Doctors.FindAsync(doctor.Id);
                 if (existingDoctor == null)
                 {
-                    throw new KeyNotFoundException(DOCTOR_NOT_FOUND);
+                    throw new KeyNotFoundException(DoctorNotFound);
                 }
 
                 doctor.DateOfRegistration = doctor.DateOfRegistration.ToUniversalTime();
@@ -61,11 +65,11 @@ namespace Infrastructure.Repositories
                 await _context.SaveChangesAsync();
 
                 var newDoctor = await _context.Doctors
-                    .FirstOrDefaultAsync(d => d.DoctorId == existingDoctor.DoctorId);
+                    .FirstOrDefaultAsync(d => d.Id == existingDoctor.Id);
 
                 if (newDoctor == null)
                 {
-                    throw new KeyNotFoundException(DOCTOR_NOT_FOUND);
+                    throw new KeyNotFoundException(DoctorNotFound);
                 }
 
                 return Result<Doctor>.Success(newDoctor);
@@ -74,7 +78,6 @@ namespace Infrastructure.Repositories
             {
                 return Result<Doctor>.Failure(ex.InnerException!.ToString());
             }
-
         }
 
         public async Task DeleteAsync(Guid id)
@@ -82,7 +85,7 @@ namespace Infrastructure.Repositories
             var doctor = await _context.Doctors.FindAsync(id);
             if (doctor == null)
             {
-                throw new KeyNotFoundException(DOCTOR_NOT_FOUND);
+                throw new KeyNotFoundException(DoctorNotFound);
             }
 
             _context.Doctors.Remove(doctor);
@@ -96,6 +99,16 @@ namespace Infrastructure.Repositories
                 .Include(d => d.MedicalRecords)
                 .Where(d => d.Username.Contains(username))
                 .ToListAsync();
+        }
+
+        public Task<Guid> Register(Doctor doctor, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> Login(Doctor doctor)
+        {
+            throw new NotImplementedException();
         }
     }
 }

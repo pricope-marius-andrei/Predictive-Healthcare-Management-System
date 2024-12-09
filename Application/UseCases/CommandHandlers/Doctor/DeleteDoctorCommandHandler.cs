@@ -15,13 +15,13 @@ namespace Application.UseCases.CommandHandlers.Doctor
 
         public async Task Handle(DeleteDoctorCommand request, CancellationToken cancellationToken)
         {
-            var doctor = await _repository.GetByIdAsync(request.DoctorId);
+            var doctor = await _repository.GetByIdAsync(request.Id);
             if (doctor == null)
             {
                 throw new InvalidOperationException("Doctor not found.");
             }
 
-            await _repository.DeleteAsync(request.DoctorId);
+            await _repository.DeleteAsync(request.Id);
         }
     }
 }
