@@ -21,10 +21,6 @@ namespace Application.UseCases.Commands.Base
             RuleFor(command => command.DateOfBirth)
                     .NotEmpty().WithMessage("Date of birth is required.")
                     .Must(BeAValidDateOfBirth).WithMessage("Invalid date of birth.");
-
-            RuleFor(command => command.DateOfRegistration)
-                    .NotEmpty().WithMessage("Date of registration is required.")
-                    .Must(BeAValidDateOfRegistration).WithMessage("Invalid date of registration.");
         }
 
         private static bool BeAValidGender(string? gender)
@@ -35,11 +31,6 @@ namespace Application.UseCases.Commands.Base
         private static bool BeAValidDateOfBirth(DateTime dateOfBirth)
         {
             return dateOfBirth <= DateTime.Now;
-        }
-
-        private static bool BeAValidDateOfRegistration(DateTime dateOfRegistration)
-        {
-            return dateOfRegistration <= DateTime.Now;
         }
     }
 }
