@@ -77,16 +77,17 @@ jobs:
           $DB_CONNECTION_STRING = $env:DB_CONNECTION_STRING
       
           # Extract the host, user, password, and database name from the connection string
-          $DB_HOST = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)', '$3')
-          $DB_USER = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)', '$1')
-          $DB_PASSWORD = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)', '$2')
-          $DB_NAME = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)', '$4')
-          $DB_PORT = 5432  # Default port for PostgreSQL
+          $DB_USER = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$1')
+          $DB_PASSWORD = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$2')
+          $DB_HOST = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$3')
+          $DB_PORT = 5432
+          $DB_NAME = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)\?sslmode=.*', '$5')
       
           # Drop and recreate the database
           $env:PGPASSWORD = $DB_PASSWORD
-          psql -h $DB_HOST -U $DB_USER -p $DB_PORT -c "DROP DATABASE IF EXISTS $DB_NAME;"
-          psql -h $DB_HOST -U $DB_USER -p $DB_PORT -c "CREATE DATABASE $DB_NAME;"
+          # Example command to drop and recreate the database
+          psql -h $DB_HOST -U $DB_USER -p $DB_PORT -d $DB_NAME -c "DROP DATABASE IF EXISTS $DB_NAME;"
+          psql -h $DB_HOST -U $DB_USER -p $DB_PORT -d $DB_NAME -c "CREATE DATABASE $DB_NAME;"
         env:
           DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
 
