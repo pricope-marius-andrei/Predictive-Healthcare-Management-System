@@ -69,15 +69,22 @@ jobs:
       - name: Drop and recreate database
         run: |
           # Extract database connection details from DB_CONNECTION_STRING
-          DB_HOST=$(echo ${{ secrets.DB_CONNECTION_STRING }} | sed -E 's/^postgresql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/([^?]+).*/\3/')
-          DB_USER=$(echo $DB_CONNECTION_STRING | sed -E 's/^postgresql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/([^?]+).*/\1/')
-          DB_PASSWORD=$(echo $DB_CONNECTION_STRING | sed -E 's/^postgresql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/([^?]+).*/\2/')
-          DB_NAME=$(echo $DB_CONNECTION_STRING | sed -E 's/^postgresql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/([^?]+).*/\5/')
-          DB_PORT=5432  # Default port for PostgreSQL
+          $DB_CONNECTION_STRING = $env:DB_CONNECTION_STRING
+      
+          # Extract the host, user, password, and database name from the connection string
+          $DB_HOST = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)', '$3')
+          $DB_USER = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)', '$1')
+          $DB_PASSWORD = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)', '$2')
+          $DB_NAME = ($DB_CONNECTION_STRING -replace '^postgresql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)', '$4')
+          $DB_PORT = 5432  # Default port for PostgreSQL
       
           # Drop and recreate the database
-          PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -U $DB_USER -p $DB_PORT -c "DROP DATABASE IF EXISTS $DB_NAME;"
-          PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -U $DB_USER -p $DB_PORT -c "CREATE DATABASE $DB_NAME;"
+          $env:PGPASSWORD = $DB_PASSWORD
+          psql -h $DB_HOST -U $DB_USER -p $DB_PORT -c "DROP DATABASE IF EXISTS $DB_NAME;"
+          psql -h $DB_HOST -U $DB_USER -p $DB_PORT -c "CREATE DATABASE $DB_NAME;"
+        env:
+          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
+
 
         
       - name: Apply migrations
