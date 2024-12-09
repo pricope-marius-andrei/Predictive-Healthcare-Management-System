@@ -68,7 +68,7 @@ jobs:
       
       - name: Install PostgreSQL client tools
         run: |
-          choco install postgresql -y 
+          choco install postgresql --yes --no-progress
 
       - name: Drop and recreate database
         run: |
