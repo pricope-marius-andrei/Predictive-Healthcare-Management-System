@@ -76,4 +76,4 @@ jobs:
       - name: Apply migrations
         run: |
           # Specify the full path to the csproj file if needed
-          dotnet ef database update --connection "${{ secrets.DB_CONNECTION_STRING }}" --project Predictive-Healthcare-Management-System/Predictive-Healthcare-Management-System.csproj
+          dotnet ef database update --connection "${{ secrets.DB_CONNECTION_STRING }}" --project Predictive-Healthcare-Management-System/Predictive-Healthcare-Management-System.csproj --force
