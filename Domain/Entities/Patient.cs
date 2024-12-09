@@ -19,7 +19,7 @@ namespace Domain.Entities
         [Required]
         public string? PhoneNumber { get; set; }
 
-        public string? Password { get; set; }
+        public new string? Password { get; set; }
 
         // public string? Address { get; set; }
 
