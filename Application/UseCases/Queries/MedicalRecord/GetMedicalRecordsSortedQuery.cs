@@ -13,4 +13,10 @@ namespace Application.UseCases.Queries.MedicalRecord
             SortBy = sortBy;
         }
     }
+
+    public enum MedicalRecordSortBy
+    {
+        VisitReason,
+        Symptoms
+    }
 }

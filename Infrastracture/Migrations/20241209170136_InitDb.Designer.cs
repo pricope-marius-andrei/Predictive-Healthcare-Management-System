@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241208151333_InitDb")]
+    [Migration("20241209170136_InitDb")]
     partial class InitDb
     {
         /// <inheritdoc />
@@ -93,6 +93,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("DateOfRegistration")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasMaxLength(8)
@@ -102,7 +105,23 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -122,46 +141,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasBaseType("Domain.Entities.User");
 
-                    b.Property<DateTime>("DateOfRegistration")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Specialization")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.ToTable("Users", t =>
-                        {
-                            t.Property("DateOfRegistration")
-                                .HasColumnName("Doctor_DateOfRegistration");
-
-                            t.Property("FirstName")
-                                .HasColumnName("Doctor_FirstName");
-
-                            t.Property("LastName")
-                                .HasColumnName("Doctor_LastName");
-
-                            t.Property("PhoneNumber")
-                                .HasColumnName("Doctor_PhoneNumber");
-
-                            t.Property("Username")
-                                .HasColumnName("Doctor_Username");
-                        });
 
                     b.HasDiscriminator().HasValue("Doctor");
                 });
@@ -173,12 +155,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("DateOfRegistration")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid?>("DoctorId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Gender")
                         .IsRequired()
@@ -187,20 +165,10 @@ namespace Infrastructure.Migrations
                     b.Property<decimal>("Height")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<decimal>("Weight")
                         .HasColumnType("numeric");
+
+                    b.HasIndex("DoctorId");
 
                     b.HasDiscriminator().HasValue("Patient");
                 });
@@ -235,9 +203,18 @@ namespace Infrastructure.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Patient", b =>
+                {
+                    b.HasOne("Domain.Entities.Doctor", null)
+                        .WithMany("Patients")
+                        .HasForeignKey("DoctorId");
+                });
+
             modelBuilder.Entity("Domain.Entities.Doctor", b =>
                 {
                     b.Navigation("MedicalRecords");
+
+                    b.Navigation("Patients");
                 });
 
             modelBuilder.Entity("Domain.Entities.Patient", b =>

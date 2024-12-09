@@ -1,4 +1,4 @@
-﻿using Application.UseCases.Commands.Patient;
+﻿/*using Application.UseCases.Commands.Patient;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
@@ -38,4 +38,4 @@ public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand,
         }
         return Result<Guid>.Failure(result.ErrorMessage);
     }
-}
+}*/

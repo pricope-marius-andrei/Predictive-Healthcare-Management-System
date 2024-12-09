@@ -29,13 +29,29 @@ public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand,
             throw new ValidationException(validationResult.Errors);
         }
 
-        var patient = _mapper.Map<Domain.Entities.Patient>(request);
+        var existingPatient = await _repository.GetByIdAsync(request.Id);
+        if (existingPatient == null)
+        {
+            return Result<Domain.Entities.Patient>.Failure("Patient not found.");
+        }
+
+        _mapper.Map(request, existingPatient);
+
+        var updateResult = await _repository.UpdateAsync(existingPatient);
+        if (updateResult.IsSuccess)
+        {
+            return Result<Domain.Entities.Patient>.Success(updateResult.Data);
+        }
+
+        return Result<Domain.Entities.Patient>.Failure(updateResult.ErrorMessage);
+
+        /*var patient = _mapper.Map<Domain.Entities.Patient>(request);
 
         var result = await _repository.UpdateAsync(patient);
         if (result.IsSuccess)
         {
             return Result<Domain.Entities.Patient>.Success(result.Data);
         }
-        return Result<Domain.Entities.Patient>.Failure(result.ErrorMessage);
+        return Result<Domain.Entities.Patient>.Failure(result.ErrorMessage);*/
     }
 }

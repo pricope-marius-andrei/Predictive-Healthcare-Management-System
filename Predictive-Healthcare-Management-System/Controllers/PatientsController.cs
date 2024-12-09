@@ -20,20 +20,6 @@ namespace Predictive_Healthcare_Management_System.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Result<Guid>>> CreatePatient(CreatePatientCommand command)
-        {
-            try
-            {
-                var result = await _mediator.Send(command);
-                return CreatedAtAction(nameof(GetPatientById), new { id = result.Data }, result.Data);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PatientDto>> GetPatientById(Guid id)
         {
@@ -97,15 +83,30 @@ namespace Predictive_Healthcare_Management_System.Controllers
         }
 
         [HttpGet("paginated")]
-        public async Task<ActionResult<PagedResult<PatientDto>>> GetPaginatedPatients([FromQuery] int page, [FromQuery] int pageSize)
+        [ProducesResponseType(typeof(Result<PagedResult<PatientDto>>), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        public async Task<IActionResult> GetPaginatedPatients(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? username = null)
         {
             var query = new GetPaginatedPatientsQuery
             {
                 Page = page,
-                PageSize = pageSize
+                PageSize = pageSize,
+                Username = username
             };
+
             var result = await _mediator.Send(query);
-            return Ok(result);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.ErrorMessage);
+            }
         }
 
         [HttpGet("sorted")]
@@ -123,19 +124,6 @@ namespace Predictive_Healthcare_Management_System.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-        }
-
-        [HttpGet("search")]
-        public async Task<IActionResult> GetPatientsByUsername([FromQuery] string username)
-        {
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                return BadRequest("Username query parameter is required.");
-            }
-
-            var query = new GetPatientsByUsernameFilterQuery(username);
-            var patients = await _mediator.Send(query);
-            return Ok(patients);
         }
     }
 }

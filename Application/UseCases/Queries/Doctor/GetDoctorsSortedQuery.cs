@@ -13,4 +13,11 @@ namespace Application.UseCases.Queries.Doctor
             SortBy = sortBy;
         }
     }
+
+    public enum DoctorSortBy
+    {
+        Username,
+        FirstName,
+        LastName
+    }
 }

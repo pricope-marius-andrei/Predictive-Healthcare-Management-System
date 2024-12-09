@@ -10,6 +10,8 @@ namespace Domain.Repositories
         Task<Result<Guid>> AddAsync(Patient patient);
         Task<Result<Patient>> UpdateAsync(Patient patient);
         Task DeleteAsync(Guid id);
-        Task<IEnumerable<Patient>> GetPatientsByUsernameFilterAsync(string username);
+        Task<IEnumerable<Patient>> GetPatientsByDoctorIdAsync(Guid doctorId);
+        Task<int> CountAsync(IEnumerable<Patient> query);
+        Task<List<Patient>> GetPaginatedAsync(IEnumerable<Patient> query, int page, int pageSize);
     }
 }

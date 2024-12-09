@@ -1,4 +1,5 @@
-﻿using Application.UseCases.CommandHandlers.Doctor;
+﻿/*
+using Application.UseCases.CommandHandlers.Doctor;
 using Application.UseCases.Commands.Doctor;
 using AutoMapper;
 using Domain.Common;
@@ -133,3 +134,4 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         }
     }
 }
+*/

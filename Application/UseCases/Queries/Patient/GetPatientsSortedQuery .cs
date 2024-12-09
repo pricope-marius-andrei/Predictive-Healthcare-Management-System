@@ -13,4 +13,11 @@ namespace Application.UseCases.Queries.Patient
             SortBy = sortBy;
         }
     }
+
+    public enum PatientSortBy
+    {
+        Username,
+        Height,
+        Weight
+    }
 }

@@ -13,4 +13,10 @@ namespace Application.UseCases.Queries.MedicalHistory
             SortBy = sortBy;
         }
     }
+
+    public enum MedicalHistorySortBy
+    {
+        DateOfDiagnosis,
+        Condition
+    }
 }
