@@ -73,6 +73,7 @@ jobs:
       - name: Drop and recreate database
         run: |
           # Extract database connection details from DB_CONNECTION_STRING
+          $env:PATH += ";C:\Program Files\PostgreSQL\17\bin"
           $DB_CONNECTION_STRING = $env:DB_CONNECTION_STRING
       
           # Extract the host, user, password, and database name from the connection string
