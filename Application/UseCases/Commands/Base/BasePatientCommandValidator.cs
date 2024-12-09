@@ -1,6 +1,5 @@
 ﻿using Application.UseCases.Commands.Patient;
 using Domain.Common;
-using Domain.Entities;
 using FluentValidation;
 
 namespace Application.UseCases.Commands.Base
@@ -9,10 +8,6 @@ namespace Application.UseCases.Commands.Base
     {
         public BasePatientCommandValidator() : base()
         {
-            RuleFor(command => command.Address)
-                    .NotEmpty().WithMessage("Address is required.")
-                    .MaximumLength(100).WithMessage("Address must not exceed 100 characters.");
-
             RuleFor(command => command.Gender)
                     .NotEmpty().WithMessage("Gender is required.")
                     .Must(BeAValidGender).WithMessage("Invalid gender.");
