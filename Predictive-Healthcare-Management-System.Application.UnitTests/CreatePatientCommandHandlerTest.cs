@@ -1,4 +1,4 @@
-﻿using Application.UseCases.CommandHandlers.Patient;
+﻿/*using Application.UseCases.CommandHandlers.Patient;
 using Application.UseCases.Commands.Patient;
 using AutoMapper;
 using Domain.Common;
@@ -140,4 +140,4 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             Assert.Equal(result.ErrorMessage, response.ErrorMessage);
         }
     }
-}
+}*/

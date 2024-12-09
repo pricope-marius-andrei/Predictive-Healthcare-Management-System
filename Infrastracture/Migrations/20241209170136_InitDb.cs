@@ -21,26 +21,27 @@ namespace Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    DateOfRegistration = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Discriminator = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
-                    Doctor_Username = table.Column<string>(type: "text", nullable: true),
-                    Doctor_FirstName = table.Column<string>(type: "text", nullable: true),
-                    Doctor_LastName = table.Column<string>(type: "text", nullable: true),
-                    Doctor_PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     Specialization = table.Column<string>(type: "text", nullable: true),
-                    Doctor_DateOfRegistration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Username = table.Column<string>(type: "text", nullable: true),
-                    FirstName = table.Column<string>(type: "text", nullable: true),
-                    LastName = table.Column<string>(type: "text", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     Gender = table.Column<string>(type: "text", nullable: true),
                     Height = table.Column<decimal>(type: "numeric", nullable: true),
                     Weight = table.Column<decimal>(type: "numeric", nullable: true),
-                    DateOfRegistration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DoctorId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Users_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -107,6 +108,11 @@ namespace Infrastructure.Migrations
                 name: "IX_MedicalRecords_PatientId",
                 table: "MedicalRecords",
                 column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_DoctorId",
+                table: "Users",
+                column: "DoctorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",

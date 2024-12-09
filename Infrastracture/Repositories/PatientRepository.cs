@@ -96,14 +96,27 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public Task<Guid> Register(Patient patient, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Patient>> GetPatientsByDoctorIdAsync(Guid doctorId)
         {
-            throw new NotImplementedException();
+            return await _context.Patients
+                .Where(p => p.DoctorId == doctorId)
+                .ToListAsync();
         }
 
-        public Task<string> Login(Patient patient)
+        public async Task<int> CountAsync(IEnumerable<Patient> patients)
         {
-            throw new NotImplementedException();
+            int count = patients.Count();
+            return await Task.FromResult(count);
+        }
+
+        public async Task<List<Patient>> GetPaginatedAsync(IEnumerable<Patient> patients, int page, int pageSize)
+        {
+            var pagedPatients = patients
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return await Task.FromResult(pagedPatients);
         }
     }
 }

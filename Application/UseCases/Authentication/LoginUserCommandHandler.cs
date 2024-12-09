@@ -2,23 +2,26 @@
 using Domain.Repositories;
 using MediatR;
 
-public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, string>
+namespace Application.UseCases.Authentication
 {
-    private readonly IUserRepository _userRepository;
-
-    public LoginUserCommandHandler(IUserRepository userRepository)
+    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, string>
     {
-        _userRepository=userRepository;
-    }
+        private readonly IUserRepository _userRepository;
 
-    public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
-    {
-        var user = new User
+        public LoginUserCommandHandler(IUserRepository userRepository)
         {
-            Email = request.Email,
-            Password = request.Password
-        };
-        var token = await _userRepository.Login(user);
-        return token;
+            _userRepository = userRepository;
+        }
+
+        public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+        {
+            var user = new User
+            {
+                Email = request.Email,
+                Password = request.Password
+            };
+            var token = await _userRepository.Login(user);
+            return token;
+        }
     }
 }

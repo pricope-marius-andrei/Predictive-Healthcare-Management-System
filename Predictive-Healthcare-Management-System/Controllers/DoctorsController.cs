@@ -20,19 +20,6 @@ namespace Predictive_Healthcare_Management_System.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Result<Guid>>> CreateDoctor(CreateDoctorCommand command)
-        {
-            try
-            {
-                var result = await _mediator.Send(command);
-                return CreatedAtAction(nameof(GetDoctorById), new { id = result.Data }, result.Data);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<DoctorDto>> GetDoctorById(Guid id)
         {
@@ -130,6 +117,86 @@ namespace Predictive_Healthcare_Management_System.Controllers
             var query = new GetDoctorsByUsernameFilterQuery(username);
             var doctors = await _mediator.Send(query);
             return Ok(doctors);
+        }
+
+        [HttpPost("{doctorId}/assign-patient")]
+        [ProducesResponseType(typeof(Doctor), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        public async Task<IActionResult> AssignPatientToDoctor(Guid doctorId, [FromBody] AssignPatientToDoctorRequest request)
+        {
+            if (doctorId != request.DoctorId)
+            {
+                return BadRequest("DoctorId in URL does not match DoctorId in request body.");
+            }
+
+            var command = new AssignPatientToDoctorCommand
+            {
+                DoctorId = request.DoctorId,
+                PatientId = request.PatientId
+            };
+
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.ErrorMessage);
+        }
+
+        [HttpPost("{doctorId}/remove-patient")]
+        [ProducesResponseType(typeof(Doctor), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        public async Task<IActionResult> RemovePatientFromDoctor(Guid doctorId, [FromBody] RemovePatientFromDoctorRequest request)
+        {
+            if (doctorId != request.DoctorId)
+            {
+                return BadRequest("DoctorId in URL does not match DoctorId in request body.");
+            }
+
+            var command = new RemovePatientFromDoctorCommand
+            {
+                DoctorId = request.DoctorId,
+                PatientId = request.PatientId
+            };
+
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.ErrorMessage);
+        }
+
+        [HttpGet("doctor/{doctorId}/paginated")]
+        [ProducesResponseType(typeof(Result<PagedResult<PatientDto>>), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        public async Task<IActionResult> GetPaginatedPatientsByDoctor(
+            [FromRoute] Guid doctorId,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? username = null)
+        {
+            var query = new GetPatientsByDoctorIdQuery(doctorId)
+            {
+                Page = page,
+                PageSize = pageSize,
+                Username = username
+            };
+
+            var result = await _mediator.Send(query);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.ErrorMessage);
+            }
         }
     }
 }   

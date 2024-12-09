@@ -17,11 +17,13 @@ namespace Application.Utils
             // -----------------------------
             CreateMap<Patient, PatientDto>()
                 .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.DoctorId, opt => opt.MapFrom(src => src.DoctorId))
                 .ForMember(dest => dest.MedicalHistories, opt => opt.MapFrom(src => src.MedicalHistories))
                 .ForMember(dest => dest.MedicalRecords, opt => opt.MapFrom(src => src.MedicalRecords));
 
-            CreateMap<CreatePatientCommand, Patient>();
-            CreateMap<UpdatePatientCommand, Patient>();
+            // CreateMap<CreatePatientCommand, Patient>();
+            CreateMap<UpdatePatientCommand, Patient>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // -----------------------------
             // Medical History Mappings
@@ -41,10 +43,15 @@ namespace Application.Utils
             // Doctor Mappings
             // -----------------------------
             CreateMap<Doctor, DoctorDto>()
-                .ForMember(dest => dest.DoctorId, opt => opt.MapFrom(src => src.Id));
+                .ForMember(dest => dest.DoctorId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Patients, opt => opt.MapFrom(src => src.Patients));
 
-            CreateMap<CreateDoctorCommand, Doctor>();
-            CreateMap<UpdateDoctorCommand, Doctor>();
+            // CreateMap<CreateDoctorCommand, Doctor>();
+            CreateMap<UpdateDoctorCommand, Doctor>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<AssignPatientToDoctorRequest, AssignPatientToDoctorCommand>();
+            CreateMap<RemovePatientFromDoctorRequest, RemovePatientFromDoctorCommand>();
         }
     }
 }

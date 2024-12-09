@@ -12,7 +12,6 @@ namespace Infrastructure.Persistence
         }
 
         public DbSet<User> Users { get; set; }
-
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
@@ -26,20 +25,29 @@ namespace Infrastructure.Persistence
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
+            modelBuilder.Entity<Patient>()
+                .HasOne(p => p.Doctor)
+                .WithMany(d => d.Patients)
+                .HasForeignKey(p => p.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<MedicalRecord>()
                 .HasOne(mr => mr.Patient)
                 .WithMany(p => p.MedicalRecords)
-                .HasForeignKey(mr => mr.PatientId);
+                .HasForeignKey(mr => mr.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<MedicalRecord>()
                 .HasOne(mr => mr.Doctor)
                 .WithMany(d => d.MedicalRecords)
-                .HasForeignKey(mr => mr.DoctorId);
+                .HasForeignKey(mr => mr.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<MedicalHistory>()
                 .HasOne(mh => mh.Patient)
                 .WithMany(p => p.MedicalHistories)
-                .HasForeignKey(mh => mh.PatientId);
+                .HasForeignKey(mh => mh.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Patient>()
                 .Property(p => p.FirstName)
@@ -59,6 +67,10 @@ namespace Infrastructure.Persistence
 
             modelBuilder.Entity<Doctor>()
                 .Property(d => d.DateOfRegistration)
+                .HasConversion(dateTimeConverter);
+
+            modelBuilder.Entity<Patient>()
+                .Property(p => p.DateOfRegistration)
                 .HasConversion(dateTimeConverter);
 
             base.OnModelCreating(modelBuilder);

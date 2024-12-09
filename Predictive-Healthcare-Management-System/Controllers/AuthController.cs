@@ -1,28 +1,32 @@
+using Application.UseCases.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-[ApiController]
-[Route("api/[controller]")]
-public class AuthController : ControllerBase
+namespace Predictive_Healthcare_Management_System.Controllers
 {
-    private readonly IMediator _mediator;
-
-    public AuthController(IMediator mediator)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
     {
-        _mediator = mediator;
-    }
+        private readonly IMediator _mediator;
 
-    [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterUserCommand command)
-    {
-        var userId = await _mediator.Send(command);
-        return Ok(new { UserId = userId });
-    }
+        public AuthController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
-    [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginUserCommand command)
-    {
-        var token = await _mediator.Send(command);
-        return Ok(new { Token = token });
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterUserCommand command)
+        {
+            var userId = await _mediator.Send(command);
+            return Ok(new { UserId = userId });
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginUserCommand command)
+        {
+            var token = await _mediator.Send(command);
+            return Ok(new { Token = token });
+        }
     }
 }

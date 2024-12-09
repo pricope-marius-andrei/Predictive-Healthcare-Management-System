@@ -7,5 +7,6 @@ namespace Application.UseCases.Commands.Doctor
     public class UpdateDoctorCommand : BaseDoctorCommand<Result<Domain.Entities.Doctor>>, IRequest<Result<Domain.Entities.Doctor>>
     {
         public Guid Id { get; set; }
+        public List<Guid>? PatientIds { get; set; }
     }
 }
