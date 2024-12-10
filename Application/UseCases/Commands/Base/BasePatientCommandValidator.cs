@@ -1,6 +1,5 @@
 ﻿using Application.UseCases.Commands.Patient;
 using Domain.Common;
-using Domain.Entities;
 using FluentValidation;
 
 namespace Application.UseCases.Commands.Base
@@ -9,10 +8,6 @@ namespace Application.UseCases.Commands.Base
     {
         public BasePatientCommandValidator() : base()
         {
-            RuleFor(command => command.Address)
-                    .NotEmpty().WithMessage("Address is required.")
-                    .MaximumLength(100).WithMessage("Address must not exceed 100 characters.");
-
             RuleFor(command => command.Gender)
                     .NotEmpty().WithMessage("Gender is required.")
                     .Must(BeAValidGender).WithMessage("Invalid gender.");
@@ -26,10 +21,6 @@ namespace Application.UseCases.Commands.Base
             RuleFor(command => command.DateOfBirth)
                     .NotEmpty().WithMessage("Date of birth is required.")
                     .Must(BeAValidDateOfBirth).WithMessage("Invalid date of birth.");
-
-            RuleFor(command => command.DateOfRegistration)
-                    .NotEmpty().WithMessage("Date of registration is required.")
-                    .Must(BeAValidDateOfRegistration).WithMessage("Invalid date of registration.");
         }
 
         private static bool BeAValidGender(string? gender)
@@ -40,11 +31,6 @@ namespace Application.UseCases.Commands.Base
         private static bool BeAValidDateOfBirth(DateTime dateOfBirth)
         {
             return dateOfBirth <= DateTime.Now;
-        }
-
-        private static bool BeAValidDateOfRegistration(DateTime dateOfRegistration)
-        {
-            return dateOfRegistration <= DateTime.Now;
         }
     }
 }

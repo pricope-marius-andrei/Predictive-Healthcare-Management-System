@@ -1,7 +1,5 @@
 ﻿using Application.UseCases.Commands.Base;
 using Domain.Common;
-using Domain.Entities;
-using MediatR;
 
 namespace Application.UseCases.Commands.Patient
 {
