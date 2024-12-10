@@ -20,7 +20,7 @@ namespace Infrastructure.Middlewares
                                   .FirstOrDefault()
                                   ?? httpContext.Request.Query["subscription-key"];
 
-            if (string.IsNullOrEmpty(subscriptionKey) || subscriptionKey != "your-valid-subscription-key")
+            if (string.IsNullOrEmpty(subscriptionKey) || subscriptionKey != "subscription-key")
             {
                 httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 await httpContext.Response.WriteAsync("Unauthorized: Invalid subscription key");
