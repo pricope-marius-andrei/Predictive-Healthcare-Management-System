@@ -1,9 +1,10 @@
 ﻿using Application.DTOs;
+using Domain.Common;
 using MediatR;
 
 namespace Application.UseCases.Queries.Doctor
 {
-    public class GetDoctorsByUsernameFilterQuery : IRequest<IEnumerable<DoctorDto>>
+    public class GetDoctorsByUsernameFilterQuery : IRequest<Result<IEnumerable<DoctorDto>>>
     {
         public string Username { get; }
 

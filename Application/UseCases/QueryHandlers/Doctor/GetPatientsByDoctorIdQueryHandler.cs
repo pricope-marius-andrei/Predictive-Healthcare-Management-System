@@ -23,15 +23,17 @@ namespace Application.UseCases.QueryHandlers.Doctor
         {
             var patients = await _patientRepository.GetPatientsByDoctorIdAsync(request.DoctorId);
 
+            var patientsList = patients.Data.AsEnumerable();
+
             if (!string.IsNullOrWhiteSpace(request.Username))
             {
-                patients = patients
+                patientsList = patientsList
                     .Where(p => p.Username.Contains(request.Username, StringComparison.OrdinalIgnoreCase));
             }
 
-            int totalCount = patients.Count();
+            int totalCount = patientsList.Count();
 
-            var pagedPatients = patients
+            var pagedPatients = patientsList
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToList();

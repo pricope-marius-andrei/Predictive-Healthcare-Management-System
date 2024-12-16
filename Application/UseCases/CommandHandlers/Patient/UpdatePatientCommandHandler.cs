@@ -35,10 +35,10 @@ namespace Application.UseCases.CommandHandlers.Patient
 
             if (request.DoctorId.HasValue)
             {
-                existingPatient.DoctorId = request.DoctorId.Value;
+                existingPatient.Data.DoctorId = request.DoctorId.Value;
             }
 
-            var updateResult = await _repository.UpdateAsync(existingPatient);
+            var updateResult = await _repository.UpdateAsync(existingPatient.Data);
             if (updateResult.IsSuccess)
             {
                 return Result<Domain.Entities.Patient>.Success(updateResult.Data);

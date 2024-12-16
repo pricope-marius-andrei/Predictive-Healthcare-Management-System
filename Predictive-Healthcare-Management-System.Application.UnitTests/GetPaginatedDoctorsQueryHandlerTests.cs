@@ -2,6 +2,7 @@
 using Application.UseCases.Queries.Doctor;
 using Application.UseCases.QueryHandlers.Doctor;
 using AutoMapper;
+using Domain.Common;
 using Domain.Repositories;
 using NSubstitute;
 
@@ -51,7 +52,9 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                     MedicalRecords = null
                 }
             };
-            _repositoryMock.GetAllAsync().Returns(doctors);
+            var returnedResult = _repositoryMock.GetAllAsync();
+
+            returnedResult.Returns(Result<IEnumerable<Domain.Entities.Doctor>>.Success(doctors));
 
             var doctorDtos = doctors.Select(d => new DoctorDto
             {

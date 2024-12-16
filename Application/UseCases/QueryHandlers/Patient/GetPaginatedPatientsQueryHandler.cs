@@ -23,19 +23,21 @@ namespace Application.UseCases.QueryHandlers.Patient
         {
             var patients = await _repository.GetAllAsync();
 
+            var patientsList = patients.Data;
+
             if (!string.IsNullOrWhiteSpace(request.Username))
             {
-                patients = patients
+                patientsList = patientsList
                     .Where(p => p.Username.Contains(request.Username, StringComparison.OrdinalIgnoreCase));
             }
 
-            int totalCount = await _repository.CountAsync(patients);
+            var totalCount = await _repository.CountAsync(patientsList);
 
-            var pagedPatients = await _repository.GetPaginatedAsync(patients, request.Page, request.PageSize);
+            var pagedPatients = await _repository.GetPaginatedAsync(patientsList, request.Page, request.PageSize);
 
             var patientDtos = _mapper.Map<List<PatientDto>>(pagedPatients);
 
-            var pagedResult = new PagedResult<PatientDto>(patientDtos, totalCount);
+            var pagedResult = new PagedResult<PatientDto>(patientDtos, totalCount.Data);
 
             return Result<PagedResult<PatientDto>>.Success(pagedResult);
         }

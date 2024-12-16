@@ -8,7 +8,9 @@ namespace Infrastructure.Repositories
 {
     public class PatientRepository : IPatientRepository
     {
+        private const string PatientNotFound = "Patient not found.";
         private readonly ApplicationDbContext _context;
+
         public PatientRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -25,26 +27,46 @@ namespace Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                return Result<Guid>.Failure(ex.InnerException!.ToString());
+                return Result<Guid>.Failure(ex.InnerException?.ToString() ?? ex.Message);
             }
         }
 
-        public async Task<Patient> GetByIdAsync(Guid id)
+        public async Task<Result<Patient>> GetByIdAsync(Guid id)
         {
-            var patient = await _context.Patients
-                .Include(p => p.MedicalHistories)
-                .Include(p => p.MedicalRecords)
-                .FirstOrDefaultAsync(p => p.Id == id);
+            try
+            {
+                var patient = await _context.Patients
+                    .Include(p => p.MedicalHistories)
+                    .Include(p => p.MedicalRecords)
+                    .FirstOrDefaultAsync(p => p.Id == id);
 
-            return patient == null ? throw new KeyNotFoundException("Patient not found.") : patient;
+                if (patient == null)
+                {
+                    return Result<Patient>.Failure(PatientNotFound);
+                }
+
+                return Result<Patient>.Success(patient);
+            }
+            catch (Exception ex)
+            {
+                return Result<Patient>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
         }
 
-        public async Task<IEnumerable<Patient>> GetAllAsync()
+        public async Task<Result<IEnumerable<Patient>>> GetAllAsync()
         {
-            return await _context.Patients
-                .Include(p => p.MedicalHistories)
-                .Include(p => p.MedicalRecords)
-                .ToListAsync();
+            try
+            {
+                var patients = await _context.Patients
+                    .Include(p => p.MedicalHistories)
+                    .Include(p => p.MedicalRecords)
+                    .ToListAsync();
+                return Result<IEnumerable<Patient>>.Success(patients);
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Patient>>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
         }
 
         public async Task<Result<Patient>> UpdateAsync(Patient patient)
@@ -52,7 +74,12 @@ namespace Infrastructure.Repositories
             ArgumentNullException.ThrowIfNull(patient);
             try
             {
-                var existingPatient = await _context.Patients.FindAsync(patient.Id) ?? throw new KeyNotFoundException("Patient not found.");
+                var existingPatient = await _context.Patients.FindAsync(patient.Id);
+                if (existingPatient == null)
+                {
+                    return Result<Patient>.Failure(PatientNotFound);
+                }
+
                 _context.Entry(existingPatient).CurrentValues.SetValues(patient);
                 await _context.SaveChangesAsync();
 
@@ -63,14 +90,14 @@ namespace Infrastructure.Repositories
 
                 if (newPatient == null)
                 {
-                    throw new KeyNotFoundException("Patient not found.");
+                    return Result<Patient>.Failure(PatientNotFound);
                 }
 
                 return Result<Patient>.Success(newPatient);
             }
             catch (Exception ex)
             {
-                return Result<Patient>.Failure(ex.InnerException!.ToString());
+                return Result<Patient>.Failure(ex.InnerException?.ToString() ?? ex.Message);
             }
         }
 
@@ -79,44 +106,73 @@ namespace Infrastructure.Repositories
             var patient = await _context.Patients.FindAsync(id);
             if (patient == null)
             {
-                throw new KeyNotFoundException("Patient not found.");
+                throw new KeyNotFoundException(PatientNotFound);
             }
 
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Patient>> GetPatientsByUsernameFilterAsync(string username)
+        public async Task<Result<IEnumerable<Patient>>> GetPatientsByUsernameFilterAsync(string username)
         {
-            return await _context.Patients
-                .AsNoTracking()
-                .Include(p => p.MedicalHistories)
-                .Include(p => p.MedicalRecords)
-                .Where(p => p.Username.Contains(username))
-                .ToListAsync();
+            try
+            {
+                var patients = await _context.Patients
+                    .AsNoTracking()
+                    .Include(p => p.MedicalHistories)
+                    .Include(p => p.MedicalRecords)
+                    .Where(p => p.Username.Contains(username))
+                    .ToListAsync();
+                return Result<IEnumerable<Patient>>.Success(patients);
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Patient>>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
         }
 
-        public async Task<IEnumerable<Patient>> GetPatientsByDoctorIdAsync(Guid doctorId)
+        public async Task<Result<IEnumerable<Patient>>> GetPatientsByDoctorIdAsync(Guid doctorId)
         {
-            return await _context.Patients
-                .Where(p => p.DoctorId == doctorId)
-                .ToListAsync();
+            try
+            {
+                var patients = await _context.Patients
+                    .Where(p => p.DoctorId == doctorId)
+                    .ToListAsync();
+                return Result<IEnumerable<Patient>>.Success(patients);
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Patient>>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
         }
 
-        public async Task<int> CountAsync(IEnumerable<Patient> patients)
+        public async Task<Result<int>> CountAsync(IEnumerable<Patient> patients)
         {
-            int count = patients.Count();
-            return await Task.FromResult(count);
+            try
+            {
+                int count = patients.Count();
+                return await Task.FromResult(Result<int>.Success(count));
+            }
+            catch (Exception ex)
+            {
+                return Result<int>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
         }
 
-        public async Task<List<Patient>> GetPaginatedAsync(IEnumerable<Patient> patients, int page, int pageSize)
+        public async Task<Result<List<Patient>>> GetPaginatedAsync(IEnumerable<Patient> patients, int page, int pageSize)
         {
-            var pagedPatients = patients
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            return await Task.FromResult(pagedPatients);
+            try
+            {
+                var pagedPatients = patients
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+                return await Task.FromResult(Result<List<Patient>>.Success(pagedPatients));
+            }
+            catch (Exception ex)
+            {
+                return Result<List<Patient>>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
         }
     }
 }

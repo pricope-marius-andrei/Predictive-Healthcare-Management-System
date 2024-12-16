@@ -26,7 +26,7 @@ public class UpdateMedicalHistoryCommandHandler : IRequestHandler<UpdateMedicalH
         }
 
         var medicalHistory = _mapper.Map<Domain.Entities.MedicalHistory>(request);
-        medicalHistory.PatientId = existingMedicalHistory.PatientId;
+        medicalHistory.PatientId = existingMedicalHistory.Data.PatientId;
 
         var result = await _repository.UpdateAsync(medicalHistory);
         if (result.IsSuccess)

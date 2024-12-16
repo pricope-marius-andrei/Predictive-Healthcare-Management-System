@@ -8,42 +8,67 @@ namespace Infrastructure.Repositories
 {
     public class MedicalRecordRepository : IMedicalRecordRepository
     {
+        private const string MedicalRecordNotFound = "Medical record not found.";
         private readonly ApplicationDbContext _context;
+
         public MedicalRecordRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<MedicalRecord>> GetAllAsync()
+        public async Task<Result<IEnumerable<MedicalRecord>>> GetAllAsync()
         {
-            return await _context.MedicalRecords
-                .Include(mr => mr.Patient)
-                .Include(mr => mr.Doctor)
-                .ToListAsync();
-        }
-
-        public async Task<MedicalRecord> GetByIdAsync(Guid id)
-        {
-            var medicalRecord = await _context.MedicalRecords
-                .Include(mr => mr.Patient)
-                .Include(mr => mr.Doctor)
-                .FirstOrDefaultAsync(mr => mr.RecordId == id);
-
-            if (medicalRecord == null)
+            try
             {
-                throw new KeyNotFoundException("Medical record not found.");
+                var medicalRecords = await _context.MedicalRecords
+                    .Include(mr => mr.Patient)
+                    .Include(mr => mr.Doctor)
+                    .ToListAsync();
+                return Result<IEnumerable<MedicalRecord>>.Success(medicalRecords);
             }
-
-            return medicalRecord;
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<MedicalRecord>>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
         }
 
-        public async Task<IEnumerable<MedicalRecord>> GetByPatientIdAsync(Guid patientId)
+        public async Task<Result<MedicalRecord>> GetByIdAsync(Guid id)
         {
-            return await _context.MedicalRecords
-                .Where(mr => mr.PatientId == patientId)
-                .Include(mr => mr.Patient)
-                .Include(mr => mr.Doctor)
-                .ToListAsync();
+            try
+            {
+                var medicalRecord = await _context.MedicalRecords
+                    .Include(mr => mr.Patient)
+                    .Include(mr => mr.Doctor)
+                    .FirstOrDefaultAsync(mr => mr.RecordId == id);
+
+                if (medicalRecord == null)
+                {
+                    return Result<MedicalRecord>.Failure(MedicalRecordNotFound);
+                }
+
+                return Result<MedicalRecord>.Success(medicalRecord);
+            }
+            catch (Exception ex)
+            {
+                return Result<MedicalRecord>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
+        }
+
+        public async Task<Result<IEnumerable<MedicalRecord>>> GetByPatientIdAsync(Guid patientId)
+        {
+            try
+            {
+                var medicalRecords = await _context.MedicalRecords
+                    .Where(mr => mr.PatientId == patientId)
+                    .Include(mr => mr.Patient)
+                    .Include(mr => mr.Doctor)
+                    .ToListAsync();
+                return Result<IEnumerable<MedicalRecord>>.Success(medicalRecords);
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<MedicalRecord>>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
         }
 
         public async Task<Result<Guid>> AddAsync(MedicalRecord medicalRecord)
@@ -69,7 +94,7 @@ namespace Infrastructure.Repositories
                 var existingMedicalRecord = await _context.MedicalRecords.FindAsync(medicalRecord.RecordId);
                 if (existingMedicalRecord == null)
                 {
-                    throw new KeyNotFoundException("Medical record not found.");
+                    return Result<MedicalRecord>.Failure(MedicalRecordNotFound);
                 }
 
                 _context.Entry(existingMedicalRecord).CurrentValues.SetValues(medicalRecord);
@@ -82,7 +107,7 @@ namespace Infrastructure.Repositories
 
                 if (newMedicalRecord == null)
                 {
-                    throw new KeyNotFoundException("Medical record not found.");
+                    return Result<MedicalRecord>.Failure(MedicalRecordNotFound);
                 }
 
                 return Result<MedicalRecord>.Success(newMedicalRecord);
@@ -98,7 +123,7 @@ namespace Infrastructure.Repositories
             var medicalRecord = await _context.MedicalRecords.FindAsync(id);
             if (medicalRecord == null)
             {
-                throw new KeyNotFoundException("Medical record not found.");
+                throw new KeyNotFoundException(MedicalRecordNotFound);
             }
 
             _context.MedicalRecords.Remove(medicalRecord);

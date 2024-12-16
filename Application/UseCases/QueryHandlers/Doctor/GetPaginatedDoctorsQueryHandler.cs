@@ -23,7 +23,7 @@ namespace Application.UseCases.QueryHandlers.Doctor
         public async Task<Result<PagedResult<DoctorDto>>> Handle(GetPaginatedDoctorsQuery request, CancellationToken cancellationToken)
         {
             var doctors = await _repository.GetAllAsync();
-            var query = doctors.AsQueryable();
+            var query = doctors.Data.AsQueryable();
 
             var pagedDoctors = query.ApplyPaging(request.Page, request.PageSize);
 

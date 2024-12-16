@@ -2,9 +2,13 @@
 using Application.UseCases.Queries.MedicalHistory;
 using Application.UseCases.QueryHandlers.MedicalHistory;
 using AutoMapper;
+using Domain.Common;
 using Domain.Repositories;
 using FluentAssertions;
 using NSubstitute;
+using System.Collections.Generic; // Add this using directive
+using System.Threading;
+using System.Threading.Tasks; // Add this using directive
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -47,7 +51,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                     Condition = "Hypertension"
                 }
             };
-            _repositoryMock.GetAllAsync().Returns(medicalHistories);
+            _repositoryMock.GetAllAsync().Returns(Task.FromResult(Result<IEnumerable<Domain.Entities.MedicalHistory>>.Success(medicalHistories)));
 
             var medicalHistoryDtos = medicalHistories.Select(m => new MedicalHistoryDto
             {
@@ -84,3 +88,5 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         }
     }
 }
+
+

@@ -2,9 +2,13 @@
 using Application.UseCases.Queries.MedicalRecord;
 using Application.UseCases.QueryHandlers.MedicalRecord;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
+using System.Collections.Generic; // Add this using directive
+using System.Threading;
+using System.Threading.Tasks; // Add this using directive
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -49,14 +53,15 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 DateOfVisit = DateTime.UtcNow
             };
 
-            _mockMedicalRecordRepository.GetByIdAsync(query.RecordId).Returns(medicalRecord);
+            _mockMedicalRecordRepository.GetByIdAsync(query.RecordId).Returns(Task.FromResult(Result<MedicalRecord>.Success(medicalRecord)));
             _mockMapper.Map<MedicalRecordDto>(medicalRecord).Returns(medicalRecordDto);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.Equal(medicalRecordDto, result);
+            Assert.True(result.IsSuccess);
+            Assert.Equal(medicalRecordDto, result.Data);
         }
 
         [Fact]
@@ -65,10 +70,12 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             // Arrange
             var query = new GetMedicalRecordByIdQuery { RecordId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
-            _mockMedicalRecordRepository.GetByIdAsync(query.RecordId).Returns((MedicalRecord?)null!);
+            _mockMedicalRecordRepository.GetByIdAsync(query.RecordId).Returns(Task.FromResult(Result<MedicalRecord>.Failure("Medical record not found")));
 
             // Act & Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => _handler.Handle(query, CancellationToken.None));
+            var exception = await Assert.ThrowsAsync<KeyNotFoundException>(() => _handler.Handle(query, CancellationToken.None));
+            Assert.Equal("Medical record not found", exception.Message);
         }
     }
 }
+

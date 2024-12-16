@@ -2,9 +2,13 @@
 using Application.UseCases.Queries.MedicalRecord;
 using Application.UseCases.QueryHandlers.MedicalRecord;
 using AutoMapper;
+using Domain.Common;
 using Domain.Repositories;
 using FluentAssertions;
 using NSubstitute;
+using System.Collections.Generic; // Add this using directive
+using System.Threading;
+using System.Threading.Tasks; // Add this using directive
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -59,7 +63,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             };
 
             // Mock repository to return the list of medical records
-            _repositoryMock.GetAllAsync().Returns(medicalRecords);
+            _repositoryMock.GetAllAsync().Returns(Task.FromResult(Result<IEnumerable<Domain.Entities.MedicalRecord>>.Success(medicalRecords)));
 
             // Prepare the expected DTOs
             var medicalRecordDtos = medicalRecords.Select(m => new MedicalRecordDto
@@ -105,3 +109,6 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         }
     }
 }
+
+
+

@@ -1,12 +1,13 @@
 ﻿using Application.DTOs;
 using Application.UseCases.Queries.MedicalRecord;
 using AutoMapper;
+using Domain.Common;
 using Domain.Repositories;
 using MediatR;
 
 namespace Application.UseCases.QueryHandlers.MedicalRecord
 {
-    public class GetMedicalRecordByIdQueryHandler : IRequestHandler<GetMedicalRecordByIdQuery, MedicalRecordDto>
+    public class GetMedicalRecordByIdQueryHandler : IRequestHandler<GetMedicalRecordByIdQuery, Result<MedicalRecordDto>>
     {
         private readonly IMedicalRecordRepository _repository;
         private readonly IMapper _mapper;
@@ -17,19 +18,32 @@ namespace Application.UseCases.QueryHandlers.MedicalRecord
             _mapper = mapper;
         }
 
-        public async Task<MedicalRecordDto> Handle(GetMedicalRecordByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<MedicalRecordDto>> Handle(GetMedicalRecordByIdQuery request, CancellationToken cancellationToken)
         {
-            var medicalRecord = await _repository.GetByIdAsync(request.RecordId);
-
-            if (medicalRecord == null)
+            var medicalRecordResult = await _repository.GetByIdAsync(request.RecordId);
+            if (!medicalRecordResult.IsSuccess)
             {
-                throw new KeyNotFoundException("Medical record not found.");
+                return Result<MedicalRecordDto>.Failure(medicalRecordResult.ErrorMessage);
             }
 
-            return _mapper.Map<MedicalRecordDto>(medicalRecord);
+            var medicalRecordDto = _mapper.Map<MedicalRecordDto>(medicalRecordResult.Data);
+            return Result<MedicalRecordDto>.Success(medicalRecordDto);
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

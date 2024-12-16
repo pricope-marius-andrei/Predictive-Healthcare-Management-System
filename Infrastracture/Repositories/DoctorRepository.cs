@@ -27,25 +27,41 @@ namespace Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                return Result<Guid>.Failure(ex.InnerException!.ToString());
+                return Result<Guid>.Failure(ex.InnerException?.ToString() ?? ex.Message);
             }
         }
 
-        public async Task<Doctor> GetByIdAsync(Guid id)
+        public async Task<Result<Doctor>> GetByIdAsync(Guid id)
         {
-            var doctor = await _context.Doctors
-                .FirstOrDefaultAsync(d => d.Id == id);
-
-            if (doctor == null)
+            try
             {
-                throw new KeyNotFoundException(DoctorNotFound);
+                var doctor = await _context.Doctors
+                    .FirstOrDefaultAsync(d => d.Id == id);
+
+                if (doctor == null)
+                {
+                    return Result<Doctor>.Failure(DoctorNotFound);
+                }
+
+                return Result<Doctor>.Success(doctor);
             }
-            return doctor;
+            catch (Exception ex)
+            {
+                return Result<Doctor>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
         }
 
-        public async Task<IEnumerable<Doctor>> GetAllAsync()
+        public async Task<Result<IEnumerable<Doctor>>> GetAllAsync()
         {
-            return await _context.Doctors.ToListAsync();
+            try
+            {
+                var doctors = await _context.Doctors.ToListAsync();
+                return Result<IEnumerable<Doctor>>.Success(doctors);
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Doctor>>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
         }
 
         public async Task<Result<Doctor>> UpdateAsync(Doctor doctor)
@@ -56,7 +72,7 @@ namespace Infrastructure.Repositories
                 var existingDoctor = await _context.Doctors.FindAsync(doctor.Id);
                 if (existingDoctor == null)
                 {
-                    throw new KeyNotFoundException(DoctorNotFound);
+                    return Result<Doctor>.Failure(DoctorNotFound);
                 }
 
                 doctor.DateOfRegistration = doctor.DateOfRegistration.ToUniversalTime();
@@ -69,14 +85,14 @@ namespace Infrastructure.Repositories
 
                 if (newDoctor == null)
                 {
-                    throw new KeyNotFoundException(DoctorNotFound);
+                    return Result<Doctor>.Failure(DoctorNotFound);
                 }
 
                 return Result<Doctor>.Success(newDoctor);
             }
             catch (Exception ex)
             {
-                return Result<Doctor>.Failure(ex.InnerException!.ToString());
+                return Result<Doctor>.Failure(ex.InnerException?.ToString() ?? ex.Message);
             }
         }
 
@@ -92,13 +108,21 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Doctor>> GetDoctorsByUsernameFilterAsync(string username)
+        public async Task<Result<IEnumerable<Doctor>>> GetDoctorsByUsernameFilterAsync(string username)
         {
-            return await _context.Doctors
-                .AsNoTracking()
-                .Include(d => d.MedicalRecords)
-                .Where(d => d.Username.Contains(username))
-                .ToListAsync();
+            try
+            {
+                var doctors = await _context.Doctors
+                    .AsNoTracking()
+                    .Include(d => d.MedicalRecords)
+                    .Where(d => d.Username.Contains(username))
+                    .ToListAsync();
+                return Result<IEnumerable<Doctor>>.Success(doctors);
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Doctor>>.Failure(ex.InnerException?.ToString() ?? ex.Message);
+            }
         }
 
         public Task<Guid> Register(Doctor doctor, CancellationToken cancellationToken)
@@ -112,3 +136,5 @@ namespace Infrastructure.Repositories
         }
     }
 }
+
+

@@ -5,6 +5,7 @@ using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
+using Xunit;
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -64,8 +65,8 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 MedicalRecords = new List<MedicalRecord>()
             };
 
-            _patientRepository.GetByIdAsync(command.PatientId).Returns(new Patient());
-            _doctorRepository.GetByIdAsync(command.DoctorId).Returns(doctor);
+            _patientRepository.GetByIdAsync(command.PatientId).Returns(Result<Patient>.Success(new Patient()));
+            _doctorRepository.GetByIdAsync(command.DoctorId).Returns(Result<Doctor>.Success(doctor));
             _mapper.Map<MedicalRecord>(command).Returns(medicalRecord);
             _medicalRecordRepository.AddAsync(medicalRecord).Returns(Result<Guid>.Success(medicalRecord.RecordId));
 
@@ -93,7 +94,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 DateOfVisit = DateTime.UtcNow
             };
 
-            _patientRepository.GetByIdAsync(command.PatientId).Returns((Patient?)null!);
+            _patientRepository.GetByIdAsync(command.PatientId).Returns(Result<Patient>.Failure("Patient not found."));
 
             // Act
             var handler = new CreateMedicalRecordCommandHandler(_medicalRecordRepository, _patientRepository, _doctorRepository, _mapper);
@@ -119,8 +120,8 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 DateOfVisit = DateTime.UtcNow
             };
 
-            _patientRepository.GetByIdAsync(command.PatientId).Returns(new Patient());
-            _doctorRepository.GetByIdAsync(command.DoctorId).Returns((Doctor)null!);
+            _patientRepository.GetByIdAsync(command.PatientId).Returns(Result<Patient>.Success(new Patient()));
+            _doctorRepository.GetByIdAsync(command.DoctorId).Returns(Result<Doctor>.Failure("Doctor not found."));
 
             // Act
             var handler = new CreateMedicalRecordCommandHandler(_medicalRecordRepository, _patientRepository, _doctorRepository, _mapper);
@@ -172,8 +173,8 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 MedicalRecords = new List<MedicalRecord>()
             };
 
-            _patientRepository.GetByIdAsync(command.PatientId).Returns(new Patient());
-            _doctorRepository.GetByIdAsync(command.DoctorId).Returns(doctor);
+            _patientRepository.GetByIdAsync(command.PatientId).Returns(Result<Patient>.Success(new Patient()));
+            _doctorRepository.GetByIdAsync(command.DoctorId).Returns(Result<Doctor>.Success(doctor));
             _mapper.Map<MedicalRecord>(command).Returns(medicalRecord);
             _medicalRecordRepository.AddAsync(medicalRecord).Returns(Result<Guid>.Failure("Error adding medical record"));
 
@@ -187,3 +188,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         }
     }
 }
+
+
+
+

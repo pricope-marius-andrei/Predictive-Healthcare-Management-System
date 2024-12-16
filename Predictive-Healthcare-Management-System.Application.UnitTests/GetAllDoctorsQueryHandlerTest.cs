@@ -2,9 +2,11 @@ using Application.DTOs;
 using Application.UseCases.Queries.Doctor;
 using Application.UseCases.QueryHandlers.Doctor;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
+using Xunit;
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -24,7 +26,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         {
             // Arrange
             List<Doctor> doctors = GenerateDoctors();
-            _repository.GetAllAsync().Returns(doctors);
+            _repository.GetAllAsync().Returns(Result<IEnumerable<Doctor>>.Success(doctors));
             var query = new GetAllDoctorsQuery();
             _mapper.Map<IEnumerable<DoctorDto>>(doctors).Returns(new List<DoctorDto>
                 {
@@ -57,25 +59,25 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(2, result.Count());
-            Assert.Equal(doctors[0].Id, result.First().DoctorId);
-            Assert.Equal(doctors[0].FirstName, result.First().FirstName);
-            Assert.Equal(doctors[0].Username, result.First().Username);
-            Assert.Equal(doctors[0].LastName, result.First().LastName);
-            Assert.Equal(doctors[0].Email, result.First().Email);
-            Assert.Equal(doctors[0].Specialization, result.First().Specialization);
-            Assert.Equal(doctors[0].PhoneNumber, result.First().PhoneNumber);
-            Assert.Equal(doctors[0].DateOfRegistration, result.First().DateOfRegistration);
+            Assert.True(result.IsSuccess);
+            Assert.Equal(2, result.Data.Count());
+            Assert.Equal(doctors[0].Id, result.Data.First().DoctorId);
+            Assert.Equal(doctors[0].FirstName, result.Data.First().FirstName);
+            Assert.Equal(doctors[0].Username, result.Data.First().Username);
+            Assert.Equal(doctors[0].LastName, result.Data.First().LastName);
+            Assert.Equal(doctors[0].Email, result.Data.First().Email);
+            Assert.Equal(doctors[0].Specialization, result.Data.First().Specialization);
+            Assert.Equal(doctors[0].PhoneNumber, result.Data.First().PhoneNumber);
+            Assert.Equal(doctors[0].DateOfRegistration, result.Data.First().DateOfRegistration);
 
-            Assert.Equal(doctors[1].Id, result.Last().DoctorId);
-            Assert.Equal(doctors[1].FirstName, result.Last().FirstName);
-            Assert.Equal(doctors[1].Username, result.Last().Username);
-            Assert.Equal(doctors[1].LastName, result.Last().LastName);
-            Assert.Equal(doctors[1].Email, result.Last().Email);
-            Assert.Equal(doctors[1].Specialization, result.Last().Specialization);
-            Assert.Equal(doctors[1].PhoneNumber, result.Last().PhoneNumber);
-            Assert.Equal(doctors[1].DateOfRegistration, result.Last().DateOfRegistration);
+            Assert.Equal(doctors[1].Id, result.Data.Last().DoctorId);
+            Assert.Equal(doctors[1].FirstName, result.Data.Last().FirstName);
+            Assert.Equal(doctors[1].Username, result.Data.Last().Username);
+            Assert.Equal(doctors[1].LastName, result.Data.Last().LastName);
+            Assert.Equal(doctors[1].Email, result.Data.Last().Email);
+            Assert.Equal(doctors[1].Specialization, result.Data.Last().Specialization);
+            Assert.Equal(doctors[1].PhoneNumber, result.Data.Last().PhoneNumber);
+            Assert.Equal(doctors[1].DateOfRegistration, result.Data.Last().DateOfRegistration);
         }
 
         private static List<Doctor> GenerateDoctors()

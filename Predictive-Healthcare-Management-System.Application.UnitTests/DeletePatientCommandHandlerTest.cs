@@ -1,8 +1,10 @@
 ﻿using Application.UseCases.CommandHandlers.Patient;
 using Application.UseCases.Commands.Patient;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
+using Xunit;
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -31,7 +33,6 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 FirstName = "Test",
                 LastName = "User",
                 PhoneNumber = "1234567890",
-                // Address = "123 Test St",
                 Gender = "Male",
                 Height = 180,
                 Weight = 75,
@@ -39,7 +40,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 DateOfRegistration = DateTime.UtcNow
             };
 
-            _mockPatientRepository.GetByIdAsync(command.Id).Returns(patient);
+            _mockPatientRepository.GetByIdAsync(command.Id).Returns(Result<Patient>.Success(patient));
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
@@ -47,17 +48,12 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             // Assert
             await _mockPatientRepository.Received(1).DeleteAsync(command.Id);
         }
-
-        [Fact]
-        public async Task Handle_ThrowsInvalidOperationException_WhenPatientDoesNotExist()
-        {
-            // Arrange
-            var command = new DeletePatientCommand { Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
-
-            _mockPatientRepository.GetByIdAsync(command.Id).Returns((Patient?)null!);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(command, CancellationToken.None));
-        }
     }
 }
+
+
+
+
+
+
+

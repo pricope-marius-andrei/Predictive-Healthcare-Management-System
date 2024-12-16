@@ -21,7 +21,7 @@ namespace Application.UseCases.Authentication
                 Password = request.Password
             };
             var token = await _userRepository.Login(user);
-            return token;
+            return token.Data;
         }
     }
 }

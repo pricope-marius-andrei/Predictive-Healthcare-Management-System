@@ -1,12 +1,13 @@
 ﻿using Application.DTOs;
 using Application.UseCases.Queries.Patient;
 using AutoMapper;
+using Domain.Common;
 using Domain.Repositories;
 using MediatR;
 
 namespace Application.UseCases.QueryHandlers.Patient
 {
-    public class GetAllPatientsQueryHandler : IRequestHandler<GetAllPatientsQuery, IEnumerable<PatientDto>>
+    public class GetAllPatientsQueryHandler : IRequestHandler<GetAllPatientsQuery, Result<IEnumerable<PatientDto>>>
     {
         private readonly IPatientRepository _repository;
         private readonly IMapper _mapper;
@@ -17,10 +18,35 @@ namespace Application.UseCases.QueryHandlers.Patient
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PatientDto>> Handle(GetAllPatientsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<PatientDto>>> Handle(GetAllPatientsQuery request, CancellationToken cancellationToken)
         {
-            var patients = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<PatientDto>>(patients);
+            var patientsResult = await _repository.GetAllAsync();
+            if (!patientsResult.IsSuccess)
+            {
+                return Result<IEnumerable<PatientDto>>.Failure(patientsResult.ErrorMessage);
+            }
+
+            var patientDtos = _mapper.Map<IEnumerable<PatientDto>>(patientsResult.Data);
+            return Result<IEnumerable<PatientDto>>.Success(patientDtos);
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

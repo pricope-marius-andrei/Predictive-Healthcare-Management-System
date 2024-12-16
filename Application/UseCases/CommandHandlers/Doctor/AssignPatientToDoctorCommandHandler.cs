@@ -22,31 +22,31 @@ namespace Application.UseCases.CommandHandlers.Doctor
 
             var patient = await _patientRepository.GetByIdAsync(request.PatientId);
 
-            patient.DoctorId = doctor.Id;
+            patient.Data.DoctorId = doctor.Data.Id;
 
-            var updateResult = await _patientRepository.UpdateAsync(patient);
+            var updateResult = await _patientRepository.UpdateAsync(patient.Data);
             if (!updateResult.IsSuccess)
             {
                 return Result<Domain.Entities.Doctor>.Failure("Failed to assign patient to doctor.");
             }
 
-            if (doctor.Patients == null)
+            if (doctor.Data.Patients == null)
             {
-                doctor.Patients = new List<Domain.Entities.Patient>();
+                doctor.Data.Patients = new List<Domain.Entities.Patient>();
             }
 
-            if (!doctor.Patients.Contains(patient))
+            if (!doctor.Data.Patients.Contains(patient.Data))
             {
-                doctor.Patients.Add(patient);
+                doctor.Data.Patients.Add(patient.Data);
             }
 
-            var doctorUpdateResult = await _doctorRepository.UpdateAsync(doctor);
+            var doctorUpdateResult = await _doctorRepository.UpdateAsync(doctor.Data);
             if (!doctorUpdateResult.IsSuccess)
             {
                 return Result<Domain.Entities.Doctor>.Failure("Failed to update doctor's patient list.");
             }
 
-            return Result<Domain.Entities.Doctor>.Success(doctor);
+            return Result<Domain.Entities.Doctor>.Success(doctor.Data);
         }
     }
 }

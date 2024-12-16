@@ -1,12 +1,13 @@
 ﻿using Application.DTOs;
 using Application.UseCases.Queries.Doctor;
 using AutoMapper;
+using Domain.Common;
 using Domain.Repositories;
 using MediatR;
 
 namespace Application.UseCases.QueryHandlers.Doctor
 {
-    public class GetDoctorByIdQueryHandler : IRequestHandler<GetDoctorByIdQuery, DoctorDto>
+    public class GetDoctorByIdQueryHandler : IRequestHandler<GetDoctorByIdQuery, Result<DoctorDto>>
     {
         private readonly IDoctorRepository _repository;
         private readonly IMapper _mapper;
@@ -17,17 +18,27 @@ namespace Application.UseCases.QueryHandlers.Doctor
             _mapper = mapper;
         }
 
-        public async Task<DoctorDto> Handle(GetDoctorByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<DoctorDto>> Handle(GetDoctorByIdQuery request, CancellationToken cancellationToken)
         {
-            var doctor = await _repository.GetByIdAsync(request.Id);
-
-            if (doctor == null)
+            var doctorResult = await _repository.GetByIdAsync(request.Id);
+            if (!doctorResult.IsSuccess)
             {
-                throw new KeyNotFoundException("Doctor not found.");
+                return Result<DoctorDto>.Failure(doctorResult.ErrorMessage);
             }
 
-            return _mapper.Map<DoctorDto>(doctor);
+            var doctorDto = _mapper.Map<DoctorDto>(doctorResult.Data);
+            return Result<DoctorDto>.Success(doctorDto);
         }
-
     }
 }
+
+
+
+
+
+
+
+
+
+
+

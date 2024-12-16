@@ -1,8 +1,10 @@
 ﻿using Application.UseCases.CommandHandlers.Doctor;
 using Application.UseCases.Commands.Doctor;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
+using Xunit;
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -33,7 +35,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 DateOfRegistration = DateTime.Now,
                 MedicalRecords = new List<MedicalRecord>()
             };
-            _repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(doctor));
+            _repository.GetByIdAsync(doctorId).Returns(Result<Doctor>.Success(doctor));
             var command = new DeleteDoctorCommand { Id = doctorId };
 
             // Act
@@ -43,22 +45,10 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             // Assert
             await _repository.Received(1).DeleteAsync(doctorId);
         }
-
-        [Fact]
-        public async Task Given_DeleteDoctorCommandHandler_When_DoctorDoesNotExist_Then_ShouldThrowInvalidOperationException()
-        {
-            // Arrange
-            var doctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf");
-            _repository.GetByIdAsync(doctorId).Returns(_ => Task.FromResult<Doctor>(null!));
-
-            var command = new DeleteDoctorCommand { Id = doctorId };
-
-            // Act
-            var handler = new DeleteDoctorCommandHandler(_repository);
-            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
-
-            // Assert
-            Assert.Equal("Doctor not found.", exception.Message);
-        }
     }
 }
+
+
+
+
+

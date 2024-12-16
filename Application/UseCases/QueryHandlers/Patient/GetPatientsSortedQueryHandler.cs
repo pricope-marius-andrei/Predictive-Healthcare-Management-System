@@ -27,13 +27,13 @@ namespace Application.UseCases.QueryHandlers.Patient
             switch (request.SortBy)
             {
                 case PatientSortBy.Username:
-                    sortedPatients = patients.OrderBy(p => p.Username).ToList();
+                    sortedPatients = patients.Data.OrderBy(p => p.Username).ToList();
                     break;
                 case PatientSortBy.Height:
-                    sortedPatients = patients.OrderBy(p => p.Height).ToList();
+                    sortedPatients = patients.Data.OrderBy(p => p.Height).ToList();
                     break;
                 case PatientSortBy.Weight:
-                    sortedPatients = patients.OrderBy(p => p.Weight).ToList();
+                    sortedPatients = patients.Data.OrderBy(p => p.Weight).ToList();
                     break;
                 default:
                     return Result<List<PatientDto>>.Failure("Invalid sort attribute specified.");

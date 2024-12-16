@@ -30,31 +30,31 @@ namespace Application.UseCases.CommandHandlers.Doctor
                 return Result<Domain.Entities.Doctor>.Failure("Patient not found.");
             }
 
-            if (patient.DoctorId != doctor.Id)
+            if (patient.Data.DoctorId != doctor.Data.Id)
             {
                 return Result<Domain.Entities.Doctor>.Failure("Patient is not assigned to this doctor.");
             }
 
-            patient.DoctorId = Guid.Empty; 
+            patient.Data.DoctorId = Guid.Empty; 
 
-            var updateResult = await _patientRepository.UpdateAsync(patient);
+            var updateResult = await _patientRepository.UpdateAsync(patient.Data);
             if (!updateResult.IsSuccess)
             {
                 return Result<Domain.Entities.Doctor>.Failure("Failed to remove patient from doctor.");
             }
 
-            if (doctor.Patients != null)
+            if (doctor.Data.Patients != null)
             {
-                doctor.Patients.Remove(patient);
+                doctor.Data.Patients.Remove(patient.Data);
             }
 
-            var doctorUpdateResult = await _doctorRepository.UpdateAsync(doctor);
+            var doctorUpdateResult = await _doctorRepository.UpdateAsync(doctor.Data);
             if (!doctorUpdateResult.IsSuccess)
             {
                 return Result<Domain.Entities.Doctor>.Failure("Failed to update doctor's patient list.");
             }
 
-            return Result<Domain.Entities.Doctor>.Success(doctor);
+            return Result<Domain.Entities.Doctor>.Success(doctor.Data);
         }
     }
 }

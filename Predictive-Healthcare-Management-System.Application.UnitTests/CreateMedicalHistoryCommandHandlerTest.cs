@@ -5,6 +5,7 @@ using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
+using Xunit;
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -31,7 +32,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         {
             // Arrange
             var command = new CreateMedicalHistoryCommand { PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
-            _mockPatientRepository.GetByIdAsync(Arg.Any<Guid>()).Returns((Patient)null!);
+            _mockPatientRepository.GetByIdAsync(Arg.Any<Guid>()).Returns(Result<Patient>.Failure("Patient not found."));
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -54,7 +55,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             var patient = new Patient { Id = command.PatientId };
             var medicalHistory = new MedicalHistory { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
-            _mockPatientRepository.GetByIdAsync(Arg.Any<Guid>()).Returns(patient);
+            _mockPatientRepository.GetByIdAsync(Arg.Any<Guid>()).Returns(Result<Patient>.Success(patient));
             _mockMapper.Map<MedicalHistory>(Arg.Any<CreateMedicalHistoryCommand>()).Returns(medicalHistory);
             _mockMedicalHistoryRepository.AddAsync(Arg.Any<MedicalHistory>()).Returns(Result<Guid>.Success(medicalHistory.HistoryId));
 
@@ -79,7 +80,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             var patient = new Patient { Id = command.PatientId };
             var medicalHistory = new MedicalHistory { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
-            _mockPatientRepository.GetByIdAsync(Arg.Any<Guid>()).Returns(patient);
+            _mockPatientRepository.GetByIdAsync(Arg.Any<Guid>()).Returns(Result<Patient>.Success(patient));
             _mockMapper.Map<MedicalHistory>(Arg.Any<CreateMedicalHistoryCommand>()).Returns(medicalHistory);
             _mockMedicalHistoryRepository.AddAsync(Arg.Any<MedicalHistory>()).Returns(Result<Guid>.Failure("Error adding medical history."));
 
@@ -92,3 +93,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         }
     }
 }
+
+
+
+

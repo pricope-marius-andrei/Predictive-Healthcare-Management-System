@@ -5,6 +5,9 @@ using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
+using System.Collections.Generic; // Add this using directive
+using System.Threading;
+using System.Threading.Tasks; // Add this using directive
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -26,7 +29,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         {
             // Arrange
             var command = new UpdateMedicalHistoryCommand { HistoryId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
-            _mockMedicalHistoryRepository.GetByIdAsync(command.HistoryId).Returns((MedicalHistory?)null!);
+            _mockMedicalHistoryRepository.GetByIdAsync(command.HistoryId).Returns(Task.FromResult(Result<MedicalHistory>.Failure("Medical history not found")));
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -63,9 +66,9 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 DateOfDiagnosis = command.DateOfDiagnosis
             };
 
-            _mockMedicalHistoryRepository.GetByIdAsync(command.HistoryId).Returns(existingMedicalHistory);
+            _mockMedicalHistoryRepository.GetByIdAsync(command.HistoryId).Returns(Task.FromResult(Result<MedicalHistory>.Success(existingMedicalHistory)));
             _mockMapper.Map<MedicalHistory>(command).Returns(updatedMedicalHistory);
-            _mockMedicalHistoryRepository.UpdateAsync(updatedMedicalHistory).Returns(Result<MedicalHistory>.Success(updatedMedicalHistory));
+            _mockMedicalHistoryRepository.UpdateAsync(updatedMedicalHistory).Returns(Task.FromResult(Result<MedicalHistory>.Success(updatedMedicalHistory)));
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -76,3 +79,6 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         }
     }
 }
+
+
+

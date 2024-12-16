@@ -5,7 +5,7 @@ using Domain.Common;
 using Domain.Repositories;
 using MediatR;
 
-namespace Application.UseCases.Queries.MedicalRecord
+namespace Application.UseCases.QueryHandlers.MedicalHistory
 {
     public class GetMedicalHistoriesSortedQueryHandler : IRequestHandler<GetMedicalHistoriesSortedQuery, Result<List<MedicalHistoryDto>>>
     {
@@ -27,10 +27,10 @@ namespace Application.UseCases.Queries.MedicalRecord
             switch (request.SortBy)
             {
                 case MedicalHistorySortBy.DateOfDiagnosis:
-                    sortedHistories = medicalHistories.OrderByDescending(m => m.DateOfDiagnosis).ToList();
+                    sortedHistories = medicalHistories.Data.OrderByDescending(m => m.DateOfDiagnosis).ToList();
                     break;
                 case MedicalHistorySortBy.Condition:
-                    sortedHistories = medicalHistories.OrderBy(m => m.Condition).ToList();
+                    sortedHistories = medicalHistories.Data.OrderBy(m => m.Condition).ToList();
                     break;
                 default:
                     return Result<List<MedicalHistoryDto>>.Failure("Invalid sort attribute specified.");

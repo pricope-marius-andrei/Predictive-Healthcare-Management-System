@@ -36,7 +36,7 @@ namespace Application.UseCases.CommandHandlers.Doctor
 
             _mapper.Map(request, existingDoctor);
 
-            var updateResult = await _repository.UpdateAsync(existingDoctor);
+            var updateResult = await _repository.UpdateAsync(existingDoctor.Data);
             if (updateResult.IsSuccess)
             {
                 return Result<Domain.Entities.Doctor>.Success(updateResult.Data);

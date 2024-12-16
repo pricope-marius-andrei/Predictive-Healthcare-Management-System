@@ -2,9 +2,13 @@
 using Application.UseCases.Queries.Patient;
 using Application.UseCases.QueryHandlers.Patient;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
+using System.Collections.Generic; // Add this using directive
+using System.Threading;
+using System.Threading.Tasks; // Add this using directive
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -58,14 +62,15 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 DateOfRegistration = patient.DateOfRegistration
             };
 
-            _mockPatientRepository.GetByIdAsync(query.Id).Returns(patient);
+            _mockPatientRepository.GetByIdAsync(query.Id).Returns(Task.FromResult(Result<Patient>.Success(patient)));
             _mockMapper.Map<PatientDto>(patient).Returns(patientDto);
 
             // Act
             var response = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.Equal(patientDto, response);
+            Assert.True(response.IsSuccess);
+            Assert.Equal(patientDto, response.Data);
         }
 
         [Fact]
@@ -74,10 +79,14 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             // Arrange
             var query = new GetPatientByIdQuery { Id = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf") };
 
-            _mockPatientRepository.GetByIdAsync(query.Id).Returns((Patient?)null!);
+            _mockPatientRepository.GetByIdAsync(query.Id).Returns(Task.FromResult(Result<Patient>.Failure("Patient not found")));
 
             // Act & Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => _handler.Handle(query, CancellationToken.None));
+            var exception = await Assert.ThrowsAsync<KeyNotFoundException>(() => _handler.Handle(query, CancellationToken.None));
+            Assert.Equal("Patient not found", exception.Message);
         }
     }
 }
+
+
+

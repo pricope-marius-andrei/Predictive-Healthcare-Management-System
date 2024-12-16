@@ -11,6 +11,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain.Common;
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -80,7 +81,8 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             };
 
             // Mock repository to return the list of patients
-            _repositoryMock.GetAllAsync().Returns(patients);
+            _repositoryMock.GetPaginatedAsync(Arg.Any<IEnumerable<Domain.Entities.Patient>>(), Arg.Any<int>(), Arg.Any<int>())
+                .Returns(Task.FromResult(Result<List<Domain.Entities.Patient>>.Success(patients)));
 
             // Prepare the expected DTOs
             var patientDtos = patients.Select(p => new PatientDto
@@ -136,3 +138,6 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         }
     }
 }
+
+
+

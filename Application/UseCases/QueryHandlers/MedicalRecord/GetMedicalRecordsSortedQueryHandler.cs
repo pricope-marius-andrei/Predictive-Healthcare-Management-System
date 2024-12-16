@@ -27,10 +27,10 @@ namespace Application.UseCases.QueryHandlers.MedicalRecord
             switch (request.SortBy)
             {
                 case MedicalRecordSortBy.VisitReason:
-                    sortedRecords = medicalRecords.OrderBy(m => m.VisitReason).ToList();
+                    sortedRecords = medicalRecords.Data.OrderBy(m => m.VisitReason).ToList();
                     break;
                 case MedicalRecordSortBy.Symptoms:
-                    sortedRecords = medicalRecords.OrderBy(m => m.Symptoms).ToList();
+                    sortedRecords = medicalRecords.Data.OrderBy(m => m.Symptoms).ToList();
                     break;
                 default:
                     return Result<List<MedicalRecordDto>>.Failure("Invalid sort attribute specified.");
