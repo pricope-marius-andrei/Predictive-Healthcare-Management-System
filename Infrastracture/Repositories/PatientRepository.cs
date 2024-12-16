@@ -14,21 +14,6 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Result<Guid>> AddAsync(Patient patient)
-        {
-            ArgumentNullException.ThrowIfNull(patient);
-            try
-            {
-                await _context.Patients.AddAsync(patient);
-                await _context.SaveChangesAsync();
-                return Result<Guid>.Success(patient.Id);
-            }
-            catch (Exception ex)
-            {
-                return Result<Guid>.Failure(ex.InnerException!.ToString());
-            }
-        }
-
         public async Task<Patient> GetByIdAsync(Guid id)
         {
             var patient = await _context.Patients
@@ -84,16 +69,6 @@ namespace Infrastructure.Repositories
 
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<Patient>> GetPatientsByUsernameFilterAsync(string username)
-        {
-            return await _context.Patients
-                .AsNoTracking()
-                .Include(p => p.MedicalHistories)
-                .Include(p => p.MedicalRecords)
-                .Where(p => p.Username.Contains(username))
-                .ToListAsync();
         }
 
         public async Task<IEnumerable<Patient>> GetPatientsByDoctorIdAsync(Guid doctorId)

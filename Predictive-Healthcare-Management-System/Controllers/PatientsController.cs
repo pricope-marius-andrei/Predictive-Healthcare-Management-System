@@ -103,10 +103,8 @@ namespace Predictive_Healthcare_Management_System.Controllers
             {
                 return Ok(result.Data);
             }
-            else
-            {
-                return BadRequest(result.ErrorMessage);
-            }
+
+            return BadRequest(result.ErrorMessage);
         }
 
         [HttpGet("sorted")]

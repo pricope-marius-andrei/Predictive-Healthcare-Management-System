@@ -7,9 +7,9 @@ namespace Domain.Repositories
     {
         Task<IEnumerable<Doctor>> GetAllAsync();
         Task<Doctor> GetByIdAsync(Guid id);
-        Task<Result<Guid>> AddAsync(Doctor doctor);
         Task<Result<Doctor>> UpdateAsync(Doctor doctor);
         Task DeleteAsync(Guid id);
-        Task<IEnumerable<Doctor>> GetDoctorsByUsernameFilterAsync(string username);
+        Task<int> CountAsync(IEnumerable<Doctor> query);
+        Task<List<Doctor>> GetPaginatedAsync(IEnumerable<Doctor> query, int page, int pageSize);
     }
 }
