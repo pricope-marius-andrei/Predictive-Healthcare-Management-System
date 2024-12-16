@@ -16,21 +16,6 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Result<Guid>> AddAsync(Doctor doctor)
-        {
-            ArgumentNullException.ThrowIfNull(doctor);
-            try
-            {
-                await _context.Doctors.AddAsync(doctor);
-                await _context.SaveChangesAsync();
-                return Result<Guid>.Success(doctor.Id);
-            }
-            catch (Exception ex)
-            {
-                return Result<Guid>.Failure(ex.InnerException!.ToString());
-            }
-        }
-
         public async Task<Doctor> GetByIdAsync(Guid id)
         {
             var doctor = await _context.Doctors
@@ -92,23 +77,20 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Doctor>> GetDoctorsByUsernameFilterAsync(string username)
+        public async Task<int> CountAsync(IEnumerable<Doctor> doctors)
         {
-            return await _context.Doctors
-                .AsNoTracking()
-                .Include(d => d.MedicalRecords)
-                .Where(d => d.Username.Contains(username))
-                .ToListAsync();
+            int count = doctors.Count();
+            return await Task.FromResult(count);
         }
 
-        public Task<Guid> Register(Doctor doctor, CancellationToken cancellationToken)
+        public async Task<List<Doctor>> GetPaginatedAsync(IEnumerable<Doctor> doctors, int page, int pageSize)
         {
-            throw new NotImplementedException();
-        }
+            var pagedDoctors = doctors
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
-        public Task<string> Login(Doctor doctor)
-        {
-            throw new NotImplementedException();
+            return await Task.FromResult(pagedDoctors);
         }
     }
 }
