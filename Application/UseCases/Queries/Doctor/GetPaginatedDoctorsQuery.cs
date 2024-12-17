@@ -8,7 +8,7 @@ namespace Application.UseCases.Queries.Doctor
     public class GetPaginatedDoctorsQuery : IRequest<Result<PagedResult<DoctorDto>>>
     {
         public int Page { get; set; }
-
         public int PageSize { get; set; }
+        public string? Username { get; set; }
     }
 }

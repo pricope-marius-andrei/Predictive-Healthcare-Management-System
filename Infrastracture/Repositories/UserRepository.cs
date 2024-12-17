@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Application.UseCases.Authentication;
 using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
@@ -23,18 +24,46 @@ namespace Infrastructure.Repositories
 
         public async Task<string> Login(User user)
         {
-            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Email == user.Email);
-            if (existingUser == null)
+            var doctor = await _context.Set<Doctor>().SingleOrDefaultAsync(u => u.Email == user.Email);
+            var patient = await _context.Set<Patient>().SingleOrDefaultAsync(u => u.Email == user.Email);
+
+            if (doctor == null && patient == null)
+            {
+                throw new UnauthorizedAccessException("Invalid credentials");
+            }
+
+            EUserType userType;
+            User existingUser;
+
+            if (doctor != null)
+            {
+                existingUser = doctor;
+                userType = EUserType.Doctor;
+            }
+            else
+            {
+                existingUser = patient;
+                userType = EUserType.Patient;
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(user.Password, existingUser.Password))
             {
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]!);
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, existingUser.Id.ToString()),
+                new Claim("UserType", userType.ToString())
+            };
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, existingUser.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddMinutes(60),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

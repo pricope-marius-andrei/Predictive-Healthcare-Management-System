@@ -4,7 +4,6 @@ using Application.Utils;
 using AutoMapper;
 using Domain.Common;
 using Domain.Repositories;
-using Gridify;
 using MediatR;
 
 namespace Application.UseCases.QueryHandlers.Doctor
@@ -23,13 +22,20 @@ namespace Application.UseCases.QueryHandlers.Doctor
         public async Task<Result<PagedResult<DoctorDto>>> Handle(GetPaginatedDoctorsQuery request, CancellationToken cancellationToken)
         {
             var doctors = await _repository.GetAllAsync();
-            var query = doctors.AsQueryable();
 
-            var pagedDoctors = query.ApplyPaging(request.Page, request.PageSize);
+            if (!string.IsNullOrWhiteSpace(request.Username))
+            {
+                doctors = doctors
+                    .Where(p => p.Username.Contains(request.Username, StringComparison.OrdinalIgnoreCase));
+            }
+
+            int totalCount = await _repository.CountAsync(doctors);
+
+            var pagedDoctors = await _repository.GetPaginatedAsync(doctors, request.Page, request.PageSize);
 
             var doctorDtos = _mapper.Map<List<DoctorDto>>(pagedDoctors);
 
-            var pagedResult = new PagedResult<DoctorDto>(doctorDtos, query.Count());
+            var pagedResult = new PagedResult<DoctorDto>(doctorDtos, totalCount);
 
             return Result<PagedResult<DoctorDto>>.Success(pagedResult);
         }
