@@ -1,8 +1,9 @@
+using Domain.Common;
 using MediatR;
 
 namespace Application.UseCases.Authentication
 {
-    public class RegisterUserCommand : IRequest<Guid>
+    public class RegisterUserCommand : IRequest<Result<Guid>>
     {
         public EUserType UserType { get; set; }
         public string Email { get; set; }

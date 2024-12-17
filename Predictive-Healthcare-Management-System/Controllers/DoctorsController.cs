@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.UseCases.Commands.Doctor;
+using Application.UseCases.Commands.MedicalHistory;
 using Application.UseCases.Queries.Doctor;
 using Application.Utils;
 using Domain.Common;
@@ -23,15 +24,12 @@ namespace Predictive_Healthcare_Management_System.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<DoctorDto>> GetDoctorById(Guid id)
         {
-            try
+            var result = await _mediator.Send(new GetDoctorByIdQuery { Id = id });
+            if (result.IsSuccess)
             {
-                var doctor = await _mediator.Send(new GetDoctorByIdQuery { Id = id });
-                return Ok(doctor);
+                return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return NotFound($"Internal server error: {ex.Message}");
-            }
+            return NotFound(result.ErrorMessage);
         }
 
         [HttpDelete("{id:guid}")]
@@ -40,26 +38,23 @@ namespace Predictive_Healthcare_Management_System.Controllers
             try
             {
                 await _mediator.Send(new DeleteDoctorCommand { Id = id });
-                return NoContent();
+                return StatusCode(StatusCodes.Status204NoContent);
             }
             catch
             {
-                return NotFound($"Doctor with ID {id} Not Found.");
+                return NotFound($"Medical history with ID {id} not found.");
             }
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DoctorDto>>> GetAllDoctors()
         {
-            try
+            var result = await _mediator.Send(new GetAllDoctorsQuery());
+            if (result.IsSuccess)
             {
-                var doctors = await _mediator.Send(new GetAllDoctorsQuery());
-                return Ok(doctors);
+                return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpPut("{id:guid}")]
@@ -70,16 +65,12 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 return BadRequest($"Doctor {id} in the path does not match the ID in the request body.");
             }
 
-            try
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess)
             {
-                var result = await _mediator.Send(command);
-
                 return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpGet("sorted")]
@@ -89,8 +80,9 @@ namespace Predictive_Healthcare_Management_System.Controllers
             var result = await _mediator.Send(query);
 
             if (result.IsSuccess)
+            {
                 return Ok(result.Data);
-
+            }
             return BadRequest(result.ErrorMessage);
         }
 
@@ -197,4 +189,5 @@ namespace Predictive_Healthcare_Management_System.Controllers
             return BadRequest(result.ErrorMessage);
         }
     }
-}   
+}
+

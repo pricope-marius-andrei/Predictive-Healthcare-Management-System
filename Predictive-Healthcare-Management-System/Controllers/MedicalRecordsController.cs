@@ -23,62 +23,46 @@ namespace Predictive_Healthcare_Management_System.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MedicalRecordDto>>> GetAllMedicalRecords()
         {
-            try
+            var result = await _mediator.Send(new GetAllMedicalRecordsQuery());
+            if (result.IsSuccess)
             {
-                var medicalRecords = await _mediator.Send(new GetAllMedicalRecordsQuery());
-                return Ok(medicalRecords);
+                return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<MedicalRecordDto>> GetMedicalRecordById(Guid id)
         {
-            try
+            var result = await _mediator.Send(new GetMedicalRecordByIdQuery { RecordId = id });
+            if (result.IsSuccess)
             {
-                var medicalRecord = await _mediator.Send(new GetMedicalRecordByIdQuery { RecordId = id });
-                return Ok(medicalRecord);
+                return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return NotFound($"Internal server error: {ex.Message}");
-            }
+            return NotFound(result.ErrorMessage);
         }
 
         [HttpGet("patient/{patientId}")]
         public async Task<ActionResult<IEnumerable<MedicalRecordDto>>> GetMedicalRecordsByPatientId(Guid patientId)
         {
-            try
+            var query = new GetMedicalRecordsByPatientIdQuery { PatientId = patientId };
+            var result = await _mediator.Send(query);
+            if (result.IsSuccess)
             {
-                var query = new GetMedicalRecordsByPatientIdQuery { PatientId = patientId };
-                var result = await _mediator.Send(query);
-                return Ok(result);
+                return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpPost]
         public async Task<ActionResult<Result<Guid>>> CreateMedicalRecord(CreateMedicalRecordCommand command)
         {
-            try
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess)
             {
-                var result = await _mediator.Send(command);
-                if (result.IsSuccess)
-                {
-                    return CreatedAtAction(nameof(GetMedicalRecordById), new { id = result.Data }, result.Data);
-                }
-                return BadRequest(result.ErrorMessage);
+                return CreatedAtAction(nameof(GetMedicalRecordById), new { id = result.Data }, result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return BadRequest(result.ErrorMessage);
         }
 
         [HttpPut("{id:guid}")]
@@ -89,19 +73,12 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 return BadRequest("Medical record ID in the path does not match the ID in the request body.");
             }
 
-            try
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess)
             {
-                var result = await _mediator.Send(command);
-                if (result.IsSuccess)
-                {
-                    return Ok(result.Data);
-                }
-                return BadRequest(result.ErrorMessage);
+                return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return BadRequest(result.ErrorMessage);
         }
 
         [HttpDelete("{id:guid}")]
@@ -127,7 +104,11 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 PageSize = pageSize
             };
             var result = await _mediator.Send(query);
-            return Ok(result);
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpGet("sorted")]
@@ -137,9 +118,11 @@ namespace Predictive_Healthcare_Management_System.Controllers
             var result = await _mediator.Send(query);
 
             if (result.IsSuccess)
+            {
                 return Ok(result.Data);
-
+            }
             return BadRequest(result.ErrorMessage);
         }
     }
 }
+

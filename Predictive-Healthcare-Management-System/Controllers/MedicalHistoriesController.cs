@@ -23,29 +23,23 @@ namespace Predictive_Healthcare_Management_System.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MedicalHistoryDto>>> GetAllMedicalHistories()
         {
-            try
+            var result = await _mediator.Send(new GetAllMedicalHistoriesQuery());
+            if (result.IsSuccess)
             {
-                var medicalHistories = await _mediator.Send(new GetAllMedicalHistoriesQuery());
-                return Ok(medicalHistories);
+                return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<MedicalHistoryDto>> GetMedicalHistoryById(Guid id)
         {
-            try
+            var result = await _mediator.Send(new GetMedicalHistoryByIdQuery { HistoryId = id });
+            if (result.IsSuccess)
             {
-                var medicalHistory = await _mediator.Send(new GetMedicalHistoryByIdQuery { HistoryId = id });
-                return Ok(medicalHistory);
+                return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return NotFound($"Internal server error: {ex.Message}");
-            }
+            return NotFound(result.ErrorMessage);
         }
 
         [HttpGet("patient/{patientId}")]
@@ -53,21 +47,22 @@ namespace Predictive_Healthcare_Management_System.Controllers
         {
             var query = new GetMedicalHistoriesByPatientIdQuery { PatientId = patientId };
             var result = await _mediator.Send(query);
-            return Ok(result);
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpPost]
         public async Task<ActionResult<Result<Guid>>> CreateMedicalHistory(CreateMedicalHistoryCommand command)
         {
-            try
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess)
             {
-                var result = await _mediator.Send(command);
                 return CreatedAtAction(nameof(GetMedicalHistoryById), new { id = result.Data }, result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpPut("{id:guid}")]
@@ -78,15 +73,12 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 return BadRequest("Medical history ID in the path does not match the ID in the request body.");
             }
 
-            try
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess)
             {
-                var result = await _mediator.Send(command);
                 return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpDelete("{id:guid}")]
@@ -112,7 +104,11 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 PageSize = pageSize
             };
             var result = await _mediator.Send(query);
-            return Ok(result);
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpGet("sorted")]
@@ -122,9 +118,11 @@ namespace Predictive_Healthcare_Management_System.Controllers
             var result = await _mediator.Send(query);
 
             if (result.IsSuccess)
+            {
                 return Ok(result.Data);
-
+            }
             return BadRequest(result.ErrorMessage);
         }
     }
 }
+

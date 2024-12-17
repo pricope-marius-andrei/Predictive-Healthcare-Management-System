@@ -23,29 +23,23 @@ namespace Predictive_Healthcare_Management_System.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PatientDto>> GetPatientById(Guid id)
         {
-            try
+            var result = await _mediator.Send(new GetPatientByIdQuery { Id = id });
+            if (result.IsSuccess)
             {
-                var patient = await _mediator.Send(new GetPatientByIdQuery { Id = id });
-                return Ok(patient);
+                return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return NotFound($"Internal server error: {ex.Message}");
-            }
+            return NotFound(result.ErrorMessage);
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetAllPatients()
         {
-            try
+            var result = await _mediator.Send(new GetAllPatientsQuery());
+            if (result.IsSuccess)
             {
-                var patients = await _mediator.Send(new GetAllPatientsQuery());
-                return Ok(patients);
+                return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpPut("{id:guid}")]
@@ -56,16 +50,12 @@ namespace Predictive_Healthcare_Management_System.Controllers
                 return BadRequest("Patient ID in the path does not match the ID in the request body.");
             }
 
-            try
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess)
             {
-                var result = await _mediator.Send(command);
-
                 return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return StatusCode(500, result.ErrorMessage);
         }
 
         [HttpDelete("{id:guid}")]
@@ -110,18 +100,15 @@ namespace Predictive_Healthcare_Management_System.Controllers
         [HttpGet("sorted")]
         public async Task<ActionResult<Result<List<PatientDto>>>> GetSortedPatients([FromQuery] PatientSortBy sortBy)
         {
-            try
+            var query = new GetPatientsSortedQuery(sortBy);
+            var result = await _mediator.Send(query);
+            if (result.IsSuccess)
             {
-                var query = new GetPatientsSortedQuery(sortBy);
-                var result = await _mediator.Send(query);
-                if (result.IsSuccess)
-                    return Ok(result.Data);
-                return BadRequest(result.ErrorMessage);
+                return Ok(result.Data);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return BadRequest(result.ErrorMessage);
         }
     }
 }
+
+

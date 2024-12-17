@@ -1,10 +1,13 @@
-﻿using Domain.Entities;
+﻿using Domain.Common;
+using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.UseCases.Authentication
 {
-    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Guid>
+    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Result<Guid>>
     {
         private readonly IUserRepository _repository;
 
@@ -13,15 +16,27 @@ namespace Application.UseCases.Authentication
             _repository = repository;
         }
 
-        public async Task<Guid> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            ValidateRequest(request);
+            try
+            {
+                ValidateRequest(request);
 
-            User user = CreateUserEntity(request);
+                User user = CreateUserEntity(request);
 
-            await _repository.Register(user, cancellationToken);
+                var result = await _repository.Register(user, cancellationToken);
 
-            return user.Id;
+                if (result.IsSuccess)
+                {
+                    return Result<Guid>.Success(user.Id);
+                }
+
+                return Result<Guid>.Failure(result.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return Result<Guid>.Failure(ex.Message);
+            }
         }
 
         private void ValidateRequest(RegisterUserCommand request)
@@ -81,3 +96,4 @@ namespace Application.UseCases.Authentication
         }
     }
 }
+
