@@ -15,7 +15,6 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-
         public async Task<Result<Guid>> AddAsync(Doctor doctor)
         {
             ArgumentNullException.ThrowIfNull(doctor);
@@ -125,14 +124,20 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public Task<Guid> Register(Doctor doctor, CancellationToken cancellationToken)
+        public async Task<int> CountAsync(IEnumerable<Doctor> doctors)
         {
-            throw new NotImplementedException();
+            int count = doctors.Count();
+            return await Task.FromResult(count);
         }
 
-        public Task<string> Login(Doctor doctor)
+        public async Task<List<Doctor>> GetPaginatedAsync(IEnumerable<Doctor> doctors, int page, int pageSize)
         {
-            throw new NotImplementedException();
+            var pagedDoctors = doctors
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return await Task.FromResult(pagedDoctors);
         }
     }
 }

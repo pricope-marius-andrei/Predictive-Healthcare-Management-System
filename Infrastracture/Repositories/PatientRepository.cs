@@ -112,7 +112,6 @@ namespace Infrastructure.Repositories
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
         }
-
         public async Task<Result<IEnumerable<Patient>>> GetPatientsByUsernameFilterAsync(string username)
         {
             try

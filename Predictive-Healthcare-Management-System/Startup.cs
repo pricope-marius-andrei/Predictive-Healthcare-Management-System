@@ -1,6 +1,5 @@
-﻿using Application;
+using Application;
 using Infrastructure;
-using Infrastructure.Middlewares;
 using Microsoft.AspNetCore.Identity;
 
 namespace Predictive_Healthcare_Management_System
@@ -21,6 +20,8 @@ namespace Predictive_Healthcare_Management_System
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+            services.AddAuthentication();
+            services.AddAuthorization();
             services.AddHttpContextAccessor();
 
             services.AddControllers()
@@ -33,8 +34,6 @@ namespace Predictive_Healthcare_Management_System
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseMiddleware<ApiKeyMiddleware>();
-
             if (env.IsDevelopment())
             {
                 app.UseSwagger();

@@ -82,18 +82,6 @@ namespace Predictive_Healthcare_Management_System.Controllers
             }
         }
 
-        [HttpGet("paginated")]
-        public async Task<ActionResult<PagedResult<DoctorDto>>> GetPaginatedDoctors([FromQuery] int page, [FromQuery] int pageSize)
-        {
-            var query = new GetPaginatedDoctorsQuery
-            {
-                Page = page,
-                PageSize = pageSize
-            };
-            var result = await _mediator.Send(query);
-            return Ok(result);
-        }
-
         [HttpGet("sorted")]
         public async Task<ActionResult<Result<List<DoctorDto>>>> GetSortedDoctors([FromQuery] DoctorSortBy sortBy)
         {
@@ -106,17 +94,29 @@ namespace Predictive_Healthcare_Management_System.Controllers
             return BadRequest(result.ErrorMessage);
         }
 
-        [HttpGet("search")]
-        public async Task<IActionResult> GetDoctorsByUsername([FromQuery] string username)
+        [HttpGet("paginated")]
+        [ProducesResponseType(typeof(Result<PagedResult<DoctorDto>>), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        public async Task<IActionResult> GetPaginatedDoctors(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? username = null)
         {
-            if (string.IsNullOrWhiteSpace(username))
+            var query = new GetPaginatedDoctorsQuery
             {
-                return BadRequest("Username query parameter is required.");
+                Page = page,
+                PageSize = pageSize,
+                Username = username
+            };
+
+            var result = await _mediator.Send(query);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
             }
 
-            var query = new GetDoctorsByUsernameFilterQuery(username);
-            var doctors = await _mediator.Send(query);
-            return Ok(doctors);
+            return BadRequest(result.ErrorMessage);
         }
 
         [HttpPost("{doctorId}/assign-patient")]
@@ -193,10 +193,8 @@ namespace Predictive_Healthcare_Management_System.Controllers
             {
                 return Ok(result.Data);
             }
-            else
-            {
-                return BadRequest(result.ErrorMessage);
-            }
+
+            return BadRequest(result.ErrorMessage);
         }
     }
 }   
