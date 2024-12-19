@@ -31,7 +31,7 @@ namespace Application.UseCases.CommandHandlers.Patient
 
             var existingPatient = await _repository.GetByIdAsync(request.Id);
 
-            _mapper.Map(request, existingPatient);
+            _mapper.Map(request, existingPatient.Data);
 
             if (request.DoctorId.HasValue)
             {

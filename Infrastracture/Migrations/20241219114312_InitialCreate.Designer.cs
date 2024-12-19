@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241209170136_InitDb")]
-    partial class InitDb
+    [Migration("20241219114312_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -189,7 +189,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Doctor", "Doctor")
                         .WithMany("MedicalRecords")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Patient", "Patient")
@@ -205,9 +205,12 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Patient", b =>
                 {
-                    b.HasOne("Domain.Entities.Doctor", null)
+                    b.HasOne("Domain.Entities.Doctor", "Doctor")
                         .WithMany("Patients")
-                        .HasForeignKey("DoctorId");
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Doctor");
                 });
 
             modelBuilder.Entity("Domain.Entities.Doctor", b =>
