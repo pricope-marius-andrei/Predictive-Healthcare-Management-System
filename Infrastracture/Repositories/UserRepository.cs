@@ -9,12 +9,14 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
         private const string InvalidCredentials = "Invalid credentials.";
+        private const string UserExists = "The user with same email exists";
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
 
@@ -84,6 +86,12 @@ namespace Infrastructure.Repositories
         {
             try
             {
+                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+                if (existingUser != null)
+                {
+                    throw new Exception(UserExists);
+                }
+
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync(cancellationToken);
                 return Result<Guid>.Success(user.Id);
