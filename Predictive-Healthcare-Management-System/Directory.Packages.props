@@ -12,6 +12,8 @@
     <PackageVersion Include="FluentValidation" Version="11.11.0" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
     <PackageVersion Include="Gridify" Version="2.15.1" />
+    <PackageVersion Include="Habanero" Version="3.0.1" />
+    <PackageVersion Include="MailKit" Version="4.9.0" />
     <PackageVersion Include="MediatR" Version="12.4.1" />
     <PackageVersion Include="Microsoft.AspNetCore.Http" Version="2.1.34" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0" />

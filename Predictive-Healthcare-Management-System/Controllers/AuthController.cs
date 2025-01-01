@@ -1,5 +1,10 @@
 using Application.UseCases.Authentication;
+using Castle.Core.Smtp;
+using Domain.Entities;
+using Domain.Repositories;
+using Infrastructure.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Predictive_Healthcare_Management_System.Controllers
@@ -9,10 +14,13 @@ namespace Predictive_Healthcare_Management_System.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IUserRepository _userRepository;
+    
 
-        public AuthController(IMediator mediator)
+        public AuthController(IMediator mediator, IUserRepository userRepository)
         {
             _mediator = mediator;
+            _userRepository = userRepository;
         }
 
         [HttpPost("register")]
@@ -40,5 +48,32 @@ namespace Predictive_Healthcare_Management_System.Controllers
 
             return Ok(new { Token = token });
         }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordCommand command)
+        {
+            var token = await _mediator.Send(command);
+
+            if(token == null) 
+            {
+                return BadRequest();
+            }
+          
+            return Ok(new {Token = token});
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
+        {
+            var user = await _mediator.Send(command);
+
+            if (!user.IsSuccess)
+            {
+                return BadRequest();
+            }
+
+            return Ok(new { message = "Password reset successful." });
+        }
+
     }
 }
