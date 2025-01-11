@@ -19,13 +19,13 @@ namespace Application.UseCases.CommandHandlers.Doctor
         public async Task<Result<Domain.Entities.Doctor>> Handle(RemovePatientFromDoctorCommand request, CancellationToken cancellationToken)
         {
             var doctor = await _doctorRepository.GetByIdAsync(request.DoctorId);
-            if (doctor == null)
+            if (!doctor.IsSuccess)
             {
                 return Result<Domain.Entities.Doctor>.Failure("Doctor not found.");
             }
 
             var patient = await _patientRepository.GetByIdAsync(request.PatientId);
-            if (patient == null)
+            if (!patient.IsSuccess)
             {
                 return Result<Domain.Entities.Doctor>.Failure("Patient not found.");
             }
@@ -35,7 +35,7 @@ namespace Application.UseCases.CommandHandlers.Doctor
                 return Result<Domain.Entities.Doctor>.Failure("Patient is not assigned to this doctor.");
             }
 
-            patient.Data.DoctorId = Guid.Empty; 
+            //patient.Data.DoctorId = Guid.Empty; 
 
             var updateResult = await _patientRepository.UpdateAsync(patient.Data);
             if (!updateResult.IsSuccess)

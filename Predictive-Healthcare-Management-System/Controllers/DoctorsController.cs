@@ -13,6 +13,8 @@ namespace Predictive_Healthcare_Management_System.Controllers
     [ApiController]
     public class DoctorsController : ControllerBase
     {
+        private const string doctorNotFound = "Doctor not found!";
+        private const string patientNotFound = "Patient not found!";
         private readonly IMediator _mediator;
 
         public DoctorsController(IMediator mediator)
@@ -140,6 +142,11 @@ namespace Predictive_Healthcare_Management_System.Controllers
             if (result.IsSuccess)
             {
                 return Ok(result.Data);
+            }
+
+            if(result.ErrorMessage == doctorNotFound || result.ErrorMessage == patientNotFound)
+            {
+                return NotFound(result.ErrorMessage);
             }
 
             return BadRequest(result.ErrorMessage);

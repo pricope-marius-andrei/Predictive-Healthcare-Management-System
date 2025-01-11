@@ -26,6 +26,8 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 
 var app = builder.Build();
 
+//app.Urls.Add("http://localhost:8081");
+
 // Use CORS policy
 app.UseCors("AllowAngularApp");
 
@@ -44,7 +46,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 await app.RunAsync();
-
-
 
 public partial class Program {}

@@ -4,6 +4,7 @@ using Application.UseCases.Commands.MedicalHistory;
 using Application.UseCases.Commands.MedicalRecord;
 using Application.UseCases.Commands.Patient;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entities;
 
 namespace Application.Utils
@@ -46,7 +47,6 @@ namespace Application.Utils
                 .ForMember(dest => dest.DoctorId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Patients, opt => opt.MapFrom(src => src.Patients));
 
-            // CreateMap<CreateDoctorCommand, Doctor>();
             CreateMap<UpdateDoctorCommand, Doctor>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
