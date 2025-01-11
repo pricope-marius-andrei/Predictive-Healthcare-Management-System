@@ -34,25 +34,15 @@ namespace Application.UseCases.CommandHandlers.Doctor
                 return Result<Domain.Entities.Doctor>.Failure("Doctor not found.");
             }
 
-            _mapper.Map(request, existingDoctor);
+            var doctor = _mapper.Map<Domain.Entities.Doctor>(request);
 
-            var updateResult = await _repository.UpdateAsync(existingDoctor.Data);
+            var updateResult = await _repository.UpdateAsync(doctor);
             if (updateResult.IsSuccess)
             {
                 return Result<Domain.Entities.Doctor>.Success(updateResult.Data);
             }
 
             return Result<Domain.Entities.Doctor>.Failure(updateResult.ErrorMessage);
-
-            /*
-            var doctor = _mapper.Map<Domain.Entities.Doctor>(request);
-
-            var result = await _repository.UpdateAsync(doctor);
-            if (result.IsSuccess)
-            {
-                return Result<Domain.Entities.Doctor>.Success(result.Data);
             }
-            return Result<Domain.Entities.Doctor>.Failure(result.ErrorMessage);*/
-        }
     }
 }

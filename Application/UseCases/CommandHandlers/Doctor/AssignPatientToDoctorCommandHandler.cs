@@ -22,6 +22,17 @@ namespace Application.UseCases.CommandHandlers.Doctor
 
             var patient = await _patientRepository.GetByIdAsync(request.PatientId);
 
+            if(!doctor.IsSuccess)
+            {
+                return Result<Domain.Entities.Doctor>.Failure("Doctor not found!");
+            }
+
+            if (!patient.IsSuccess)
+            {
+                return Result<Domain.Entities.Doctor>.Failure("Patient not found!");
+            }
+            
+
             patient.Data.DoctorId = doctor.Data.Id;
 
             var updateResult = await _patientRepository.UpdateAsync(patient.Data);

@@ -1,10 +1,6 @@
 using Application.UseCases.Authentication;
-using Castle.Core.Smtp;
-using Domain.Entities;
 using Domain.Repositories;
-using Infrastructure.Repositories;
 using MediatR;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Predictive_Healthcare_Management_System.Controllers

@@ -76,7 +76,15 @@ namespace Infrastructure.Repositories
 
                 doctor.DateOfRegistration = doctor.DateOfRegistration.ToUniversalTime();
 
-                _context.Entry(existingDoctor).CurrentValues.SetValues(doctor);
+                foreach (var property in typeof(Doctor).GetProperties())
+                {
+                    var newValue = property.GetValue(doctor);
+                    if (newValue != null)
+                    {
+                        property.SetValue(existingDoctor, newValue);
+                    }
+                }
+
                 await _context.SaveChangesAsync();
 
                 var newDoctor = await _context.Doctors
