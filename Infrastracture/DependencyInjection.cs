@@ -25,6 +25,7 @@ namespace Infrastructure
             services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
             services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
+            services.AddScoped<ITokenGenerator,  TokenGenerator>();
 
             var key = Encoding.ASCII.GetBytes("ccUQ2Sr9mruC9Tua1Nss2Bg21jMWLgZiCpvNvsxX7Xc=,");
 

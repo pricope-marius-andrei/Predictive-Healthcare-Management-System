@@ -1,4 +1,5 @@
-﻿public class GuidTokenGenerator : ITokenGenerator
+﻿public class 
+    TokenGenerator : ITokenGenerator
 {
     public string GenerateToken()
     {
