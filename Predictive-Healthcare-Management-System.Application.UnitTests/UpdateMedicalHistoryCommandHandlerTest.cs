@@ -8,6 +8,7 @@ using NSubstitute;
 using System.Collections.Generic; // Add this using directive
 using System.Threading;
 using System.Threading.Tasks; // Add this using directive
+using Xunit;
 
 namespace Predictive_Healthcare_Management_System.Application.UnitTests
 {
@@ -67,7 +68,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             };
 
             _mockMedicalHistoryRepository.GetByIdAsync(command.HistoryId).Returns(Task.FromResult(Result<MedicalHistory>.Success(existingMedicalHistory)));
-            _mockMapper.Map<MedicalHistory>(command).Returns(updatedMedicalHistory);
+            _mockMapper.Map(command, existingMedicalHistory).Returns(updatedMedicalHistory);
             _mockMedicalHistoryRepository.UpdateAsync(updatedMedicalHistory).Returns(Task.FromResult(Result<MedicalHistory>.Success(updatedMedicalHistory)));
 
             // Act

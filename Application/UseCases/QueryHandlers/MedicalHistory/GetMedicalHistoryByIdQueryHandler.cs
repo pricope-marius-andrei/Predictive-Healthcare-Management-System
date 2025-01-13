@@ -4,6 +4,8 @@ using AutoMapper;
 using Domain.Common;
 using Domain.Repositories;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.UseCases.QueryHandlers.MedicalHistory
 {
@@ -21,28 +23,18 @@ namespace Application.UseCases.QueryHandlers.MedicalHistory
         public async Task<Result<MedicalHistoryDto>> Handle(GetMedicalHistoryByIdQuery request, CancellationToken cancellationToken)
         {
             var medicalHistoryResult = await _repository.GetByIdAsync(request.HistoryId);
-            if (!medicalHistoryResult.IsSuccess)
+
+            if (!medicalHistoryResult.IsSuccess || medicalHistoryResult.Data == null)
             {
-                return Result<MedicalHistoryDto>.Failure(medicalHistoryResult.ErrorMessage);
+                throw new KeyNotFoundException("Medical history not found");
             }
 
             var medicalHistoryDto = _mapper.Map<MedicalHistoryDto>(medicalHistoryResult.Data);
+
             return Result<MedicalHistoryDto>.Success(medicalHistoryDto);
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

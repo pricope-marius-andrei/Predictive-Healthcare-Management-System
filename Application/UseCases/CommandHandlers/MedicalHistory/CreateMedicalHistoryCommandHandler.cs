@@ -4,40 +4,51 @@ using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
+using MedicalHistoryEntity = Domain.Entities.MedicalHistory; // Add this alias
 
-namespace Application.UseCases.CommandHandlers.MedicalHistory;
-
-public class CreateMedicalHistoryCommandHandler : IRequestHandler<CreateMedicalHistoryCommand, Result<Guid>>
+namespace Application.UseCases.CommandHandlers.MedicalHistory
 {
-    private readonly IMedicalHistoryRepository _repository;
-    private readonly IPatientRepository _patientRepository;
-    private readonly IMapper _mapper;
-
-    public CreateMedicalHistoryCommandHandler(
-        IMedicalHistoryRepository repository,
-        IPatientRepository patientRepository,
-        IMapper mapper)
+    public class CreateMedicalHistoryCommandHandler : IRequestHandler<CreateMedicalHistoryCommand, Result<Guid>>
     {
-        _repository = repository;
-        _patientRepository = patientRepository;
-        _mapper = mapper;
-    }
+        private readonly IMedicalHistoryRepository _repository;
+        private readonly IPatientRepository _patientRepository;
+        private readonly IMapper _mapper;
 
-    public async Task<Result<Guid>> Handle(CreateMedicalHistoryCommand request, CancellationToken cancellationToken)
-    {
-        var patientExists = await _patientRepository.GetByIdAsync(request.PatientId) != null;
-        if (!patientExists)
+        public CreateMedicalHistoryCommandHandler(
+            IMedicalHistoryRepository repository,
+            IPatientRepository patientRepository,
+            IMapper mapper)
         {
-            return Result<Guid>.Failure("Patient not found.");
+            _repository = repository;
+            _patientRepository = patientRepository;
+            _mapper = mapper;
         }
 
-        var medicalHistory = _mapper.Map<Domain.Entities.MedicalHistory>(request);
-
-        var result = await _repository.AddAsync(medicalHistory);
-        if (result.IsSuccess)
+        public async Task<Result<Guid>> Handle(CreateMedicalHistoryCommand request, CancellationToken cancellationToken)
         {
-            return Result<Guid>.Success(result.Data);
+            var patientResult = await _patientRepository.GetByIdAsync(request.PatientId);
+
+            if (!patientResult.IsSuccess || patientResult.Data == null)
+            {
+                return Result<Guid>.Failure("Patient not found.");
+            }
+
+            var medicalHistory = _mapper.Map<MedicalHistoryEntity>(request); // Use the alias
+
+            var addResult = await _repository.AddAsync(medicalHistory);
+
+            if (!addResult.IsSuccess)
+            {
+                return Result<Guid>.Failure(addResult.ErrorMessage);
+            }
+
+            return Result<Guid>.Success(addResult.Data);
         }
-        return Result<Guid>.Failure(result.ErrorMessage);
     }
 }
+
+
+
+

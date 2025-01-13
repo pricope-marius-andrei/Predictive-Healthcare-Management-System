@@ -1,39 +1,51 @@
-﻿using Application.UseCases.Commands.MedicalRecord;
+﻿using Application.UseCases.CommandHandlers.MedicalRecord;
+using Application.UseCases.Commands.MedicalRecord;
 using AutoMapper;
 using Domain.Common;
+using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Application.UseCases.CommandHandlers.MedicalRecord;
-
-public class UpdateMedicalRecordCommandHandler : IRequestHandler<UpdateMedicalRecordCommand, Result<Domain.Entities.MedicalRecord>>
+namespace Application.UseCases.CommandHandlers.MedicalRecord
 {
-    private readonly IMedicalRecordRepository _repository;
-    private readonly IMapper _mapper;
-
-    public UpdateMedicalRecordCommandHandler(IMedicalRecordRepository repository, IMapper mapper)
+    public class UpdateMedicalRecordCommandHandler : IRequestHandler<UpdateMedicalRecordCommand, Result<Domain.Entities.MedicalRecord>>
     {
-        _repository = repository;
-        _mapper = mapper;
-    }
+        private readonly IMedicalRecordRepository _repository;
+        private readonly IMapper _mapper;
 
-    public async Task<Result<Domain.Entities.MedicalRecord>> Handle(UpdateMedicalRecordCommand request, CancellationToken cancellationToken)
-    {
-        var existingMedicalRecord = await _repository.GetByIdAsync(request.RecordId);
-        if (existingMedicalRecord == null)
+        public UpdateMedicalRecordCommandHandler(IMedicalRecordRepository repository, IMapper mapper)
         {
-            return Result<Domain.Entities.MedicalRecord>.Failure("Medical record not found.");
+            _repository = repository;
+            _mapper = mapper;
         }
 
-        var medicalRecord = _mapper.Map<Domain.Entities.MedicalRecord>(request);
-        medicalRecord.PatientId = existingMedicalRecord.Data.PatientId;
-        medicalRecord.DoctorId = existingMedicalRecord.Data.DoctorId;
-
-        var result = await _repository.UpdateAsync(medicalRecord);
-        if (result.IsSuccess)
+        public async Task<Result<Domain.Entities.MedicalRecord>> Handle(UpdateMedicalRecordCommand request, CancellationToken cancellationToken)
         {
-            return Result<Domain.Entities.MedicalRecord>.Success(result.Data);
+            var existingMedicalRecordResult = await _repository.GetByIdAsync(request.RecordId);
+
+            if (!existingMedicalRecordResult.IsSuccess || existingMedicalRecordResult.Data == null)
+            {
+                return Result<Domain.Entities.MedicalRecord>.Failure("Medical record not found.");
+            }
+
+            var existingMedicalRecord = existingMedicalRecordResult.Data;
+
+            var updatedMedicalRecord = _mapper.Map(request, existingMedicalRecord);
+
+            var updateResult = await _repository.UpdateAsync(updatedMedicalRecord);
+
+            if (!updateResult.IsSuccess)
+            {
+                return Result<Domain.Entities.MedicalRecord>.Failure(updateResult.ErrorMessage);
+            }
+
+            return Result<Domain.Entities.MedicalRecord>.Success(updateResult.Data);
         }
-        return Result<Domain.Entities.MedicalRecord>.Failure(result.ErrorMessage);
     }
 }
+
+
+
+

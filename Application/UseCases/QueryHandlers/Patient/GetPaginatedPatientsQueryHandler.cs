@@ -21,23 +21,39 @@ namespace Application.UseCases.QueryHandlers.Patient
 
         public async Task<Result<PagedResult<PatientDto>>> Handle(GetPaginatedPatientsQuery request, CancellationToken cancellationToken)
         {
-            var patients = await _repository.GetAllAsync();
+            var patientsResult = await _repository.GetAllAsync();
 
-            var patientsList = patients.Data;
+            if (!patientsResult.IsSuccess || patientsResult.Data == null)
+            {
+                return Result<PagedResult<PatientDto>>.Failure("Failed to retrieve patients.");
+            }
+
+            var patientsList = patientsResult.Data.ToList(); // Copy patients.Data to patientsList
 
             if (!string.IsNullOrWhiteSpace(request.Username))
             {
                 patientsList = patientsList
-                    .Where(p => p.Username.Contains(request.Username, StringComparison.OrdinalIgnoreCase));
+                    .Where(p => p.Username != null && p.Username.Contains(request.Username, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
             }
 
-            var totalCount = await _repository.CountAsync(patientsList);
+            var totalCountResult = await _repository.CountAsync(patientsList);
 
-            var pagedPatients = await _repository.GetPaginatedAsync(patientsList, request.Page, request.PageSize);
+            if (!totalCountResult.IsSuccess)
+            {
+                return Result<PagedResult<PatientDto>>.Failure("Failed to count patients.");
+            }
 
-            var patientDtos = _mapper.Map<List<PatientDto>>(pagedPatients);
+            var pagedPatientsResult = await _repository.GetPaginatedAsync(patientsList, request.Page, request.PageSize);
 
-            var pagedResult = new PagedResult<PatientDto>(patientDtos, totalCount.Data);
+            if (!pagedPatientsResult.IsSuccess || pagedPatientsResult.Data == null)
+            {
+                return Result<PagedResult<PatientDto>>.Failure("Failed to retrieve paginated patients.");
+            }
+
+            var patientDtos = _mapper.Map<List<PatientDto>>(pagedPatientsResult.Data);
+
+            var pagedResult = new PagedResult<PatientDto>(patientDtos, totalCountResult.Data);
 
             return Result<PagedResult<PatientDto>>.Success(pagedResult);
         }

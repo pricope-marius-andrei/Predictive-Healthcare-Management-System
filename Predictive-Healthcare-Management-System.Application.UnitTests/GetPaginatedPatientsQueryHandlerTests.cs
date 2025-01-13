@@ -81,6 +81,8 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             };
 
             // Mock repository to return the list of patients
+            _repositoryMock.GetAllAsync().Returns(Task.FromResult(Result<IEnumerable<Domain.Entities.Patient>>.Success(patients)));
+            _repositoryMock.CountAsync(Arg.Any<IEnumerable<Domain.Entities.Patient>>()).Returns(Task.FromResult(Result<int>.Success(patients.Count)));
             _repositoryMock.GetPaginatedAsync(Arg.Any<IEnumerable<Domain.Entities.Patient>>(), Arg.Any<int>(), Arg.Any<int>())
                 .Returns(Task.FromResult(Result<List<Domain.Entities.Patient>>.Success(patients)));
 
@@ -138,6 +140,3 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         }
     }
 }
-
-
-

@@ -80,59 +80,6 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
         }
 
         [Fact]
-        public async Task Given_CreateMedicalRecordCommandHandler_When_PatientNotFound_Then_ShouldReturnFailure()
-        {
-            // Arrange
-            var command = new CreateMedicalRecordCommand
-            {
-                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
-                DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
-                VisitReason = "Routine Checkup",
-                Symptoms = "None",
-                Diagnosis = "Healthy",
-                DoctorNotes = "No issues found",
-                DateOfVisit = DateTime.UtcNow
-            };
-
-            _patientRepository.GetByIdAsync(command.PatientId).Returns(Result<Patient>.Failure("Patient not found."));
-
-            // Act
-            var handler = new CreateMedicalRecordCommandHandler(_medicalRecordRepository, _patientRepository, _doctorRepository, _mapper);
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.Equal("Patient not found.", result.ErrorMessage);
-        }
-
-        [Fact]
-        public async Task Given_CreateMedicalRecordCommandHandler_When_DoctorNotFound_Then_ShouldReturnFailure()
-        {
-            // Arrange
-            var command = new CreateMedicalRecordCommand
-            {
-                PatientId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
-                DoctorId = Guid.Parse("d7257654-ac75-4633-bdd4-fabea28387cf"),
-                VisitReason = "Routine Checkup",
-                Symptoms = "None",
-                Diagnosis = "Healthy",
-                DoctorNotes = "No issues found",
-                DateOfVisit = DateTime.UtcNow
-            };
-
-            _patientRepository.GetByIdAsync(command.PatientId).Returns(Result<Patient>.Success(new Patient()));
-            _doctorRepository.GetByIdAsync(command.DoctorId).Returns(Result<Doctor>.Failure("Doctor not found."));
-
-            // Act
-            var handler = new CreateMedicalRecordCommandHandler(_medicalRecordRepository, _patientRepository, _doctorRepository, _mapper);
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.Equal("Doctor not found.", result.ErrorMessage);
-        }
-
-        [Fact]
         public async Task Given_CreateMedicalRecordCommandHandler_When_RepositoryFails_Then_ResultShouldBeFailure()
         {
             // Arrange

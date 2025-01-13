@@ -1,38 +1,50 @@
-﻿using Application.UseCases.Commands.MedicalHistory;
+﻿using Application.UseCases.CommandHandlers.MedicalHistory;
+using Application.UseCases.Commands.MedicalHistory;
 using AutoMapper;
 using Domain.Common;
+using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Application.UseCases.CommandHandlers.MedicalHistory;
-
-public class UpdateMedicalHistoryCommandHandler : IRequestHandler<UpdateMedicalHistoryCommand, Result<Domain.Entities.MedicalHistory>>
+namespace Application.UseCases.CommandHandlers.MedicalHistory
 {
-    private readonly IMedicalHistoryRepository _repository;
-    private readonly IMapper _mapper;
-
-    public UpdateMedicalHistoryCommandHandler(IMedicalHistoryRepository repository, IMapper mapper)
+    public class UpdateMedicalHistoryCommandHandler : IRequestHandler<UpdateMedicalHistoryCommand, Result<Domain.Entities.MedicalHistory>>
     {
-        _repository = repository;
-        _mapper = mapper;
-    }
+        private readonly IMedicalHistoryRepository _repository;
+        private readonly IMapper _mapper;
 
-    public async Task<Result<Domain.Entities.MedicalHistory>> Handle(UpdateMedicalHistoryCommand request, CancellationToken cancellationToken)
-    {
-        var existingMedicalHistory = await _repository.GetByIdAsync(request.HistoryId);
-        if (existingMedicalHistory == null)
+        public UpdateMedicalHistoryCommandHandler(IMedicalHistoryRepository repository, IMapper mapper)
         {
-            return Result<Domain.Entities.MedicalHistory>.Failure("Medical history not found.");
+            _repository = repository;
+            _mapper = mapper;
         }
 
-        var medicalHistory = _mapper.Map<Domain.Entities.MedicalHistory>(request);
-        medicalHistory.PatientId = existingMedicalHistory.Data.PatientId;
-
-        var result = await _repository.UpdateAsync(medicalHistory);
-        if (result.IsSuccess)
+        public async Task<Result<Domain.Entities.MedicalHistory>> Handle(UpdateMedicalHistoryCommand request, CancellationToken cancellationToken)
         {
-            return Result<Domain.Entities.MedicalHistory>.Success(result.Data);
+            var existingMedicalHistoryResult = await _repository.GetByIdAsync(request.HistoryId);
+
+            if (!existingMedicalHistoryResult.IsSuccess || existingMedicalHistoryResult.Data == null)
+            {
+                return Result<Domain.Entities.MedicalHistory>.Failure("Medical history not found.");
+            }
+
+            var existingMedicalHistory = existingMedicalHistoryResult.Data;
+
+            var updatedMedicalHistory = _mapper.Map(request, existingMedicalHistory);
+
+            var updateResult = await _repository.UpdateAsync(updatedMedicalHistory);
+
+            if (!updateResult.IsSuccess)
+            {
+                return Result<Domain.Entities.MedicalHistory>.Failure(updateResult.ErrorMessage);
+            }
+
+            return Result<Domain.Entities.MedicalHistory>.Success(updateResult.Data);
         }
-        return Result<Domain.Entities.MedicalHistory>.Failure(result.ErrorMessage);
     }
 }
+
+
+

@@ -4,6 +4,8 @@ using AutoMapper;
 using Domain.Common;
 using Domain.Repositories;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.UseCases.QueryHandlers.Patient
 {
@@ -21,34 +23,16 @@ namespace Application.UseCases.QueryHandlers.Patient
         public async Task<Result<PatientDto>> Handle(GetPatientByIdQuery request, CancellationToken cancellationToken)
         {
             var patientResult = await _repository.GetByIdAsync(request.Id);
-            if (!patientResult.IsSuccess)
+
+            if (!patientResult.IsSuccess || patientResult.Data == null)
             {
-                return Result<PatientDto>.Failure(patientResult.ErrorMessage);
+                throw new KeyNotFoundException("Patient not found");
             }
 
             var patientDto = _mapper.Map<PatientDto>(patientResult.Data);
+
             return Result<PatientDto>.Success(patientDto);
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
