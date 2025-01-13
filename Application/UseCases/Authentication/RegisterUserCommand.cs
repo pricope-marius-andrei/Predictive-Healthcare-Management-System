@@ -16,6 +16,7 @@ namespace Application.UseCases.Authentication
     public enum EUserType
     {
         Patient,
-        Doctor
+        Doctor,
+        Admin
     }
 }

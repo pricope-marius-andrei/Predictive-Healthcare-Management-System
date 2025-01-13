@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Domain.Common;
+using MediatR;
 
 namespace Application.UseCases.Commands.Doctor
 {

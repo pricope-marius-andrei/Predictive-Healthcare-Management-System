@@ -31,10 +31,12 @@ namespace Infrastructure.Repositories
         {
             try
             {
+                // Attempt to find the user in all user types
                 var doctor = await _context.Set<Doctor>().SingleOrDefaultAsync(u => u.Email == user.Email);
                 var patient = await _context.Set<Patient>().SingleOrDefaultAsync(u => u.Email == user.Email);
+                var admin = await _context.Set<Admin>().SingleOrDefaultAsync(u => u.Email == user.Email);
 
-                if (doctor == null && patient == null)
+                if (doctor == null && patient == null && admin == null)
                 {
                     return Result<string>.Failure(InvalidCredentials);
                 }
@@ -47,17 +49,24 @@ namespace Infrastructure.Repositories
                     existingUser = doctor;
                     userType = EUserType.Doctor;
                 }
-                else
+                else if (patient != null)
                 {
                     existingUser = patient;
                     userType = EUserType.Patient;
                 }
+                else
+                {
+                    existingUser = admin!;
+                    userType = EUserType.Admin;
+                }
 
+                // Verify the password
                 if (!BCrypt.Net.BCrypt.Verify(user.Password, existingUser.Password))
                 {
                     return Result<string>.Failure(InvalidCredentials);
                 }
 
+                // Generate the JWT token
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]!);
 
@@ -70,7 +79,7 @@ namespace Infrastructure.Repositories
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.UtcNow.AddMinutes(1),
+                    Expires = DateTime.UtcNow.AddMinutes(1), // Adjust token expiration as needed
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
 
