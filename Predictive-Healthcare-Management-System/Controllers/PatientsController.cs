@@ -6,9 +6,11 @@ using Domain.Common;
 using Application.Utils;
 using Application.UseCases.Commands.Patient;
 using Application.UseCases.Queries.Patient;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Predictive_Healthcare_Management_System.Controllers
 {
+    [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class PatientsController : ControllerBase

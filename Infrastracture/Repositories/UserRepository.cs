@@ -9,7 +9,6 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Infrastructure.Repositories
 {
@@ -71,7 +70,7 @@ namespace Infrastructure.Repositories
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.UtcNow.AddMinutes(60),
+                    Expires = DateTime.UtcNow.AddMinutes(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
 
@@ -111,7 +110,7 @@ namespace Infrastructure.Repositories
                 return Result<User>.Failure("The token is invalid");
             }
 
-           var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
             {
