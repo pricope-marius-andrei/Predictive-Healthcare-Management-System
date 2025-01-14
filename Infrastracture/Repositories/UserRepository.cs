@@ -33,6 +33,7 @@ namespace Infrastructure.Repositories
             try
             {
                 var doctor = await _context.Set<Doctor>().SingleOrDefaultAsync(u => u.Email == user.Email);
+                
                 var patient = await _context.Set<Patient>().SingleOrDefaultAsync(u => u.Email == user.Email);
 
                 if (doctor == null && patient == null)
@@ -76,6 +77,7 @@ namespace Infrastructure.Repositories
                 };
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
+
                 return Result<string>.Success(tokenHandler.WriteToken(token));
             }
             catch (Exception ex)

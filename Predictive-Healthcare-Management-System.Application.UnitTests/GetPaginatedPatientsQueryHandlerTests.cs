@@ -50,7 +50,6 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                     Gender = "Male",
                     Height = 180,
                     Weight = 75,
-                    // Address = "123 Street",
                     DateOfBirth = new DateTime(1990, 1, 1),
                     DateOfRegistration = DateTime.UtcNow,
                     MedicalHistories = new List<Domain.Entities.MedicalHistory>
@@ -60,7 +59,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                             HistoryId = medicalHistoryId,
                             DateOfDiagnosis = DateTime.UtcNow,
                             Condition = "Diabetes",
-                            PatientId = patientId // Ensure consistency
+                            PatientId = patientId
                         }
                     },
                     MedicalRecords = new List<Domain.Entities.MedicalRecord>
@@ -73,7 +72,7 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                             Diagnosis = "Healthy",
                             DoctorNotes = "Routine checkup",
                             DoctorId = doctorId,
-                            PatientId = patientId, // Ensure consistency
+                            PatientId = patientId,
                             DateOfVisit = DateTime.UtcNow
                         }
                     }
@@ -81,8 +80,14 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
             };
 
             // Mock repository to return the list of patients
-            _repositoryMock.GetAllAsync().Returns(Task.FromResult(Result<IEnumerable<Domain.Entities.Patient>>.Success(patients)));
-            _repositoryMock.CountAsync(Arg.Any<IEnumerable<Domain.Entities.Patient>>()).Returns(Task.FromResult(Result<int>.Success(patients.Count)));
+            _repositoryMock.GetAllAsync()
+                .Returns(Task.FromResult(Result<IEnumerable<Domain.Entities.Patient>>.Success(patients)));
+
+            // Mock repository to return the total count of patients
+            _repositoryMock.CountAsync(Arg.Any<IEnumerable<Domain.Entities.Patient>>())
+                .Returns(Task.FromResult(Result<int>.Success(patients.Count)));
+
+            // Mock repository to return the paginated list of patients
             _repositoryMock.GetPaginatedAsync(Arg.Any<IEnumerable<Domain.Entities.Patient>>(), Arg.Any<int>(), Arg.Any<int>())
                 .Returns(Task.FromResult(Result<List<Domain.Entities.Patient>>.Success(patients)));
 
@@ -98,7 +103,6 @@ namespace Predictive_Healthcare_Management_System.Application.UnitTests
                 Gender = p.Gender,
                 Height = p.Height,
                 Weight = p.Weight,
-                // Address = p.Address,
                 DateOfBirth = p.DateOfBirth,
                 DateOfRegistration = p.DateOfRegistration,
                 MedicalHistories = p.MedicalHistories.Select(mh => new MedicalHistoryDto

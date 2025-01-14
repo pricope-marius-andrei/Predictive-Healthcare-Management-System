@@ -57,5 +57,6 @@ namespace Application.UseCases.QueryHandlers.Patient
 
             return Result<PagedResult<PatientDto>>.Success(pagedResult);
         }
+
     }
 }
